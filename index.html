@@ -55,7 +55,7 @@
       word-wrap: break-word;
     }
     h1 { font-size: clamp(26px, 5vw, 36px); margin-top: 24px; text-transform: uppercase; }
-    h2 { font-size: 16px; margin-top: 22px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
+    h2 { font-size: 15px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
 
     p { margin: 0 0 14px; }
     .muted { color: var(--ink-light); font-size: 13px; }
@@ -84,7 +84,7 @@
       width: 100%;
       height: 22vh;
       min-height: 140px;
-      background-color: #E5E5E5;
+      background-color: #EAEAE6;
       background-size: cover;
       background-position: center;
       position: relative;
@@ -95,7 +95,7 @@
       position: absolute;
       bottom: 12px;
       right: 12px;
-      opacity: 0.5;
+      opacity: 0.85;
       transition: opacity 0.2s;
     }
     .notion-cover:hover .cover-actions { opacity: 1; }
@@ -112,7 +112,7 @@
       .focus-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); display: grid; gap: 24px; align-items: start; }
     }
 
-    /* Brutalist Components */
+    /* Cards & Controls */
     .box {
       background: var(--paper);
       border: 1px solid #E5E5E5;
@@ -128,12 +128,12 @@
       -webkit-appearance: none;
       background: var(--paper);
       color: var(--ink);
-      border: 1px solid #E5E5E5;
+      border: 1px solid #D8D8D8;
       border-radius: 4px;
       font-family: var(--font-sans);
       font-size: 13px;
       font-weight: 600;
-      min-height: 38px;
+      min-height: 40px;
       padding: 8px 14px;
       cursor: pointer;
       display: inline-flex;
@@ -145,8 +145,8 @@
     .btn:active { background: #E5E5E5; }
     .btn.full { width: 100%; margin-bottom: 12px; }
     .btn.inverse { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-    .btn.inverse:hover { background: #333; }
-    .btn.small { min-height: 28px; padding: 4px 10px; font-size: 12px; }
+    .btn.inverse:hover { background: #333333; }
+    .btn.small { min-height: 32px; padding: 5px 10px; font-size: 12px; }
 
     input[type="text"], input[type="password"], textarea {
       width: 100%;
@@ -166,13 +166,13 @@
 
     /* Project Rows */
     .project-row { display: flex; gap: 8px; margin-bottom: 8px; width: 100%; }
-    .project-row .btn.main-proj { flex: 1; margin-bottom: 0; justify-content: flex-start; text-align: left; }
-    .project-row .btn.del-proj { margin-bottom: 0; width: 38px; flex-shrink: 0; color: #D93025; }
+    .project-row .btn.main-proj { flex: 1; margin-bottom: 0; justify-content: space-between; text-align: left; }
+    .project-row .btn.del-proj { margin-bottom: 0; width: 40px; flex-shrink: 0; color: #D93025; }
 
     /* Video Result Items */
     .list-item {
       border-bottom: 1px solid #E5E5E5;
-      padding: 16px 0;
+      padding: 14px 0;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -180,8 +180,24 @@
     }
     .list-item:last-child { border-bottom: none; }
     .list-item-content { flex: 1; min-width: 0; }
-    .list-item-title { font-weight: 600; margin-bottom: 4px; font-family: var(--font-serif); font-size: 17px; line-height: 1.3; }
+    .list-item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.3;
+      word-wrap: break-word;
+    }
     .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 6px; }
+    .list-item-desc {
+      font-size: 12px;
+      color: var(--ink);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-wrap: break-word;
+    }
     
     .score-badge {
       display: inline-block;
@@ -226,14 +242,15 @@
 
     /* Inline Video Brief (Chapters) */
     .brief-chapter {
-      padding: 6px 0;
+      padding: 7px 0;
       border-bottom: 1px dashed #E5E5E5;
       font-size: 13px;
       display: flex;
-      gap: 8px;
+      gap: 10px;
+      align-items: baseline;
     }
     .brief-chapter:last-child { border-bottom: none; }
-    .chapter-time { font-family: var(--font-mono); font-weight: 600; color: #0055CC; cursor: pointer; }
+    .chapter-time { font-family: var(--font-mono); font-weight: 600; color: #0055CC; cursor: pointer; flex-shrink: 0; }
 
     /* Notion-Style To-Do Ledger */
     .ledger-entry {
@@ -242,25 +259,28 @@
       gap: 10px;
       margin-bottom: 10px;
       font-size: 14px;
-      padding: 8px;
-      background: #F9F9F9;
+      padding: 8px 10px;
+      background: #F6F6F5;
       border-radius: 4px;
     }
     .ledger-time { cursor: pointer; color: #0055CC; font-family: var(--font-mono); font-weight: bold; flex-shrink: 0; }
-    .ledger-text { flex: 1; word-wrap: break-word; }
+    .ledger-text { flex: 1; word-wrap: break-word; min-width: 0; }
     .ledger-text.done { text-decoration: line-through; color: var(--ink-light); }
     
     .custom-checkbox {
       appearance: none;
-      width: 16px;
-      height: 16px;
-      border: 1px solid var(--ink-light);
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--ink-light);
       border-radius: 3px;
       margin-top: 2px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
+      background: var(--paper);
     }
     .custom-checkbox:checked { background: var(--ink); border-color: var(--ink); }
     .custom-checkbox:checked::after { content: "✓"; color: #fff; font-size: 12px; font-weight: bold; }
@@ -275,37 +295,40 @@
   <!-- GLOBAL STATUS BAR -->
   <div class="top-status-bar">
     <span>MTUBE // RESEARCH OS</span>
-    <span class="sync-badge" id="sync-status">INITIALIZING...</span>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="sync-badge" id="sync-status">INITIALIZING...</span>
+      <button type="button" class="btn small" id="btn-open-settings" style="min-height:24px; padding:2px 8px; font-size:11px;">VAULT</button>
+    </div>
   </div>
 
   <!-- NOTION COVER (DYNAMIC GIPHY) -->
   <div class="notion-cover hidden" id="ws-cover">
     <div class="cover-actions">
-      <button class="btn small" id="btn-change-cover" style="background:rgba(255,255,255,0.8); border:none;">Change Cover</button>
+      <button type="button" class="btn small" id="btn-change-cover" style="background:rgba(255,255,255,0.92);">Change Cover</button>
     </div>
   </div>
 
   <div class="container">
 
-    <!-- VIEW 0: VAULT SETUP (Replaces config.json) -->
+    <!-- VIEW 0: VAULT SETUP -->
     <div id="view-setup" class="view">
       <h1>SECURE VAULT SETUP</h1>
-      <p class="muted">Your API keys will be stored securely in a Private GitHub repo, never exposed to the public internet.</p>
+      <p class="muted">Your API keys are stored inside your Private GitHub repository (<code>Mtube-Vault</code>), never exposed publicly.</p>
       <div class="box web-grid">
         <div>
-          <h2>1. GITHUB CREDENTIALS</h2>
-          <input type="password" id="setup-gh-token" placeholder="GitHub Personal Access Token (ghp_...)" />
+          <h2 style="margin-top:0;">1. GITHUB CREDENTIALS</h2>
+          <input type="password" id="setup-gh-token" placeholder="GitHub Personal Access Token (ghp_... or github_pat_...)" />
           <input type="text" id="setup-gh-repo" placeholder="Private Repo Name (e.g. Mtube-Vault)" />
           
           <h2>2. YOUTUBE API KEY</h2>
           <input type="password" id="setup-yt-key" placeholder="YouTube Data API v3 Key (AIza...)" />
           
-          <button class="btn full inverse" id="btn-save-vault" style="margin-top:16px;">SECURE &amp; CONNECT VAULT</button>
-          <div id="setup-error" style="color:#D93025; font-size:12px; font-weight:bold; margin-top:8px;"></div>
+          <button type="button" class="btn full inverse" id="btn-save-vault" style="margin-top:8px;">SECURE &amp; CONNECT VAULT</button>
+          <div id="setup-error" style="color:#D93025; font-size:13px; font-weight:bold; margin-top:8px;"></div>
         </div>
         <div>
           <h2 style="margin-top:0;">IOS SHORTCUT BYPASS</h2>
-          <p class="muted">Apple Safari clears local data every 7 days. To prevent logging in repeatedly, MTube will generate a secure URL for your Apple Shortcuts app after you connect.</p>
+          <p class="muted">Apple Safari clears local storage after 7 days of inactivity. Once connected, MTube generates a permanent Shortcut URL that authenticates your Vault automatically.</p>
         </div>
       </div>
     </div>
@@ -321,16 +344,16 @@
           <div class="box" style="margin-top:16px;">
             <h2 style="margin-top:0;">+ NEW WORKSPACE</h2>
             <input type="text" id="new-proj-name" placeholder="Name (e.g., 'SwiftUI Development')" />
-            <button class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
+            <button type="button" class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
           </div>
         </div>
         <!-- Right Column: Setup Shortcut -->
         <div>
           <div class="box" style="background: #F4F4F4; border-color: #E5E5E5;">
             <h2 style="margin-top:0;">PERMANENT ACCESS SHORTCUT</h2>
-            <p class="muted">Copy this link and paste it into a new iOS Shortcut ("Open URLs" action) to bypass the Safari 7-day wipe.</p>
+            <p class="muted">Copy this link into an iOS Shortcut ("Open URLs" action) so your Vault stays logged in across Safari resets and devices.</p>
             <input type="text" id="shortcut-url" readonly style="font-size:12px; color:#555;" />
-            <button class="btn small" id="btn-copy-shortcut">COPY URL</button>
+            <button type="button" class="btn small" id="btn-copy-shortcut">COPY URL</button>
           </div>
         </div>
       </div>
@@ -339,8 +362,8 @@
     <!-- VIEW 2: WORKSPACE -->
     <div id="view-workspace" class="view">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
-        <button class="btn small" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
-        <button class="btn small" id="btn-force-sync">SYNC NOW</button>
+        <button type="button" class="btn small" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
+        <button type="button" class="btn small" id="btn-force-sync">SYNC NOW</button>
       </div>
       <h1 id="ws-title">WORKSPACE</h1>
       
@@ -350,7 +373,7 @@
             <h2 style="margin-top:0;">IMPLEMENTATION INTENTION</h2>
             <input type="text" id="ig-query" placeholder="Query (e.g., 'Latest Podcast Raj Shamani')" />
             <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Learn from founder experience on Figuring Out')" />
-            <button class="btn full inverse" id="btn-search">SEARCH YOUTUBE</button>
+            <button type="button" class="btn full inverse" id="btn-search">SEARCH YOUTUBE</button>
             <div id="search-status" class="bold" style="margin-top:8px;"></div>
           </div>
 
@@ -374,11 +397,10 @@
     <div id="view-focus" class="view">
       <div style="display:flex; justify-content:space-between; align-items:center; margin: 16px 0;">
         <span class="bold">FOCUS MODE</span>
-        <button class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
+        <button type="button" class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
       </div>
       
-      <!-- Stated Purpose Bar -->
-      <div style="background:#EAEAEA; padding: 12px 16px; border-radius: 4px; margin-bottom: 24px;">
+      <div style="background:#EAEAEA; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px;">
         <div style="font-size:11px; color:var(--ink-light); font-weight:bold; letter-spacing:0.05em;">STATED PURPOSE:</div>
         <div id="focus-purpose" style="font-family:var(--font-serif); font-size:18px; font-weight:bold;"></div>
       </div>
@@ -389,8 +411,8 @@
           <div class="player-wrapper">
             <div id="yt-player"></div>
             <div id="blackout-overlay">
-              <h2 style="margin:0 0 8px;">PAUSED</h2>
-              <button class="btn inverse" id="btn-resume">RESUME VIDEO</button>
+              <h2 style="margin:0 0 8px; color:var(--paper);">PAUSED</h2>
+              <button type="button" class="btn" id="btn-resume">RESUME VIDEO</button>
             </div>
           </div>
 
@@ -407,9 +429,19 @@
             <p class="muted">Type <code>/todo</code> to create a clickable checkbox task.</p>
             <input type="text" id="note-input" placeholder="Type insight or /todo... (Enter)" />
             <div id="ledger-list"></div>
-            <button class="btn full inverse" style="margin-top:16px;" id="btn-finish">COMPLETE &amp; ARCHIVE</button>
+            <button type="button" class="btn full inverse" style="margin-top:16px;" id="btn-finish">COMPLETE &amp; ARCHIVE</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: POST-VIDEO ASSIMILATION BUFFER -->
+    <div id="view-buffer" class="view">
+      <div class="box" style="text-align:center; padding: 48px 20px; margin-top: 24px;">
+        <h1 style="border:none;">ASSIMILATION</h1>
+        <p class="muted">Video and timestamped notes archived in your synced Knowledge Vault.</p>
+        <div style="font-size: 44px; font-weight:bold; margin: 20px 0; font-family:var(--font-mono);" id="buffer-timer">15</div>
+        <button type="button" class="btn inverse" id="btn-exit-buffer" disabled style="opacity:0.35;">RETURN TO WORKSPACE</button>
       </div>
     </div>
 
@@ -426,6 +458,8 @@
         ytKey: ""
       },
       state: {
+        activeProjectId: null,
+        activeVideo: null,
         projects: [],
         queue: {},
         archive: {},
@@ -435,7 +469,6 @@
       player: null,
       apiReady: false,
 
-      // Block junk ONLY in title so long-form podcasts pass safely
       titleJunkKeywords: ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "gossip"],
 
       async init() {
@@ -445,7 +478,7 @@
         if (this.tryLoadAuthFromHash() || this.tryLoadAuthFromLocal()) {
           await this.pullFromVault();
         } else {
-          this.setSyncBadge("SETUP REQUIRED");
+          this.setSyncBadge("SETUP REQUIRED", "err");
           this.navigate('setup');
         }
       },
@@ -464,12 +497,12 @@
             const decoded = atob(hash.replace('#vault=', ''));
             const [token, owner, repo] = decoded.split('|');
             if (token && owner && repo) {
-              this.credentials = { token, owner, repo, ytKey: "" }; // ytKey loaded from Vault
+              this.credentials = { token, owner, repo, ytKey: "" };
               localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
-              history.replaceState(null, null, ' '); // Hide hash securely
+              history.replaceState(null, null, window.location.pathname);
               return true;
             }
-          } catch(e) {}
+          } catch (e) {}
         }
         return false;
       },
@@ -477,16 +510,15 @@
       tryLoadAuthFromLocal() {
         try {
           const auth = JSON.parse(localStorage.getItem('mtube_auth'));
-          if (auth && auth.token) {
+          if (auth && auth.token && auth.owner && auth.repo) {
             this.credentials = auth;
             return true;
           }
-        } catch(e) {}
+        } catch (e) {}
         return false;
       },
 
       generateShortcutUrl() {
-        // Creates a secure #vault= payload for iOS Shortcuts
         const payload = btoa(`${this.credentials.token}|${this.credentials.owner}|${this.credentials.repo}`);
         const url = `${window.location.origin}${window.location.pathname}#vault=${payload}`;
         document.getElementById('shortcut-url').value = url;
@@ -500,30 +532,48 @@
         err.innerText = "";
 
         if (!token || !repoInput || !ytKey) {
-          err.innerText = "All fields are required.";
+          err.innerText = "All three fields are required.";
           return;
         }
 
-        // Get owner from token if possible, else ask user (Assume owner is current user for PAT)
-        let owner = "your-username"; 
-        try {
-          const uRes = await fetch('https://api.github.com/user', { headers: { "Authorization": `Bearer ${token}` }});
-          const uData = await uRes.json();
-          owner = uData.login;
-        } catch(e) {
-          err.innerText = "Invalid GitHub Token."; return;
-        }
+        const btn = document.getElementById('btn-save-vault');
+        btn.disabled = true;
+        btn.innerText = "CONNECTING...";
 
-        this.credentials = { token, owner, repo: repoInput, ytKey };
-        localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
-        
-        // Attempt initial push to create vault
-        const success = await this.pushToVault(true);
-        if (success) {
-          this.generateShortcutUrl();
-          this.navigate('projects');
-        } else {
-          err.innerText = "Failed to access private repo. Check permissions.";
+        try {
+          const uRes = await fetch('https://api.github.com/user', {
+            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
+          });
+          if (!uRes.ok) throw new Error("Invalid GitHub Token.");
+          const uData = await uRes.json();
+          const owner = uData.login;
+
+          this.credentials = { token, owner, repo: repoInput, ytKey };
+          localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
+
+          // Check if vault file already exists before overwriting
+          const checkUrl = `https://api.github.com/repos/${owner}/${repoInput}/contents/mtube_data.json?t=${Date.now()}`;
+          const checkRes = await fetch(checkUrl, {
+            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
+          });
+
+          if (checkRes.ok) {
+            await this.pullFromVault();
+            // Ensure new ytKey is saved if user updated it
+            this.credentials.ytKey = ytKey;
+            await this.pushToVault();
+          } else {
+            const success = await this.pushToVault(true);
+            if (!success) throw new Error(`Cannot write to "${owner}/${repoInput}". Confirm the private repo exists and token has Contents Read/Write permission.`);
+            this.setSyncBadge("SYNCED ✓", "ok");
+            this.generateShortcutUrl();
+            this.navigate('projects');
+          }
+        } catch (e) {
+          err.innerText = e.message || "Failed to connect Vault.";
+        } finally {
+          btn.disabled = false;
+          btn.innerText = "SECURE & CONNECT VAULT";
         }
       },
 
@@ -532,11 +582,16 @@
         try {
           const { token, owner, repo } = this.credentials;
           const url = `https://api.github.com/repos/${owner}/${repo}/contents/mtube_data.json?t=${Date.now()}`;
-          const res = await fetch(url, { headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }});
+          const res = await fetch(url, {
+            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
+          });
 
           if (res.status === 404) {
-            this.setSyncBadge("VAULT EMPTY, CREATING...", "");
-            await this.pushToVault();
+            const created = await this.pushToVault(true);
+            if (!created) throw new Error("Could not initialize vault file.");
+            this.setSyncBadge("SYNCED ✓", "ok");
+            this.generateShortcutUrl();
+            this.navigate('projects');
             return;
           }
           if (!res.ok) throw new Error("Pull failed");
@@ -546,19 +601,26 @@
           const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
           const remoteData = JSON.parse(decoded);
 
-          this.state = remoteData.state || this.state;
-          // Hydrate ytKey from vault if we logged in via Hash
-          if (!this.credentials.ytKey && remoteData.ytKey) {
+          if (remoteData.state) {
+            this.state.projects = remoteData.state.projects || [];
+            this.state.queue = remoteData.state.queue || {};
+            this.state.archive = remoteData.state.archive || {};
+            this.state.notes = remoteData.state.notes || {};
+            this.state.covers = remoteData.state.covers || {};
+          }
+          if (remoteData.ytKey) {
             this.credentials.ytKey = remoteData.ytKey;
+            localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
           }
 
+          this.pruneOldArchive();
           this.setSyncBadge("SYNCED ✓", "ok");
           this.generateShortcutUrl();
           this.navigate('projects');
         } catch (err) {
           console.error(err);
           this.setSyncBadge("SYNC FAILED", "err");
-          this.navigate('setup'); // Fallback if token is dead
+          this.navigate('setup');
         }
       },
 
@@ -571,7 +633,13 @@
           const payload = {
             updatedAt: new Date().toISOString(),
             ytKey: ytKey,
-            state: this.state
+            state: {
+              projects: this.state.projects,
+              queue: this.state.queue,
+              archive: this.state.archive,
+              notes: this.state.notes,
+              covers: this.state.covers
+            }
           };
 
           const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
@@ -581,7 +649,11 @@
 
           const res = await fetch(url, {
             method: "PUT",
-            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Accept": "application/vnd.github+json",
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify(body)
           });
 
@@ -598,15 +670,32 @@
 
       queueSync() {
         clearTimeout(this.syncTimeout);
-        this.syncTimeout = setTimeout(() => this.pushToVault(), 1000);
+        this.syncTimeout = setTimeout(() => this.pushToVault(), 900);
+      },
+
+      pruneOldArchive() {
+        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        let changed = false;
+
+        Object.keys(this.state.archive).forEach(projId => {
+          const list = this.state.archive[projId] || [];
+          const filtered = list.filter(v => !v.archivedAt || (now - v.archivedAt) <= thirtyDaysMs);
+          if (filtered.length !== list.length) {
+            this.state.archive[projId] = filtered;
+            changed = true;
+          }
+        });
+        if (changed) this.queueSync();
       },
 
       /* --- NAVIGATION & RENDERING --- */
       navigate(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(`view-${viewId}`).classList.add('active');
+        const target = document.getElementById(`view-${viewId}`);
+        if (target) target.classList.add('active');
+
         const cover = document.getElementById('ws-cover');
-        
         if (viewId === 'projects') {
           cover.classList.add('hidden');
           this.renderProjects();
@@ -624,19 +713,24 @@
         list.innerHTML = '';
         
         if (this.state.projects.length === 0) {
-          list.innerHTML = '<span class="muted">No workspaces yet. Create one below.</span>';
+          list.innerHTML = '<p class="muted">No workspaces yet. Create one below.</p>';
         }
 
         this.state.projects.forEach(p => {
+          const qCount = (this.state.queue[p.id] || []).length;
+          const aCount = (this.state.archive[p.id] || []).length;
+
           const row = document.createElement('div');
           row.className = 'project-row';
 
           const openBtn = document.createElement('button');
+          openBtn.type = 'button';
           openBtn.className = 'btn main-proj';
-          openBtn.innerText = p.name;
+          openBtn.innerHTML = `<span>${p.name}</span><span class="muted" style="font-size:11px;">Q:${qCount} | V:${aCount}</span>`;
           openBtn.onclick = () => this.openWorkspace(p);
 
           const delBtn = document.createElement('button');
+          delBtn.type = 'button';
           delBtn.className = 'btn del-proj';
           delBtn.innerText = "X";
           delBtn.onclick = () => {
@@ -666,7 +760,7 @@
 
       openWorkspace(project) {
         this.state.activeProjectId = project.id;
-        document.getElementById('ws-title').innerText = `${project.name.toUpperCase()}`;
+        document.getElementById('ws-title').innerText = project.name.toUpperCase();
         document.getElementById('search-results-container').classList.add('hidden');
         document.getElementById('ig-query').value = '';
         document.getElementById('ig-purpose').value = '';
@@ -682,8 +776,9 @@
       },
 
       changeCover() {
-        let url = prompt("Paste Giphy GIF URL (or image link):");
+        let url = prompt("Paste Giphy GIF URL (or direct image link). Leave blank to clear:");
         if (url !== null) {
+          url = url.trim();
           const giphyMatch = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
           if (giphyMatch && giphyMatch[1]) {
             url = `https://media.giphy.com/media/${giphyMatch[1]}/giphy.gif`;
@@ -696,9 +791,11 @@
 
       /* --- YOUTUBE SEARCH & PARSING --- */
       parseDuration(iso) {
-        if (!iso) return { totalSeconds: 0, h: 0, m: 0, s: 0 };
+        if (!iso || typeof iso !== 'string') return { totalSeconds: 0, h: 0, m: 0, s: 0 };
         const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/) || [];
-        const h = parseInt(match[1] || 0), m = parseInt(match[2] || 0), s = parseInt(match[3] || 0);
+        const h = parseInt(match[1] || 0, 10);
+        const m = parseInt(match[2] || 0, 10);
+        const s = parseInt(match[3] || 0, 10);
         return { totalSeconds: (h * 3600) + (m * 60) + s, h, m, s };
       },
 
@@ -733,8 +830,10 @@
         
         try {
           const ytKey = this.credentials.ytKey;
-          // Ensure YouTube gets the full context but forces English to avoid irrelevant localized content
-          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query + " " + purpose)}&type=video&relevanceLanguage=en&maxResults=25&safeSearch=strict&key=${ytKey}`;
+          if (!ytKey) throw new Error("Missing YouTube API Key. Open VAULT at top right.");
+
+          const orderParam = /\b(latest|newest|recent)\b/i.test(query) ? "date" : "relevance";
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query + " " + purpose)}&type=video&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${ytKey}`;
           
           const searchRes = await fetch(searchUrl);
           const searchData = await searchRes.json();
@@ -746,11 +845,10 @@
           const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${ytKey}`);
           const vidData = await vidRes.json();
 
-          let validVideos = vidData.items.filter(v => {
+          let validVideos = (vidData.items || []).filter(v => {
             const dur = this.parseDuration(v.contentDetails?.duration);
-            // Allow Podcasts > 20 mins bypass junk filter
-            if (dur.totalSeconds >= 1200) return true;
-            if (dur.totalSeconds > 0 && dur.totalSeconds < 180) return false; // Block shorts
+            if (dur.totalSeconds >= 1200) return true; // Podcasts >= 20m always pass
+            if (dur.totalSeconds > 0 && dur.totalSeconds < 180) return false; // Block Shorts < 3m
             
             const titleLower = (v.snippet?.title || "").toLowerCase();
             if (this.titleJunkKeywords.some(junk => titleLower.includes(junk))) return false;
@@ -787,7 +885,7 @@
               <div class="list-item-meta">${v.snippet?.channelTitle || "Unknown"} // ${this.formatDuration(durObj)}</div>
               <div class="list-item-desc">${v.snippet?.description || ""}</div>
             </div>
-            <button class="btn small">[ ADD ]</button>
+            <button type="button" class="btn small">[ ADD ]</button>
           `;
           div.querySelector('button').onclick = () => {
             const q = this.state.queue[this.state.activeProjectId] || [];
@@ -828,8 +926,8 @@
               <div class="list-item-meta">Purpose: ${v.purpose}</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="btn small inverse btn-focus">FOCUS</button>
-              <button class="btn small btn-rm">DROP</button>
+              <button type="button" class="btn small inverse btn-focus">FOCUS</button>
+              <button type="button" class="btn small btn-rm">DROP</button>
             </div>
           `;
           div.querySelector('.btn-focus').onclick = () => this.startFocus(v);
@@ -843,18 +941,54 @@
         });
       },
 
+      renderArchive() {
+        const list = document.getElementById('archive-list');
+        const arch = this.state.archive[this.state.activeProjectId] || [];
+        list.innerHTML = '';
+
+        if (arch.length === 0) {
+          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay synced here for 30 days with notes attached.</span>';
+          return;
+        }
+
+        arch.forEach((v, index) => {
+          const notes = this.state.notes[v.id] || [];
+          const daysAgo = Math.floor((Date.now() - (v.archivedAt || Date.now())) / 86400000);
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `
+            <div class="list-item-content">
+              <div class="list-item-title">${v.title}</div>
+              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes</div>
+              <div class="list-item-desc">${notes.length > 0 ? notes.map(n => `[${this.formatSecs(n.time)}] ${n.text}`).join(' | ') : 'No notes recorded.'}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button type="button" class="btn small btn-reopen">REVIEW</button>
+              <button type="button" class="btn small btn-del-arch">PURGE</button>
+            </div>
+          `;
+          div.querySelector('.btn-reopen').onclick = () => this.startFocus(v);
+          div.querySelector('.btn-del-arch').onclick = () => {
+            arch.splice(index, 1);
+            this.state.archive[this.state.activeProjectId] = arch;
+            this.queueSync();
+            this.renderArchive();
+          };
+          list.appendChild(div);
+        });
+      },
+
       /* --- FOCUS MODE & INLINE CHAPTERS --- */
       renderInlineBrief(videoInfo) {
         const container = document.getElementById('inline-video-brief');
         const desc = videoInfo.description || "";
         const lines = desc.split('\n').map(l => l.trim()).filter(Boolean);
         
-        // Match robust timestamps: 00:00, 1:23, 12:34:56
         const chapterRegex = /(?:^|\s)((?:\d{1,2}:)?\d{1,2}:\d{2})\s*[-–—|]*\s*(.+)/;
         const chapters = [];
 
         lines.forEach(line => {
-          if (/^https?:\/\//i.test(line)) return; 
+          if (/^https?:\/\//i.test(line)) return;
           const m = line.match(chapterRegex);
           if (m) chapters.push({ timeStr: m[1], label: m[2] });
         });
@@ -862,7 +996,7 @@
         container.innerHTML = '';
 
         if (chapters.length > 0) {
-          chapters.slice(0, 20).forEach(ch => {
+          chapters.slice(0, 25).forEach(ch => {
             const row = document.createElement('div');
             row.className = 'brief-chapter';
 
@@ -998,6 +1132,7 @@
           div.appendChild(textSpan);
 
           const delBtn = document.createElement('button');
+          delBtn.type = 'button';
           delBtn.className = 'btn small';
           delBtn.innerText = 'X';
           delBtn.style.border = "none";
@@ -1020,9 +1155,10 @@
         const vid = this.state.activeVideo;
         if (projId && vid) {
           const arch = this.state.archive[projId] || [];
-          if (!arch.some(item => item.id === vid.id)) {
-            arch.unshift({ ...vid, archivedAt: Date.now() });
-          }
+          const existingIdx = arch.findIndex(item => item.id === vid.id);
+          const entry = { ...vid, archivedAt: Date.now() };
+          if (existingIdx >= 0) arch[existingIdx] = entry;
+          else arch.unshift(entry);
           this.state.archive[projId] = arch;
 
           const q = this.state.queue[projId] || [];
@@ -1037,7 +1173,7 @@
         let left = 15;
         
         btn.disabled = true;
-        btn.style.opacity = '0.3';
+        btn.style.opacity = '0.35';
         timerEl.innerText = left;
 
         const interval = setInterval(() => {
@@ -1053,11 +1189,26 @@
 
       bindEvents() {
         // Vault Setup
+        document.getElementById('btn-open-settings').onclick = () => this.navigate('setup');
         document.getElementById('btn-save-vault').onclick = () => this.handleSetupSubmit();
+        document.getElementById('setup-gh-token').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') document.getElementById('setup-gh-repo').focus();
+        });
+        document.getElementById('setup-gh-repo').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') document.getElementById('setup-yt-key').focus();
+        });
+        document.getElementById('setup-yt-key').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.handleSetupSubmit();
+        });
+
         document.getElementById('btn-copy-shortcut').onclick = () => {
           const url = document.getElementById('shortcut-url');
           url.select();
-          navigator.clipboard.writeText(url.value);
+          navigator.clipboard.writeText(url.value).then(() => {
+            const btn = document.getElementById('btn-copy-shortcut');
+            btn.innerText = "COPIED ✓";
+            setTimeout(() => btn.innerText = "COPY URL", 2000);
+          });
         };
 
         // Project Creation & Cover
@@ -1088,18 +1239,23 @@
         document.getElementById('btn-abort-focus').onclick = () => {
           if (this.player && typeof this.player.pauseVideo === 'function') this.player.pauseVideo();
           this.renderQueue();
+          this.renderArchive();
           this.navigate('workspace');
         };
 
         document.getElementById('btn-finish').onclick = () => this.startBuffer();
         document.getElementById('btn-exit-buffer').onclick = () => {
           this.renderQueue();
+          this.renderArchive();
           this.navigate('workspace');
         };
         
         document.getElementById('btn-force-sync').onclick = async () => {
           await this.pullFromVault();
-          if (this.state.activeProjectId) this.renderQueue();
+          if (this.state.activeProjectId) {
+            this.renderQueue();
+            this.renderArchive();
+          }
         };
       }
     };
