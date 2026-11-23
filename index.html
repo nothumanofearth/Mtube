@@ -3,27 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube / Second Brain</title>
-  
-  <!-- Brutalist Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='75' x='22' fill='white' font-family='monospace' font-size='70'>M</text></svg>">
+  <title>MTube / Research &amp; Sync</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='74' x='22' fill='white' font-family='monospace' font-size='68'>M</text></svg>">
 
   <style>
-    /* BRUTALIST PAPER THEME */
+    /* BRUTALIST PAPER — RESPONSIVE & SAFARI-SAFE */
     :root {
       --bg: #F5F5F0;
       --ink: #000000;
-      --ink-light: #555555;
+      --ink-light: #52524E;
       --paper: #FFFFFF;
-      --accent-bg: #EAEAE2;
       --border: 2px solid var(--ink);
-      --font-mono: "Courier New", Courier, ui-monospace, monospace;
-      --font-serif: "Times New Roman", Times, ui-serif, serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      --font-serif: "New York", Georgia, "Times New Roman", serif;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
@@ -31,12 +34,15 @@
       color: var(--ink);
       font-family: var(--font-mono);
       margin: 0;
-      padding: env(safe-area-inset-top) 16px 60px;
+      padding: calc(12px + env(safe-area-inset-top)) 16px calc(48px + env(safe-area-inset-bottom));
       line-height: 1.5;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     .container {
-      max-width: 640px;
+      width: 100%;
+      max-width: 960px;
       margin: 0 auto;
     }
 
@@ -44,106 +50,168 @@
     h1, h2, h3 {
       font-family: var(--font-serif);
       font-weight: normal;
-      margin: 0 0 16px 0;
+      margin: 0 0 14px 0;
       letter-spacing: -0.02em;
+      word-wrap: break-word;
     }
-    h1 { font-size: 30px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; text-transform: uppercase; }
-    h2 { font-size: 19px; margin-top: 24px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; text-transform: uppercase; }
-    
+    h1 {
+      font-size: clamp(24px, 5vw, 34px);
+      border-bottom: var(--border);
+      padding-bottom: 8px;
+      margin-top: 20px;
+      text-transform: uppercase;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 22px;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
     p { margin: 0 0 14px; }
     .muted { color: var(--ink-light); font-size: 13px; }
     .bold { font-weight: bold; }
 
-    /* Dashboard Header Widget */
-    .dash-widget {
+    /* Clean Header Bar (Replaces Weird Clock) */
+    .top-status-bar {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       background: var(--ink);
       color: var(--paper);
-      padding: 12px 16px;
-      margin-top: 16px;
-      font-family: var(--font-mono);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
     }
-    .dash-time { font-size: 22px; font-weight: bold; letter-spacing: 2px; }
-    .dash-ascii { font-size: 16px; white-space: pre; }
 
-    /* Brutalist Components */
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
+    }
+
+    /* Responsive Web Grid */
+    .web-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      .web-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+      .focus-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 20px;
+        align-items: start;
+      }
+    }
+
+    /* Brutalist Boxes & Controls */
     .box {
       background: var(--paper);
       border: var(--border);
       padding: 16px;
-      margin-bottom: 24px;
-      box-shadow: 6px 6px 0 var(--ink);
+      margin-bottom: 20px;
+      box-shadow: 5px 5px 0 var(--ink);
+      width: 100%;
     }
 
     .btn {
       appearance: none;
+      -webkit-appearance: none;
       background: var(--paper);
       color: var(--ink);
       border: var(--border);
+      border-radius: 0;
       font-family: var(--font-mono);
       font-size: 13px;
       font-weight: bold;
       text-transform: uppercase;
+      min-height: 44px;
       padding: 10px 14px;
       cursor: pointer;
       box-shadow: 4px 4px 0 var(--ink);
-      transition: transform 0.1s, box-shadow 0.1s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-align: center;
     }
     .btn:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0 var(--ink);
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0 var(--ink);
     }
     .btn.full { width: 100%; margin-bottom: 12px; }
     .btn.inverse { background: var(--ink); color: var(--paper); }
-    .btn.small { padding: 5px 9px; font-size: 11px; box-shadow: 2px 2px 0 var(--ink); }
-    .btn.small:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+    .btn.small {
+      min-height: 36px;
+      padding: 6px 10px;
+      font-size: 11px;
+      box-shadow: 2px 2px 0 var(--ink);
+    }
 
+    /* Safari 16px input rule prevents auto-zoom */
     input, textarea {
       width: 100%;
+      max-width: 100%;
       background: var(--bg);
       border: var(--border);
+      border-radius: 0;
       color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 15px;
-      padding: 11px;
+      font-size: 16px;
+      padding: 11px 12px;
       margin-bottom: 14px;
       outline: none;
+      display: block;
     }
     input:focus, textarea:focus { background: var(--paper); }
 
-    /* Project Row with Delete */
+    /* Giphy Ambient Frame */
+    .giphy-frame {
+      width: 100%;
+      border: var(--border);
+      background: var(--paper);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .giphy-frame img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%) contrast(115%);
+    }
+
+    /* Project Rows */
     .project-row {
       display: flex;
       gap: 8px;
       margin-bottom: 12px;
+      width: 100%;
     }
     .project-row .btn.main-proj {
       flex: 1;
       margin-bottom: 0;
       justify-content: space-between;
       text-align: left;
+      overflow: hidden;
     }
     .project-row .btn.del-proj {
       margin-bottom: 0;
-      padding: 10px 12px;
+      width: 46px;
+      flex-shrink: 0;
     }
 
-    /* Zettelkasten Mindmap & Habit Matrix */
-    .mindmap-canvas {
-      width: 100%;
-      background: var(--paper);
-      border: var(--border);
-      padding: 14px;
-      margin-bottom: 24px;
-      box-shadow: 6px 6px 0 var(--ink);
-    }
+    /* Habit Matrix & Concept Map */
     .habit-strip {
       display: flex;
       justify-content: space-between;
@@ -153,29 +221,24 @@
       margin-bottom: 12px;
       font-size: 12px;
     }
-    .habit-cells {
-      display: flex;
-      gap: 4px;
-    }
+    .habit-cells { display: flex; gap: 4px; }
     .habit-cell {
       width: 14px;
       height: 14px;
       border: 1px solid var(--ink);
       background: var(--bg);
     }
-    .habit-cell.done {
-      background: var(--ink);
-    }
+    .habit-cell.done { background: var(--ink); }
+
     .mindmap-nodes {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      align-items: center;
     }
     .node-chip {
       border: 1px solid var(--ink);
       background: var(--bg);
-      padding: 4px 8px;
+      padding: 5px 9px;
       font-size: 12px;
       cursor: pointer;
     }
@@ -185,21 +248,35 @@
       font-weight: bold;
     }
 
-    /* Lists & Results */
+    /* Video Result Items */
     .list-item {
       border-bottom: 1px solid var(--ink);
-      padding: 12px 0;
+      padding: 14px 0;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
     }
     .list-item:last-child { border-bottom: none; }
-    .list-item-content { flex: 1; }
-    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; line-height: 1.25; }
-    .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 4px; }
-    .list-item-desc { font-size: 12px; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    
+    .list-item-content { flex: 1; min-width: 0; }
+    .list-item-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.3;
+      word-wrap: break-word;
+    }
+    .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 6px; }
+    .list-item-desc {
+      font-size: 12px;
+      color: var(--ink);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .score-badge {
       display: inline-block;
       background: var(--ink);
@@ -208,19 +285,29 @@
       font-size: 10px;
       font-weight: bold;
       margin-right: 6px;
+      vertical-align: middle;
     }
 
-    /* Focus Mode & Player */
+    /* Responsive 16:9 Video Player */
     .player-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 16/9;
+      padding-bottom: 56.25%;
+      height: 0;
       background: var(--ink);
       border: var(--border);
       margin-bottom: 16px;
+      overflow: hidden;
     }
-    .player-wrapper iframe { width: 100%; height: 100%; border: none; }
-    
+    .player-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
     /* Native Unhooking Blackout */
     #blackout-overlay {
       position: absolute;
@@ -231,41 +318,29 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
-      border: var(--border);
       text-align: center;
       padding: 16px;
     }
     #blackout-overlay.active { display: flex; }
 
-    /* In-Screen Gemini Assistant Drawer */
-    .gemini-drawer {
+    /* Inline Video Brief (Replaces External Gemini Assistant) */
+    .brief-box {
       background: var(--paper);
       border: var(--border);
       padding: 14px;
       margin-bottom: 20px;
-      box-shadow: 5px 5px 0 var(--ink);
     }
-    .suggestion-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-bottom: 12px;
+    .brief-chapter {
+      padding: 6px 0;
+      border-bottom: 1px dashed #ccc;
+      font-size: 13px;
     }
-    .suggestion-card {
-      text-align: left;
-      background: var(--bg);
-      border: 1px solid var(--ink);
-      padding: 9px 11px;
-      font-family: var(--font-mono);
-      font-size: 12px;
+    .brief-chapter:last-child { border-bottom: none; }
+    .chapter-time {
+      font-weight: bold;
+      text-decoration: underline;
       cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .suggestion-card:active {
-      background: var(--ink);
-      color: var(--paper);
+      margin-right: 8px;
     }
 
     /* Timestamped Ledger */
@@ -290,78 +365,104 @@
 <body>
   <div class="container">
     
-    <!-- DASHBOARD HEADER -->
-    <div class="dash-widget" id="main-dashboard">
-      <div class="dash-time" id="clock-display">00:00:00</div>
-      <div class="dash-ascii" id="ascii-spinner">[ - ]</div>
+    <!-- CLEAN STATUS & CLOUD SYNC HEADER -->
+    <div class="top-status-bar">
+      <span>MTUBE // RESEARCH OS</span>
+      <span class="sync-badge" id="sync-status">LOCAL CACHE</span>
     </div>
 
     <!-- VIEW 0: CONFIG ERROR -->
     <div id="view-error" class="view">
       <h1>SYSTEM HALT</h1>
       <div class="box">
-        <p class="bold">config.json not found or invalid.</p>
-        <p>Ensure config.json exists in your repo root with a valid apiKey.</p>
+        <p class="bold">config.json missing or invalid.</p>
+        <p>Ensure config.json exists in your GitHub repository root with your YouTube API key.</p>
       </div>
     </div>
 
-    <!-- VIEW 1: PROJECTS DIRECTORY & SECOND BRAIN -->
+    <!-- VIEW 1: DIRECTORY & MULTI-DEVICE DASHBOARD -->
     <div id="view-projects" class="view active">
       <h1>DIRECTORY</h1>
-      <p class="muted">PARA Workspaces: Isolate every learning session by active project.</p>
-      
-      <div id="projects-list"></div>
+      <p class="muted">Cross-device PARA workspaces synced via GitHub.</p>
 
-      <!-- In-UI Custom Project Creation -->
-      <div class="box" style="margin-top: 16px;">
-        <h2 style="margin-top:0;">+ NEW PROJECT WORKSPACE</h2>
-        <input type="text" id="new-proj-name" placeholder="Project Name (e.g., '8-Ball Pool Cue Control')" />
-        <button class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
-      </div>
-      
-      <h2>ZETTELKASTEN CONCEPT MAP</h2>
-      <p class="muted">Synthesized from your Atomic Habits streak, intentions, and saved notes.</p>
-      <div class="mindmap-canvas">
-        <div class="habit-strip">
-          <span class="bold">7-DAY DELIBERATE REPS:</span>
-          <div class="habit-cells" id="habit-cells"></div>
+      <div class="web-grid">
+        <!-- Left Column: Active Projects -->
+        <div>
+          <div id="projects-list"></div>
+
+          <div class="box">
+            <h2 style="margin-top:0;">+ NEW WORKSPACE</h2>
+            <input type="text" id="new-proj-name" placeholder="Project Name (e.g., 'Podcasts & Startups')" />
+            <button class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
+          </div>
         </div>
-        <div class="mindmap-nodes" id="mindmap-nodes"></div>
+
+        <!-- Right Column: Second Brain, Habit Matrix & Giphy -->
+        <div>
+          <div class="box">
+            <h2 style="margin-top:0;">HABIT &amp; CONCEPT GRAPH</h2>
+            <div class="habit-strip">
+              <span class="bold">7-DAY DELIBERATE REPS:</span>
+              <div class="habit-cells" id="habit-cells"></div>
+            </div>
+            <div class="mindmap-nodes" id="mindmap-nodes"></div>
+          </div>
+
+          <div class="box">
+            <h2 style="margin-top:0;">VISUAL ANCHOR (GIPHY)</h2>
+            <div id="giphy-container" class="giphy-frame hidden">
+              <img id="giphy-img" src="" alt="Focus Visual Anchor" />
+            </div>
+            <input type="text" id="giphy-url-input" placeholder="Paste Giphy GIF URL (.gif or giphy.com link)" />
+            <div style="display:flex; gap:8px;">
+              <button class="btn small inverse" style="flex:1;" id="btn-save-giphy">SET GIF</button>
+              <button class="btn small" id="btn-clear-giphy">CLEAR</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- VIEW 2: WORKSPACE (Intention Gate, Queue & 30-Day Archive) -->
+    <!-- VIEW 2: WORKSPACE -->
     <div id="view-workspace" class="view">
-      <button class="btn small" style="margin-bottom: 16px;" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+        <button class="btn small" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
+        <button class="btn small" id="btn-force-sync">SYNC NOW</button>
+      </div>
       <h1 id="ws-title">WORKSPACE</h1>
       
-      <div class="box">
-        <h2 style="margin-top:0;">IMPLEMENTATION INTENTION</h2>
-        <p class="muted" style="margin-bottom: 8px;">State what you are looking for and why. Results are ranked against your Purpose.</p>
-        <input type="text" id="ig-query" placeholder="Query (e.g., 'Proxmox ZFS mirror setup')" />
-        <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Understand drive redundancy before buying')" />
-        <button class="btn full" id="btn-search">SEARCH DATABASE</button>
-        <div id="search-status" class="bold" style="margin-top:8px;"></div>
+      <div class="web-grid">
+        <div>
+          <div class="box">
+            <h2 style="margin-top:0;">INTENTION GATE</h2>
+            <p class="muted">Podcasts &amp; long-form talks are automatically preserved.</p>
+            <input type="text" id="ig-query" placeholder="Query (e.g., 'Latest podcast of Figuring it out')" />
+            <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Learn from founder experiences')" />
+            <button class="btn full inverse" id="btn-search">SEARCH DATABASE</button>
+            <div id="search-status" class="bold" style="margin-top:8px;"></div>
+          </div>
+
+          <div id="search-results-container" class="hidden">
+            <h2>CURATED RESULTS (TOP 10)</h2>
+            <div class="box" id="search-results-list"></div>
+          </div>
+        </div>
+
+        <div>
+          <h2 style="margin-top:0;">ACTIVE QUEUE</h2>
+          <div class="box" id="queue-list"></div>
+
+          <h2>30-DAY KNOWLEDGE VAULT</h2>
+          <p class="muted">Synced across your devices with notes attached.</p>
+          <div class="box" id="archive-list"></div>
+        </div>
       </div>
-
-      <div id="search-results-container" class="hidden">
-        <h2>CURATED RESULTS (TOP 10)</h2>
-        <p class="muted">Shorts &amp; entertainment purged. Sorted by Purpose match.</p>
-        <div class="box" id="search-results-list"></div>
-      </div>
-
-      <h2>ACTIVE QUEUE</h2>
-      <div class="box" id="queue-list"></div>
-
-      <h2>SAVED KNOWLEDGE VAULT (30-DAY ARCHIVE)</h2>
-      <p class="muted">Completed videos with your attached timestamped notes.</p>
-      <div class="box" id="archive-list"></div>
     </div>
 
-    <!-- VIEW 3: FOCUS MODE & IN-SCREEN GEMINI -->
+    <!-- VIEW 3: FOCUS MODE & INLINE BRIEF -->
     <div id="view-focus" class="view">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
-        <span class="bold" style="text-transform:uppercase;">Focus Mode</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin: 16px 0;">
+        <span class="bold">FOCUS MODE</span>
         <button class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
       </div>
 
@@ -370,51 +471,44 @@
         <div id="focus-purpose" class="bold" style="font-family:var(--font-serif); font-size:18px;"></div>
       </div>
 
-      <div class="player-wrapper">
-        <div id="yt-player"></div>
-        <div id="blackout-overlay">
-          <h2 style="margin:0 0 8px;">PAUSED</h2>
-          <p class="muted">YouTube recommendations suppressed.</p>
-          <button class="btn" id="btn-resume">RESUME VIDEO</button>
-        </div>
-      </div>
+      <div class="focus-grid">
+        <!-- Left: Video + Inline Brief Directly Below -->
+        <div>
+          <div class="player-wrapper">
+            <div id="yt-player"></div>
+            <div id="blackout-overlay">
+              <h2 style="margin:0 0 8px;">PAUSED</h2>
+              <p class="muted">YouTube recommendations suppressed.</p>
+              <button class="btn" id="btn-resume">RESUME VIDEO</button>
+            </div>
+          </div>
 
-      <!-- In-Screen Gemini Toggle -->
-      <button class="btn full inverse" id="btn-toggle-gemini" style="margin-bottom: 16px;">✦ GEMINI VIDEO ASSISTANT</button>
-
-      <!-- In-Screen Gemini Assistant Panel -->
-      <div id="gemini-drawer" class="gemini-drawer hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span class="bold" style="font-size:13px;">✦ GEMINI PROMPT SYNTHESIZER</span>
-          <button class="btn small" id="btn-close-gemini">X</button>
+          <!-- Inline Video Summary & Chapter Breakdown Right Below Player -->
+          <div class="brief-box">
+            <h2 style="margin-top:0;">INLINE VIDEO BRIEF &amp; CHAPTERS</h2>
+            <div id="inline-video-brief" class="muted">Loading video structure...</div>
+          </div>
         </div>
-        <p class="muted" style="font-size:12px; margin-bottom:10px;">
-          Tap a suggestion card below to build a prompt containing this video, your purpose, and your timestamped notes:
-        </p>
-        <div id="gemini-suggestions" class="suggestion-grid"></div>
-        <textarea id="gemini-prompt-box" rows="5" placeholder="Select a card above or write a custom question about this video..."></textarea>
-        <div style="display:flex; gap:8px;">
-          <button class="btn small inverse" style="flex:1;" id="btn-copy-gemini-prompt">COPY PROMPT</button>
-          <a id="gemini-launch-link" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" class="btn small" style="text-decoration:none;">OPEN GEMINI &nearr;</a>
-        </div>
-      </div>
 
-      <h2>TIMESTAMPED LEDGER (AUTO-SAVED)</h2>
-      <p class="muted">Notes remain attached to this video in your Workspace Vault.</p>
-      <input type="text" id="note-input" placeholder="Type insight or /todo... (Press Enter to stamp time)" />
-      <div id="ledger-list"></div>
-      
-      <div style="margin-top: 24px;">
-        <button class="btn full" id="btn-finish">COMPLETE &amp; ARCHIVE VIDEO</button>
+        <!-- Right: Timestamped Ledger -->
+        <div>
+          <div class="box">
+            <h2 style="margin-top:0;">TIMESTAMPED LEDGER</h2>
+            <p class="muted">Auto-syncs to GitHub. Tap a timestamp to jump.</p>
+            <input type="text" id="note-input" placeholder="Type insight or /todo... (Enter)" />
+            <div id="ledger-list"></div>
+            <button class="btn full inverse" style="margin-top:16px;" id="btn-finish">COMPLETE &amp; ARCHIVE</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- VIEW 4: ONE-SEC POST BUFFER -->
+    <!-- VIEW 4: POST-VIDEO BUFFER -->
     <div id="view-buffer" class="view">
-      <div class="box" style="text-align:center; padding: 60px 20px;">
+      <div class="box" style="text-align:center; padding: 48px 20px; margin-top: 24px;">
         <h1 style="border:none;">ASSIMILATION</h1>
-        <p>Video archived with your notes. Pause to consolidate what you learned.</p>
-        <div style="font-size: 48px; font-weight:bold; margin: 24px 0;" id="buffer-timer">15</div>
+        <p>Video and notes saved to your synced Knowledge Vault.</p>
+        <div style="font-size: 44px; font-weight:bold; margin: 20px 0;" id="buffer-timer">15</div>
         <button class="btn" id="btn-exit-buffer" disabled style="opacity:0.3;">RETURN TO WORKSPACE</button>
       </div>
     </div>
@@ -424,37 +518,160 @@
   <script>
     const App = {
       config: null,
+      ghFileSha: null,
+      syncTimeout: null,
       state: {
         activeProjectId: null,
         activeVideo: null,
-        customProjects: JSON.parse(localStorage.getItem('mtube_custom_projects') || '[]'),
-        deletedProjectIds: JSON.parse(localStorage.getItem('mtube_deleted_projects') || '[]'),
-        queue: JSON.parse(localStorage.getItem('mtube_queue') || '{}'),
-        archive: JSON.parse(localStorage.getItem('mtube_archive') || '{}'),
-        scratchpad: JSON.parse(localStorage.getItem('mtube_scratchpad') || '[]'),
-        notes: JSON.parse(localStorage.getItem('mtube_notes') || '{}'),
-        habitDates: JSON.parse(localStorage.getItem('mtube_habit_dates') || '[]')
+        customProjects: [],
+        deletedProjectIds: [],
+        queue: {},
+        archive: {},
+        scratchpad: [],
+        notes: {},
+        habitDates: [],
+        giphyUrl: ""
       },
       player: null,
       apiReady: false,
-      
-      junkKeywords: ["shorts", "vlog", "prank", "funny", "comedy", "tiktok", "meme", "challenge", "reaction", "gossip", "drama"],
+
+      // Only block obvious junk in the TITLE (never in description, so podcasts pass cleanly)
+      titleJunkKeywords: ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "try not to laugh", "gossip", "drama"],
 
       async init() {
-        this.startDashboardClock();
+        this.loadLocalCache();
         try {
           const res = await fetch(`config.json?t=${Date.now()}`);
           if (!res.ok) throw new Error();
           this.config = await res.json();
           if (!this.config.apiKey) throw new Error();
-          
+
+          await this.pullFromGitHub();
           this.pruneOldArchive();
           this.renderProjects();
           this.renderMindmapAndHabits();
+          this.renderGiphy();
           this.bindEvents();
           this.loadYouTubeAPI();
         } catch (e) {
           this.navigate('error');
+        }
+      },
+
+      loadLocalCache() {
+        try {
+          const cached = JSON.parse(localStorage.getItem('mtube_cloud_cache') || 'null');
+          if (cached) {
+            this.state = { ...this.state, ...cached };
+          }
+        } catch {}
+      },
+
+      setSyncBadge(text) {
+        document.getElementById('sync-status').innerText = text;
+      },
+
+      /* =====================================================================
+         GITHUB API TWO-WAY CLOUD SYNC (data.json)
+      ===================================================================== */
+      async pullFromGitHub() {
+        const { githubToken, githubOwner, githubRepo } = this.config || {};
+        if (!githubToken || !githubOwner || !githubRepo) {
+          this.setSyncBadge("LOCAL ONLY (ADD GITHUB TOKEN)");
+          return;
+        }
+
+        this.setSyncBadge("SYNCING...");
+        try {
+          const url = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data.json?t=${Date.now()}`;
+          const res = await fetch(url, {
+            headers: {
+              "Authorization": `Bearer ${githubToken}`,
+              "Accept": "application/vnd.github+json"
+            }
+          });
+
+          if (res.status === 404) {
+            // Initialize data.json on GitHub for the first time
+            await this.pushToGitHub();
+            return;
+          }
+          if (!res.ok) throw new Error("GitHub pull failed");
+
+          const fileData = await res.json();
+          this.ghFileSha = fileData.sha;
+          const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
+          const remoteState = JSON.parse(decoded);
+
+          this.state = {
+            ...this.state,
+            customProjects: remoteState.customProjects || [],
+            deletedProjectIds: remoteState.deletedProjectIds || [],
+            queue: remoteState.queue || {},
+            archive: remoteState.archive || {},
+            scratchpad: remoteState.scratchpad || [],
+            notes: remoteState.notes || {},
+            habitDates: remoteState.habitDates || [],
+            giphyUrl: remoteState.giphyUrl || ""
+          };
+          localStorage.setItem('mtube_cloud_cache', JSON.stringify(this.state));
+          this.setSyncBadge("GITHUB SYNCED ✓");
+        } catch (err) {
+          console.warn(err);
+          this.setSyncBadge("OFFLINE CACHE");
+        }
+      },
+
+      saveState() {
+        localStorage.setItem('mtube_cloud_cache', JSON.stringify(this.state));
+        clearTimeout(this.syncTimeout);
+        this.syncTimeout = setTimeout(() => this.pushToGitHub(), 900);
+      },
+
+      async pushToGitHub() {
+        const { githubToken, githubOwner, githubRepo } = this.config || {};
+        if (!githubToken || !githubOwner || !githubRepo) return;
+
+        this.setSyncBadge("SAVING TO GITHUB...");
+        try {
+          const payload = {
+            updatedAt: new Date().toISOString(),
+            customProjects: this.state.customProjects,
+            deletedProjectIds: this.state.deletedProjectIds,
+            queue: this.state.queue,
+            archive: this.state.archive,
+            scratchpad: this.state.scratchpad,
+            notes: this.state.notes,
+            habitDates: this.state.habitDates,
+            giphyUrl: this.state.giphyUrl
+          };
+
+          const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+          const url = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data.json`;
+
+          const body = {
+            message: "Sync MTube research state",
+            content: encodedContent
+          };
+          if (this.ghFileSha) body.sha = this.ghFileSha;
+
+          const res = await fetch(url, {
+            method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${githubToken}`,
+              "Accept": "application/vnd.github+json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+          });
+
+          if (!res.ok) throw new Error("Push failed");
+          const result = await res.json();
+          this.ghFileSha = result.content.sha;
+          this.setSyncBadge("GITHUB SYNCED ✓");
+        } catch (err) {
+          console.warn(err);
+          this.setSyncBadge("SYNC RETRY PENDING");
         }
       },
 
@@ -464,7 +681,6 @@
       },
 
       pruneOldArchive() {
-        // Keep archived videos & attached notes for 30 days
         const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
         const now = Date.now();
         let changed = false;
@@ -488,38 +704,36 @@
         }
       },
 
-      startDashboardClock() {
-        setInterval(() => {
-          const now = new Date();
-          document.getElementById('clock-display').innerText = now.toLocaleTimeString('en-US', { hour12: false });
-        }, 1000);
-
-        const frames = ["[ - ]", "[ \\ ]", "[ | ]", "[ / ]"];
-        let frameIdx = 0;
-        setInterval(() => {
-          document.getElementById('ascii-spinner').innerText = frames[frameIdx];
-          frameIdx = (frameIdx + 1) % frames.length;
-        }, 200);
-      },
-
-      saveState() {
-        localStorage.setItem('mtube_custom_projects', JSON.stringify(this.state.customProjects));
-        localStorage.setItem('mtube_deleted_projects', JSON.stringify(this.state.deletedProjectIds));
-        localStorage.setItem('mtube_queue', JSON.stringify(this.state.queue));
-        localStorage.setItem('mtube_archive', JSON.stringify(this.state.archive));
-        localStorage.setItem('mtube_scratchpad', JSON.stringify(this.state.scratchpad));
-        localStorage.setItem('mtube_notes', JSON.stringify(this.state.notes));
-        localStorage.setItem('mtube_habit_dates', JSON.stringify(this.state.habitDates));
-      },
-
       navigate(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(`view-${viewId}`).classList.add('active');
         if (viewId === 'projects') {
           this.renderProjects();
           this.renderMindmapAndHabits();
+          this.renderGiphy();
         }
         window.scrollTo(0, 0);
+      },
+
+      renderGiphy() {
+        const container = document.getElementById('giphy-container');
+        const img = document.getElementById('giphy-img');
+        const input = document.getElementById('giphy-url-input');
+        const url = (this.state.giphyUrl || "").trim();
+
+        input.value = url;
+        if (!url) {
+          container.classList.add('hidden');
+          return;
+        }
+        // Convert giphy.com/gifs/name-ID to direct media.giphy.com/media/ID/giphy.gif if needed
+        let directUrl = url;
+        const giphyMatch = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
+        if (giphyMatch && giphyMatch[1]) {
+          directUrl = `https://media.giphy.com/media/${giphyMatch[1]}/giphy.gif`;
+        }
+        img.src = directUrl;
+        container.classList.remove('hidden');
       },
 
       renderProjects() {
@@ -567,7 +781,7 @@
         if (!name) return;
 
         const id = 'proj_' + Date.now();
-        this.state.customProjects.push({ id, name, context: name.toLowerCase() });
+        this.state.customProjects.push({ id, name });
         this.saveState();
         input.value = '';
         this.renderProjects();
@@ -575,7 +789,6 @@
       },
 
       renderMindmapAndHabits() {
-        // 1. Atomic Habits 7-Day Consistency Strip
         const cellsEl = document.getElementById('habit-cells');
         cellsEl.innerHTML = '';
         for (let i = 6; i >= 0; i--) {
@@ -586,7 +799,6 @@
           cellsEl.appendChild(cell);
         }
 
-        // 2. Zettelkasten Concept Nodes (Links Projects + Extracted Concepts from Notes/Queries)
         const nodesEl = document.getElementById('mindmap-nodes');
         nodesEl.innerHTML = '';
 
@@ -599,8 +811,7 @@
           nodesEl.appendChild(hub);
         });
 
-        // Extract meaningful keywords from recent queries & notes to form linked concept nodes
-        const stopWords = new Set(['about', 'after', 'before', 'between', 'could', 'from', 'have', 'into', 'just', 'like', 'more', 'other', 'should', 'some', 'such', 'than', 'that', 'their', 'there', 'these', 'they', 'this', 'those', 'through', 'under', 'very', 'what', 'when', 'where', 'which', 'while', 'with', 'would', 'your', 'understand', 'learn', 'tutorial', 'video']);
+        const stopWords = new Set(['about', 'after', 'before', 'between', 'could', 'from', 'have', 'into', 'just', 'like', 'more', 'other', 'should', 'some', 'such', 'than', 'that', 'their', 'there', 'these', 'they', 'this', 'those', 'through', 'under', 'very', 'what', 'when', 'where', 'which', 'while', 'with', 'would', 'your', 'understand', 'learn', 'tutorial', 'video', 'latest']);
         const freq = {};
 
         this.state.scratchpad.forEach(q => {
@@ -665,11 +876,13 @@
       },
 
       scoreRelevance(video, query, purpose) {
-        const haystack = (video.snippet.title + " " + video.snippet.description).toLowerCase();
+        const title = video.snippet.title.toLowerCase();
+        const desc = (video.snippet.description || "").toLowerCase();
         const intentWords = (query + " " + purpose).toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 3);
         let score = 0;
         intentWords.forEach(word => {
-          if (haystack.includes(word)) score += 1;
+          if (title.includes(word)) score += 3;
+          if (desc.includes(word)) score += 1;
         });
         return score;
       },
@@ -680,18 +893,20 @@
         const status = document.getElementById('search-status');
         
         if (!query || !purpose) {
-          status.innerText = "Error: Implementation Intention requires both Query and Purpose.";
+          status.innerText = "Error: Intention Gate requires both Query and Purpose.";
           return;
         }
 
         this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 12);
         this.saveState();
 
-        status.innerText = "Fetching and analyzing database...";
+        status.innerText = "Searching YouTube...";
         
         try {
           const apiKey = this.config.apiKey;
-          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=25&safeSearch=strict&key=${apiKey}`);
+          // If user asks for "latest", sort by date so newest podcast episodes appear first
+          const orderParam = /\b(latest|newest|recent)\b/i.test(query) ? "date" : "relevance";
+          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=25&order=${orderParam}&safeSearch=strict&key=${apiKey}`);
           const searchData = await searchRes.json();
           if (!searchRes.ok) throw new Error(searchData.error?.message || "API Error");
           
@@ -703,9 +918,15 @@
 
           let validVideos = vidData.items.filter(v => {
             const dur = this.parseDuration(v.contentDetails.duration);
-            if (dur.totalSeconds < 180) return false; 
-            const textContent = (v.snippet.title + " " + v.snippet.description).toLowerCase();
-            if (this.junkKeywords.some(junk => textContent.includes(junk))) return false;
+            // Block Shorts & clips under 3 minutes (180 seconds)
+            if (dur.totalSeconds < 180) return false;
+            
+            // Any long-form podcast/lecture >= 20 minutes (1200s) is automatically allowed
+            if (dur.totalSeconds >= 1200) return true;
+
+            // Check ONLY the title for junk keywords (not description, which often mentions Shorts channels)
+            const titleLower = v.snippet.title.toLowerCase();
+            if (this.titleJunkKeywords.some(junk => titleLower.includes(junk))) return false;
             return true;
           });
 
@@ -716,7 +937,7 @@
           validVideos.sort((a, b) => b.intentScore - a.intentScore);
           const finalCuratedList = validVideos.slice(0, 10);
 
-          if (finalCuratedList.length === 0) throw new Error("All results were flagged as shorts or junk. Try a different query.");
+          if (finalCuratedList.length === 0) throw new Error("No videos over 3 minutes matched. Try broadening your query.");
 
           this.renderSearchResults(finalCuratedList, purpose);
           status.innerText = "";
@@ -737,7 +958,7 @@
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">
-                <span class="score-badge">SCORE:${v.intentScore}</span>${v.snippet.title}
+                <span class="score-badge">MATCH:${v.intentScore}</span>${v.snippet.title}
               </div>
               <div class="list-item-meta">${v.snippet.channelTitle} // ${this.formatDuration(durObj)}</div>
               <div class="list-item-desc">${v.snippet.description || "No description provided."}</div>
@@ -747,7 +968,13 @@
           div.querySelector('button').onclick = () => {
             const q = this.state.queue[this.state.activeProjectId] || [];
             if (!q.some(item => item.id === v.id)) {
-              q.push({ id: v.id, title: v.snippet.title, channel: v.snippet.channelTitle, purpose });
+              q.push({
+                id: v.id,
+                title: v.snippet.title,
+                channel: v.snippet.channelTitle,
+                description: v.snippet.description || "",
+                purpose
+              });
               this.state.queue[this.state.activeProjectId] = q;
               this.saveState();
               this.renderQueue();
@@ -764,7 +991,7 @@
         list.innerHTML = '';
         
         if (q.length === 0) {
-          list.innerHTML = '<span class="muted">Queue empty. Search above to curate.</span>';
+          list.innerHTML = '<span class="muted">Queue empty. Search to curate.</span>';
           return;
         }
 
@@ -775,7 +1002,7 @@
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">Purpose: ${v.purpose} ${noteCount > 0 ? `• [${noteCount} Notes Attached]` : ''}</div>
+              <div class="list-item-meta">Purpose: ${v.purpose} ${noteCount > 0 ? `• [${noteCount} Notes]` : ''}</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <button class="btn small btn-focus">FOCUS</button>
@@ -799,7 +1026,7 @@
         list.innerHTML = '';
 
         if (arch.length === 0) {
-          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay here for 30 days with your notes attached.</span>';
+          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay synced here for 30 days.</span>';
           return;
         }
 
@@ -811,7 +1038,7 @@
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes attached</div>
+              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes</div>
               <div class="list-item-desc">${notes.length > 0 ? notes.map(n => `[${this.formatSecs(n.time)}] ${n.text}`).join(' | ') : 'No notes recorded.'}</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
@@ -837,12 +1064,89 @@
         document.head.appendChild(tag);
       },
 
+      /* =====================================================================
+         INLINE VIDEO BRIEF & CHAPTER EXTRACTOR (Right below video player)
+      ===================================================================== */
+      async renderInlineBrief(videoInfo) {
+        const container = document.getElementById('inline-video-brief');
+        container.innerHTML = '<span class="muted">Extracting video chapters &amp; summary...</span>';
+
+        let desc = videoInfo.description || "";
+        if (!desc && this.config?.apiKey) {
+          try {
+            const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoInfo.id}&key=${this.config.apiKey}`);
+            const data = await res.json();
+            desc = data.items?.[0]?.snippet?.description || "";
+            videoInfo.description = desc;
+          } catch {}
+        }
+
+        const lines = desc.split('\n').map(l => l.trim()).filter(Boolean);
+        const chapterRegex = /(?:^|\s)(\d{1,2}:\d{2}(?::\d{2})?)\s*[-–—]?\s*(.+)/;
+        const chapters = [];
+        const summaryLines = [];
+
+        lines.forEach(line => {
+          if (/^https?:\/\//i.test(line)) return; // skip raw promotional URLs
+          const m = line.match(chapterRegex);
+          if (m) {
+            chapters.push({ timeStr: m[1], label: m[2] });
+          } else if (summaryLines.length < 4 && line.length > 25) {
+            summaryLines.push(line);
+          }
+        });
+
+        container.innerHTML = '';
+
+        if (summaryLines.length > 0) {
+          const sumDiv = document.createElement('p');
+          sumDiv.style.fontSize = '13px';
+          sumDiv.style.color = 'var(--ink)';
+          sumDiv.innerText = summaryLines.join(' ');
+          container.appendChild(sumDiv);
+        }
+
+        if (chapters.length > 0) {
+          const chHeader = document.createElement('div');
+          chHeader.className = 'bold';
+          chHeader.style.fontSize = '12px';
+          chHeader.style.marginBottom = '6px';
+          chHeader.innerText = 'KEY SECTIONS (TAP TO JUMP):';
+          container.appendChild(chHeader);
+
+          chapters.slice(0, 15).forEach(ch => {
+            const row = document.createElement('div');
+            row.className = 'brief-chapter';
+
+            const timeLink = document.createElement('span');
+            timeLink.className = 'chapter-time';
+            timeLink.innerText = ch.timeStr;
+            timeLink.onclick = () => {
+              const parts = ch.timeStr.split(':').map(Number);
+              const secs = parts.length === 3 ? parts[0]*3600 + parts[1]*60 + parts[2] : parts[0]*60 + parts[1];
+              if (this.player && typeof this.player.seekTo === 'function') {
+                this.player.seekTo(secs, true);
+                this.player.playVideo();
+              }
+            };
+
+            const txt = document.createElement('span');
+            txt.innerText = ch.label;
+
+            row.appendChild(timeLink);
+            row.appendChild(txt);
+            container.appendChild(row);
+          });
+        } else if (summaryLines.length === 0) {
+          container.innerHTML = '<span class="muted">No creator chapters or summary notes provided in metadata. Log your key points in the Timestamped Ledger.</span>';
+        }
+      },
+
       startFocus(videoInfo) {
         this.state.activeVideo = videoInfo;
         document.getElementById('focus-purpose').innerText = videoInfo.purpose;
-        document.getElementById('gemini-drawer').classList.add('hidden');
         this.renderLedger();
-        this.renderGeminiSuggestions();
+        this.renderInlineBrief(videoInfo);
         this.navigate('focus');
 
         if (!this.apiReady) {
@@ -874,8 +1178,10 @@
       },
 
       formatSecs(s) {
-        const m = Math.floor(s / 60);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
         const secs = Math.floor(s % 60);
+        if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
         return `${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
       },
 
@@ -884,7 +1190,7 @@
         let text = input.value.trim();
         if (!text || !this.player) return;
 
-        const timeSecs = this.player.getCurrentTime();
+        const timeSecs = typeof this.player.getCurrentTime === 'function' ? this.player.getCurrentTime() : 0;
         let isTodo = false;
         
         if (text.toLowerCase().startsWith('/todo')) {
@@ -900,7 +1206,6 @@
         this.saveState();
         input.value = '';
         this.renderLedger();
-        this.renderGeminiSuggestions();
       },
 
       renderLedger() {
@@ -935,7 +1240,6 @@
             this.state.notes[vidId].splice(idx, 1);
             this.saveState();
             this.renderLedger();
-            this.renderGeminiSuggestions();
           };
 
           div.appendChild(left);
@@ -944,60 +1248,9 @@
         });
       },
 
-      buildNotesContext() {
-        const v = this.state.activeVideo;
-        const notes = this.state.notes[v.id] || [];
-        if (notes.length === 0) return "";
-        const formatted = notes.map(n => `- [${this.formatSecs(n.time)}] ${n.isTodo ? '(TODO) ' : ''}${n.text}`).join('\n');
-        return `\n\nMy Timestamped Notes so far:\n${formatted}`;
-      },
-
-      renderGeminiSuggestions() {
-        const container = document.getElementById('gemini-suggestions');
-        const v = this.state.activeVideo;
-        if (!v) return;
-
-        const ytUrl = `https://www.youtube.com/watch?v=${v.id}`;
-        const notesBlock = this.buildNotesContext();
-
-        const suggestions = [
-          {
-            label: "1. Summarize key concepts for my purpose",
-            prompt: `Analyze this YouTube video: ${ytUrl}\nTitle: ${v.title}\nMy Purpose: ${v.purpose}${notesBlock}\n\nSummarize the core concepts, technical steps, and key timestamps that directly answer my purpose.`
-          },
-          {
-            label: "2. Expand & verify my timestamped notes",
-            prompt: `Review my timestamped notes on this video (${ytUrl} — "${v.title}"):\nMy Purpose: ${v.purpose}${notesBlock}\n\nFill in any missing technical context around my timestamps, correct any misunderstandings, and highlight the most critical takeaway.`
-          },
-          {
-            label: "3. Create an actionable implementation checklist",
-            prompt: `Based on this video (${ytUrl} — "${v.title}") and my goal ("${v.purpose}")${notesBlock}\n\nTurn the concepts into a step-by-step practical checklist I can execute immediately.`
-          },
-          {
-            label: "4. Quiz me to test retention (Active Recall)",
-            prompt: `I just watched "${v.title}" (${ytUrl}) to learn: ${v.purpose}.${notesBlock}\n\nAsk me 3 targeted active-recall questions to test whether I truly understood the material.`
-          }
-        ];
-
-        container.innerHTML = '';
-        suggestions.forEach(s => {
-          const card = document.createElement('button');
-          card.type = 'button';
-          card.className = 'suggestion-card';
-          card.innerHTML = `<span>${s.label}</span><span>[USE]</span>`;
-          card.onclick = () => {
-            const box = document.getElementById('gemini-prompt-box');
-            box.value = s.prompt;
-            navigator.clipboard.writeText(s.prompt).catch(() => {});
-          };
-          container.appendChild(card);
-        });
-      },
-
       startBuffer() {
-        if (this.player) this.player.stopVideo();
+        if (this.player && typeof this.player.stopVideo === 'function') this.player.stopVideo();
         
-        // Archive video with timestamp so notes stay attached for 30 days
         const projId = this.state.activeProjectId;
         const vid = this.state.activeVideo;
         if (projId && vid) {
@@ -1008,7 +1261,6 @@
           else arch.unshift(entry);
           this.state.archive[projId] = arch;
 
-          // Remove from active queue
           const q = this.state.queue[projId] || [];
           this.state.queue[projId] = q.filter(item => item.id !== vid.id);
           this.recordHabitRep();
@@ -1042,6 +1294,24 @@
           if (e.key === 'Enter') this.createCustomProject();
         });
 
+        document.getElementById('btn-save-giphy').onclick = () => {
+          this.state.giphyUrl = document.getElementById('giphy-url-input').value.trim();
+          this.saveState();
+          this.renderGiphy();
+        };
+
+        document.getElementById('btn-clear-giphy').onclick = () => {
+          this.state.giphyUrl = "";
+          this.saveState();
+          this.renderGiphy();
+        };
+
+        document.getElementById('btn-force-sync').onclick = async () => {
+          await this.pullFromGitHub();
+          this.renderQueue();
+          this.renderArchive();
+        };
+
         document.getElementById('btn-search').onclick = () => this.handleSearch();
         
         document.getElementById('btn-resume').onclick = () => {
@@ -1052,37 +1322,9 @@
         noteInput.addEventListener('keypress', (e) => {
           if (e.key === 'Enter') this.logNote();
         });
-
-        // In-Screen Gemini Drawer Controls
-        document.getElementById('btn-toggle-gemini').onclick = () => {
-          const drawer = document.getElementById('gemini-drawer');
-          drawer.classList.toggle('hidden');
-          if (!drawer.classList.contains('hidden')) {
-            this.renderGeminiSuggestions();
-            const box = document.getElementById('gemini-prompt-box');
-            if (!box.value.trim()) {
-              const firstCard = document.querySelector('.suggestion-card');
-              if (firstCard) firstCard.click();
-            }
-          }
-        };
-
-        document.getElementById('btn-close-gemini').onclick = () => {
-          document.getElementById('gemini-drawer').classList.add('hidden');
-        };
-
-        document.getElementById('btn-copy-gemini-prompt').onclick = () => {
-          const box = document.getElementById('gemini-prompt-box');
-          if (!box.value.trim()) return;
-          navigator.clipboard.writeText(box.value).then(() => {
-            const btn = document.getElementById('btn-copy-gemini-prompt');
-            btn.innerText = "COPIED TO CLIPBOARD";
-            setTimeout(() => btn.innerText = "COPY PROMPT", 2000);
-          });
-        };
         
         document.getElementById('btn-abort-focus').onclick = () => {
-          if (this.player) this.player.pauseVideo();
+          if (this.player && typeof this.player.pauseVideo === 'function') this.player.pauseVideo();
           this.renderQueue();
           this.renderArchive();
           this.navigate('workspace');
