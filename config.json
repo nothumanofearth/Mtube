@@ -1,20 +1,17 @@
 {
   "apiKey": "AIzaSyCkwB4WDboObBrbgygqzYmo4Q4d9OADel8",
+  "githubToken": "ghp_YOUR_GITHUB_PERSONAL_ACCESS_TOKEN",
+  "githubOwner": "nothumanofearth",
+  "githubRepo": "Mtube",
   "projects": [
     {
       "id": "home-server",
-      "name": "Home Server & Self-Hosting",
-      "context": "self hosted proxmox docker home server"
+      "name": "Home Server & Self-Hosting"
     },
     {
-      "id": "8-ball",
-      "name": "8-Ball Pool Mechanics",
-      "context": "8 ball pool billiards technique tutorial"
-    },
-    {
-      "id": "tech-news",
-      "name": "Tech Architecture & News",
-      "context": "software architecture tech news analysis"
+      "id": "podcasts",
+      "name": "Podcasts & Long-Form"
     }
   ]
 }
+
