@@ -2,32 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#0E1511" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="MTube" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230E1511'/%3E%3Ccircle cx='90' cy='90' r='54' fill='none' stroke='%23A8E6B7' stroke-width='10'/%3E%3Cpolygon points='78,66 78,114 116,90' fill='%23A8E6B7'/%3E%3C/svg%3E" />
-  <title>MTube 2.0 — Mindful YouTube</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MTube / Research</title>
   <style>
+    /* BRUTALIST PAPER THEME */
     :root {
-      --background: #0E1511;
-      --surface: #18231C;
-      --surface-secondary: #202E25;
-      --border: #304438;
-      --primary: #A8E6B7;
-      --primary-dim: rgba(168, 230, 183, 0.14);
-      --text: #EDF5EE;
-      --muted: #9AADA0;
-      --danger: #FFB4A9;
-      --danger-dim: rgba(255, 180, 169, 0.14);
-      --gold: #F4D58A;
-      --gold-dim: rgba(244, 213, 138, 0.14);
-      --radius-sm: 12px;
-      --radius-md: 16px;
-      --radius-lg: 22px;
-      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+      --bg: #F5F5F0;
+      --ink: #000000;
+      --ink-light: #555555;
+      --paper: #FFFFFF;
+      --border: 2px solid var(--ink);
+      --font-mono: "Courier New", Courier, ui-monospace, monospace;
+      --font-serif: "Times New Roman", Times, ui-serif, serif;
     }
 
     * {
@@ -35,2264 +21,602 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--background);
-      color: var(--text);
-      font-family: var(--font-sans);
-      font-size: 16px;
-      line-height: 1.45;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
     body {
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(88px + env(safe-area-inset-bottom));
-      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      margin: 0;
+      padding: env(safe-area-inset-top) 16px 40px;
+      line-height: 1.5;
     }
 
-    /* Layout & Container */
-    .app-shell {
-      max-width: 540px;
+    .container {
+      max-width: 640px;
       margin: 0 auto;
-      padding: 16px 16px 24px;
     }
 
-    /* Header */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      padding: 4px 2px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: var(--primary-dim);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      flex-shrink: 0;
-    }
-
-    .brand-title {
-      font-size: 20px;
-      font-weight: 700;
+    /* Typography */
+    h1, h2, h3 {
+      font-family: var(--font-serif);
+      font-weight: normal;
+      margin: 0 0 16px 0;
       letter-spacing: -0.02em;
-      line-height: 1.1;
     }
+    h1 { font-size: 32px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; }
+    h2 { font-size: 24px; margin-top: 24px; }
+    
+    p { margin: 0 0 16px; }
+    .muted { color: var(--ink-light); font-size: 14px; }
+    .bold { font-weight: bold; }
 
-    .brand-sub {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .focus-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 11px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-    }
-
-    .focus-pill.active {
-      color: var(--primary);
-      border-color: rgba(168, 230, 183, 0.45);
-      background: var(--primary-dim);
-    }
-
-    .focus-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--muted);
-    }
-
-    .focus-pill.active .focus-dot {
-      background: var(--primary);
-    }
-
-    /* Cards & Typography */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
+    /* Brutalist Components */
+    .box {
+      background: var(--paper);
+      border: var(--border);
       padding: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 24px;
+      box-shadow: 6px 6px 0 var(--ink);
     }
 
-    .section-label {
-      font-size: 12px;
-      font-weight: 600;
+    .btn {
+      appearance: none;
+      background: var(--paper);
+      color: var(--ink);
+      border: var(--border);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--muted);
-      margin: 0 0 10px;
-    }
-
-    h2 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin: 0 0 6px;
-    }
-
-    h3 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin: 0 0 6px;
-    }
-
-    /* Session Timer */
-    .timer-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .timer-display {
-      font-size: 36px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.03em;
-      color: var(--text);
-    }
-
-    .timer-display.expired {
-      color: var(--danger);
-    }
-
-    .timer-status-text {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background: var(--surface-secondary);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 100%;
-      background: var(--primary);
-      border-radius: 999px;
-      transition: width 0.4s ease;
-    }
-
-    .timer-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    /* Buttons & Inputs */
-    button {
-      font-family: var(--font-sans);
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: var(--radius-md);
-      min-height: 44px;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      background: var(--surface-secondary);
-      color: var(--text);
+      padding: 10px 16px;
       cursor: pointer;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform 0.1s, box-shadow 0.1s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: opacity 0.15s ease, transform 0.1s ease;
     }
-
-    button:active {
-      transform: scale(0.985);
-      opacity: 0.85;
+    .btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0 var(--ink);
     }
+    .btn.full { width: 100%; margin-bottom: 12px; }
+    .btn.small { padding: 4px 8px; font-size: 12px; box-shadow: 2px 2px 0 var(--ink); }
+    .btn.small:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
 
-    button.btn-primary {
-      background: var(--primary);
-      color: #0B140E;
-      border-color: var(--primary);
-    }
-
-    button.btn-danger {
-      background: var(--danger-dim);
-      color: var(--danger);
-      border-color: rgba(255, 180, 169, 0.35);
-    }
-
-    button.btn-ghost {
-      background: transparent;
-      border-color: var(--border);
-      color: var(--muted);
-    }
-
-    button.btn-full {
+    input, textarea {
       width: 100%;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100%;
-      min-height: 44px;
-      background: var(--surface-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      color: var(--text);
-      font-family: var(--font-sans);
+      background: var(--bg);
+      border: var(--border);
+      color: var(--ink);
+      font-family: var(--font-mono);
       font-size: 16px;
-      padding: 10px 14px;
+      padding: 12px;
+      margin-bottom: 16px;
       outline: none;
     }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--primary);
-    }
-
-    textarea {
-      min-height: 96px;
-      resize: vertical;
-      line-height: 1.45;
-    }
-
-    /* Category Pills */
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .cat-chip {
-      min-height: 44px;
-      padding: 8px 6px;
-      font-size: 13px;
-      font-weight: 500;
-      border-radius: var(--radius-sm);
-      background: var(--surface-secondary);
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-align: center;
-    }
-
-    .cat-chip.selected {
-      background: var(--primary-dim);
-      border-color: var(--primary);
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .search-group {
+    input:focus, textarea:focus { background: var(--paper); }
+    
+    /* Lists & Results */
+    .list-item {
+      border-bottom: 1px solid var(--ink);
+      padding: 12px 0;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    /* API Setup Banner */
-    .setup-banner {
-      background: var(--gold-dim);
-      border: 1px solid rgba(244, 213, 138, 0.35);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      font-size: 14px;
-      color: var(--gold);
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 16px;
     }
+    .list-item:last-child { border-bottom: none; }
+    .list-item-content { flex: 1; }
+    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; }
+    .list-item-meta { font-size: 12px; color: var(--ink-light); }
 
-    .setup-banner button {
-      min-height: 36px;
-      padding: 6px 12px;
-      font-size: 13px;
-      background: var(--gold);
-      color: #1A1508;
-      border: none;
-      flex-shrink: 0;
-    }
-
-    /* Video Result Cards */
-    .results-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 18px 0 10px;
-    }
-
-    .video-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-
-    .thumb-wrap {
+    /* Focus Mode & Player */
+    .player-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #090E0B;
+      aspect-ratio: 16/9;
+      background: var(--ink);
+      border: var(--border);
+      margin-bottom: 24px;
     }
-
-    .thumb-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .duration-badge {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: rgba(14, 21, 17, 0.9);
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-
-    .whitelist-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(14, 21, 17, 0.9);
-      color: var(--primary);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(168, 230, 183, 0.4);
-    }
-
-    .video-body {
-      padding: 14px;
-    }
-
-    .video-title {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.35;
-      margin: 0 0 6px;
-      color: var(--text);
-    }
-
-    .video-meta {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .video-actions {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr auto;
-      gap: 8px;
-    }
-
-    /* Embedded Player Overlay / Section */
-    .player-panel {
-      background: var(--surface);
-      border: 1px solid var(--primary);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .player-aspect {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-    }
-
-    .player-aspect iframe,
-    .player-aspect > div {
+    .player-wrapper iframe { width: 100%; height: 100%; border: none; }
+    
+    /* The Native Unhooking Blackout */
+    #blackout-overlay {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .player-footer {
-      padding: 14px;
-    }
-
-    .player-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    /* Dashboard Metrics */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .metric-tile {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px;
-    }
-
-    .metric-value {
-      font-size: 26px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--primary);
-      line-height: 1.15;
-    }
-
-    .metric-label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* Learning Notes List */
-    .note-item {
-      background: var(--surface-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-
-    .note-text {
-      font-size: 15px;
-      color: var(--text);
-      margin: 0 0 6px;
-    }
-
-    .note-meta {
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Settings Rows */
-    .setting-row {
-      margin-bottom: 14px;
-    }
-
-    .setting-row label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .setting-help {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .channel-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface-secondary);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    .channel-chip button {
-      min-height: 24px;
-      padding: 0 6px;
-      border: none;
-      background: transparent;
-      color: var(--danger);
-      font-size: 16px;
-    }
-
-    /* Modal (Learning Confirmation & Alerts) */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(7, 11, 9, 0.82);
+      background: var(--paper);
       display: none;
-      align-items: flex-end;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
-      z-index: 100;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal-sheet {
-      width: 100%;
-      max-width: 520px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-    }
-
-    /* Bottom Tab Bar */
-    .tab-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(14, 21, 17, 0.94);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid var(--border);
-      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
-      z-index: 50;
-    }
-
-    .tab-bar-inner {
-      max-width: 540px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-    }
-
-    .tab-btn {
-      min-height: 48px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      flex-direction: column;
-      gap: 3px;
-      padding: 4px;
-      font-size: 11px;
-      font-weight: 500;
-      border-radius: var(--radius-sm);
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      background: var(--primary-dim);
-    }
-
-    /* Views & States */
-    .view {
-      display: none;
-    }
-
-    .view.active {
-      display: block;
-    }
-
-    .empty-state {
+      z-index: 10;
+      border: var(--border);
       text-align: center;
-      padding: 28px 16px;
-      color: var(--muted);
-      font-size: 15px;
+      padding: 16px;
     }
+    #blackout-overlay.active { display: flex; }
 
-    .status-msg {
-      padding: 12px 14px;
-      border-radius: var(--radius-md);
+    /* Timestamped Ledger */
+    .ledger-entry {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
       font-size: 14px;
-      margin-top: 12px;
-      background: var(--surface-secondary);
-      border: 1px solid var(--border);
-      color: var(--text);
+      border-left: 2px solid var(--ink);
+      padding-left: 12px;
     }
+    .ledger-time {
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    .ledger-todo { font-weight: bold; display: inline-block; margin-right: 4px; }
 
-    .status-msg.error {
-      background: var(--danger-dim);
-      border-color: rgba(255, 180, 169, 0.4);
-      color: var(--danger);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .disclaimer-text {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-      margin-top: 8px;
-    }
+    /* Views */
+    .view { display: none; }
+    .view.active { display: block; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <!-- Top Branding Bar -->
-    <header class="top-bar">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
-          </svg>
-        </div>
-        <div>
-          <div class="brand-title">MTube</div>
-          <div class="brand-sub">Mindful YouTube</div>
-        </div>
+  <div class="container">
+    
+    <!-- VIEW 0: CONFIG ERROR -->
+    <div id="view-error" class="view">
+      <h1>SYSTEM HALT</h1>
+      <div class="box">
+        <p class="bold">config.json not found or invalid.</p>
+        <p>To use MTube, create a <span class="bold">config.json</span> file in your GitHub repository root next to this HTML file.</p>
+        <p class="muted">Template:</p>
+        <pre style="font-size:11px; overflow-x:auto;">
+{
+  "apiKey": "AIzaSy...",
+  "projects": [
+    {
+      "id": "home-server",
+      "name": "Home Server",
+      "context": "self hosted proxmox"
+    }
+  ]
+}
+        </pre>
       </div>
-      <div id="focusPill" class="focus-pill" aria-live="polite">
-        <span class="focus-dot"></span>
-        <span id="focusPillText">Ready</span>
-      </div>
-    </header>
-
-    <!-- Missing API Key Prompt -->
-    <div id="apiKeyBanner" class="setup-banner hidden">
-      <span>Add your YouTube Data API v3 key to search videos.</span>
-      <button type="button" id="bannerGoSettingsBtn">Setup</button>
     </div>
 
-    <!-- Embedded Video Player Container (Shown only during active playback) -->
-    <section id="playerContainer" class="player-panel hidden" aria-label="Video Player">
-      <div class="player-aspect">
-        <div id="ytPlayerTarget"></div>
+    <!-- VIEW 1: PROJECTS DIRECTORY -->
+    <div id="view-projects" class="view active">
+      <h1>DIRECTORY</h1>
+      <p>Select a workspace to isolate your research.</p>
+      <div id="projects-list"></div>
+      
+      <h2 style="font-size:18px; border-top:var(--border); padding-top:16px;">SCRATCHPAD</h2>
+      <p class="muted">Your recent un-projected queries.</p>
+      <div id="scratchpad-list" style="font-size:14px;"></div>
+    </div>
+
+    <!-- VIEW 2: WORKSPACE (Intention Gate & Curation) -->
+    <div id="view-workspace" class="view">
+      <button class="btn small" style="margin-bottom: 16px;" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
+      <h1 id="ws-title">WORKSPACE</h1>
+      
+      <div class="box">
+        <h2>INTENTION GATE</h2>
+        <input type="text" id="ig-query" placeholder="Query (e.g., 'Docker bridge network')" />
+        <input type="text" id="ig-purpose" placeholder="Purpose (Why are you watching this?)" />
+        <button class="btn full" id="btn-search">SEARCH DATABASE</button>
+        <div id="search-status" class="muted" style="margin-top:8px;"></div>
       </div>
-      <div class="player-footer">
-        <h3 id="playerVideoTitle">Video Title</h3>
-        <div id="playerVideoChannel" class="video-meta" style="margin-bottom: 0;">Channel Name</div>
-        <div class="player-controls">
-          <button type="button" id="finishVideoBtn" class="btn-primary">Finish &amp; Reflect</button>
-          <button type="button" id="closePlayerBtn" class="btn-ghost">Close Player</button>
-        </div>
+
+      <div id="search-results-container" class="hidden">
+        <h2>RESULTS</h2>
+        <p class="muted">Text-first indexing. Thumbnails suppressed.</p>
+        <div class="box" id="search-results-list"></div>
       </div>
-    </section>
 
-    <!-- VIEW 1: FOCUS / DISCOVER -->
-    <main id="view-focus" class="view active">
-      <!-- Session Timer Card -->
-      <section class="card" aria-label="Focus Session Timer">
-        <div class="timer-header">
-          <div>
-            <div class="section-label" style="margin-bottom: 2px;">Focus Session</div>
-            <div id="timerDisplay" class="timer-display">20:00</div>
-          </div>
-          <div id="timerStatusText" class="timer-status-text">Idle • 20 min limit</div>
-        </div>
-        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-          <div id="timerProgress" class="progress-fill"></div>
-        </div>
-        <div class="timer-controls">
-          <button type="button" id="timerPrimaryBtn" class="btn-primary">Start Session</button>
-          <button type="button" id="timerEndBtn" class="btn-ghost">End Session</button>
-        </div>
-        <div class="disclaimer-text">
-          Behavioural reminder only. When time expires, take a break rather than extending.
-        </div>
-      </section>
+      <h2>CURATION QUEUE</h2>
+      <p class="muted">Videos staged for Focus Mode.</p>
+      <div class="box" id="queue-list"></div>
+    </div>
 
-      <!-- Learning Intention & Category Selector -->
-      <section class="card" aria-label="Learning Topic Selection">
-        <div class="section-label">1. Choose a Learning Domain</div>
-        <div id="categoryGrid" class="category-grid"></div>
+    <!-- VIEW 3: FOCUS MODE (Native Unhook + Ledger) -->
+    <div id="view-focus" class="view">
+      <div style="display:flex; justify-content:space-between; margin-bottom: 16px;">
+        <span class="bold" style="text-transform:uppercase;">Focus Mode</span>
+        <button class="btn small" id="btn-abort-focus">ABORT</button>
+      </div>
 
-        <div class="section-label" style="margin-top: 6px;">2. State Your Learning Intention</div>
-        <div class="search-group">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="What do you want to learn today?"
-            autocomplete="off"
-            enterkeyhint="search"
-          />
-          <button type="button" id="searchBtn" class="btn-primary btn-full">
-            Find up to 5 useful videos
-          </button>
-        </div>
-        <div id="searchStatus" class="status-msg hidden" role="status"></div>
-      </section>
+      <div class="box" style="background:var(--ink); color:var(--paper);">
+        <div style="font-size:12px; color:#aaa;">PURPOSE:</div>
+        <div id="focus-purpose" class="bold" style="font-family:var(--font-serif); font-size:18px;"></div>
+      </div>
 
-      <!-- Capped Results (Hard Max 5) -->
-      <section id="resultsSection" class="hidden" aria-label="Filtered Video Results">
-        <div class="results-header">
-          <div class="section-label" style="margin: 0;">Curated Results (Max 5)</div>
-          <span id="resultsCountText" style="font-size: 12px; color: var(--muted);"></span>
-        </div>
-        <div id="resultsList"></div>
-      </section>
-    </main>
-
-    <!-- VIEW 2: SAVED VIDEOS -->
-    <main id="view-saved" class="view">
-      <section class="card">
-        <h2>Saved for Later</h2>
-        <p style="font-size: 14px; color: var(--muted); margin: 0;">
-          Intentional watch queue. Videos never autoplay.
-        </p>
-      </section>
-      <div id="savedList"></div>
-    </main>
-
-    <!-- VIEW 3: MINDFUL DASHBOARD -->
-    <main id="view-dashboard" class="view">
-      <section class="card">
-        <h2>Mindful Usage</h2>
-        <p style="font-size: 14px; color: var(--muted); margin: 0;">
-          Measures deliberate learning reflections and active playback—never streaks or endless watch time.
-        </p>
-      </section>
-
-      <div class="metrics-grid">
-        <div class="metric-tile">
-          <div id="statNotes" class="metric-value">0</div>
-          <div class="metric-label">Learning Notes</div>
-        </div>
-        <div class="metric-tile">
-          <div id="statVideosCompleted" class="metric-value">0</div>
-          <div class="metric-label">Videos Completed</div>
-        </div>
-        <div class="metric-tile">
-          <div id="statSessionsCompleted" class="metric-value">0</div>
-          <div class="metric-label">Sessions Completed</div>
-        </div>
-        <div class="metric-tile">
-          <div id="statMinutesWatched" class="metric-value">0m</div>
-          <div class="metric-label">Est. Active Playback</div>
-        </div>
-        <div class="metric-tile">
-          <div id="statTodayMinutes" class="metric-value">0m</div>
-          <div class="metric-label">Today's Playback</div>
-        </div>
-        <div class="metric-tile">
-          <div id="statSavedCount" class="metric-value">0</div>
-          <div class="metric-label">Saved Videos</div>
+      <div class="player-wrapper">
+        <div id="yt-player"></div>
+        <!-- Native Unhooking Blackout -->
+        <div id="blackout-overlay">
+          <h2 style="margin:0 0 8px;">PAUSED</h2>
+          <p class="muted">YouTube recommendations suppressed.</p>
+          <button class="btn" id="btn-resume">RESUME VIDEO</button>
         </div>
       </div>
 
-      <section class="card">
-        <div class="section-label">Learning Reflections</div>
-        <div id="notesList"></div>
-      </section>
-    </main>
+      <h2>TIMESTAMPED LEDGER</h2>
+      <input type="text" id="note-input" placeholder="Type note or /todo... (Press Enter to log timestamp)" />
+      
+      <div id="ledger-list"></div>
+      
+      <button class="btn full" id="btn-export" style="margin-top:24px;">[ COPY AS MARKDOWN ]</button>
+      <button class="btn full" id="btn-finish">FINISH VIDEO</button>
+    </div>
 
-    <!-- VIEW 4: SETTINGS -->
-    <main id="view-settings" class="view">
-      <section class="card">
-        <h2>Configuration</h2>
-        <p style="font-size: 14px; color: var(--muted); margin: 0;">
-          All settings, keys, and notes stay locally on your device.
-        </p>
-      </section>
+    <!-- VIEW 4: ONE-SEC POST BUFFER -->
+    <div id="view-buffer" class="view">
+      <div class="box" style="text-align:center; padding: 60px 20px;">
+        <h1 style="border:none;">ASSIMILATION</h1>
+        <p>Video complete. Transition out of passive consumption mode.</p>
+        <div style="font-size: 48px; font-weight:bold; margin: 24px 0;" id="buffer-timer">15</div>
+        <button class="btn" id="btn-exit-buffer" disabled style="opacity:0.3;">RETURN TO WORKSPACE</button>
+      </div>
+    </div>
 
-      <!-- API Key -->
-      <section class="card">
-        <div class="section-label">YouTube Data API v3</div>
-        <div class="setting-row">
-          <label for="apiKeyInput">API Key</label>
-          <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off" />
-          <div class="setting-help">
-            Stored in browser localStorage. Restrict your key to YouTube Data API v3 and your GitHub Pages referrer in Google Cloud Console.
-          </div>
-        </div>
-        <button type="button" id="saveApiKeyBtn" class="btn-primary btn-full">Save API Key</button>
-      </section>
-
-      <!-- Channel Whitelist -->
-      <section class="card">
-        <div class="section-label">Channel Preferences</div>
-        <div class="setting-row">
-          <label for="channelModeSelect">Discovery Mode</label>
-          <select id="channelModeSelect">
-            <option value="both">Both (Boost preferred + open discovery)</option>
-            <option value="whitelist_only">Whitelist-only (Approved channels only)</option>
-          </select>
-        </div>
-        <div class="setting-row">
-          <label for="channelIdInput">Add Approved Channel ID</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" id="channelIdInput" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx" />
-            <button type="button" id="addChannelBtn" class="btn-primary">Add</button>
-          </div>
-          <div class="setting-help">
-            Must start with "UC" followed by 22 characters. Approved channels still pass keyword and duration filters.
-          </div>
-          <div id="preferredChannelsList" class="chip-list"></div>
-        </div>
-      </section>
-
-      <!-- Filtering Rules -->
-      <section class="card">
-        <div class="section-label">Balanced Content Filter</div>
-        <div class="setting-row">
-          <label for="minDurationInput">Minimum Video Duration (seconds)</label>
-          <input type="number" id="minDurationInput" min="60" max="7200" step="30" />
-          <div class="setting-help">Default: 240 seconds (4 minutes).</div>
-        </div>
-        <div class="setting-row">
-          <label for="blacklistTextarea">Blocked Keywords &amp; Phrases (one per line)</label>
-          <textarea id="blacklistTextarea" rows="7"></textarea>
-          <div class="setting-help">
-            Case-insensitive phrase matching on titles and channel names. Broad educational terms like "review", "news", and "interview" are preserved.
-          </div>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <button type="button" id="saveFiltersBtn" class="btn-primary">Save Filters</button>
-          <button type="button" id="restoreFiltersBtn" class="btn-ghost">Restore Defaults</button>
-        </div>
-      </section>
-
-      <!-- Data Portability & Reset -->
-      <section class="card">
-        <div class="section-label">Data Backup &amp; Reset</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-          <button type="button" id="exportDataBtn">Export JSON</button>
-          <button type="button" id="importDataBtn">Import JSON</button>
-        </div>
-        <input type="file" id="importFileInput" accept="application/json" class="hidden" />
-        <button type="button" id="resetAllBtn" class="btn-danger btn-full">Reset All Application Data</button>
-      </section>
-    </main>
   </div>
-
-  <!-- Learning Confirmation Modal -->
-  <div id="learningModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="learningModalTitle">
-    <div class="modal-sheet">
-      <div class="section-label">Active Retention</div>
-      <h3 id="learningModalTitle">What did you learn from this video?</h3>
-      <p id="learningModalVideo" style="font-size: 13px; color: var(--muted); margin: 0 0 12px;"></p>
-      <textarea
-        id="learningNoteInput"
-        placeholder="Write one useful sentence you learned..."
-        maxlength="400"
-      ></textarea>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
-        <button type="button" id="saveLearningBtn" class="btn-primary">Save &amp; Complete</button>
-        <button type="button" id="skipLearningBtn" class="btn-ghost">Skip Note</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Session Completed Modal -->
-  <div id="sessionModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="sessionModalTitle">
-    <div class="modal-sheet">
-      <div class="section-label" style="color: var(--gold);">Session Complete</div>
-      <h3 id="sessionModalTitle">20-Minute Focus Session Ended</h3>
-      <p style="font-size: 14px; color: var(--muted); margin: 0 0 14px;">
-        Pause here. Step away from the screen and let what you watched consolidate before starting anything new.
-      </p>
-      <button type="button" id="ackSessionModalBtn" class="btn-primary btn-full">Close &amp; Take a Break</button>
-    </div>
-  </div>
-
-  <!-- Bottom Tab Navigation -->
-  <nav class="tab-bar" aria-label="Main Navigation">
-    <div class="tab-bar-inner">
-      <button type="button" class="tab-btn active" data-tab="focus">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <span>Focus</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="saved">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-        </svg>
-        <span id="tabSavedLabel">Saved</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="dashboard">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Mindful</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="settings">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-        <span>Settings</span>
-      </button>
-    </div>
-  </nav>
 
   <script>
-    (() => {
-      "use strict";
+    const App = {
+      config: null,
+      state: {
+        activeProjectId: null,
+        activeVideo: null,
+        purpose: "",
+        queue: JSON.parse(localStorage.getItem('mtube_queue') || '{}'),
+        scratchpad: JSON.parse(localStorage.getItem('mtube_scratchpad') || '[]'),
+        notes: JSON.parse(localStorage.getItem('mtube_notes') || '{}')
+      },
+      player: null,
+      apiReady: false,
 
-      /* =====================================================================
-         1. CONSTANTS & DEFAULT CONFIGURATION
-      ===================================================================== */
-      const STORAGE_KEY = "mtube_v2_state";
-      const CACHE_KEY = "mtube_v2_search_cache";
-      const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
-      const MAX_RESULTS = 5;
+      async init() {
+        try {
+          // Fetch stateless cloud profile
+          const res = await fetch(`config.json?t=${Date.now()}`);
+          if (!res.ok) throw new Error();
+          this.config = await res.json();
+          if (!this.config.apiKey) throw new Error();
+          
+          this.renderProjects();
+          this.renderScratchpad();
+          this.bindEvents();
+          this.loadYouTubeAPI();
+        } catch (e) {
+          this.navigate('error');
+        }
+      },
 
-      const CATEGORIES = [
-        { id: "technology", label: "Technology", context: "programming software AI technology tutorial" },
-        { id: "science", label: "Science", context: "science physics biology explainer" },
-        { id: "finance", label: "Finance", context: "personal finance investing financial education" },
-        { id: "fitness", label: "Fitness", context: "exercise technique strength training fitness education" },
-        { id: "cooking", label: "Cooking", context: "cooking technique culinary recipe tutorial" },
-        { id: "diy", label: "DIY & Home", context: "home repair woodworking DIY improvement" },
-        { id: "history", label: "History", context: "history documentary historical explainer" },
-        { id: "career", label: "Career", context: "professional skills career development" },
-        { id: "languages", label: "Languages", context: "language learning grammar lesson" }
-      ];
+      saveState() {
+        localStorage.setItem('mtube_queue', JSON.stringify(this.state.queue));
+        localStorage.setItem('mtube_scratchpad', JSON.stringify(this.state.scratchpad));
+        localStorage.setItem('mtube_notes', JSON.stringify(this.state.notes));
+      },
 
-      const DEFAULT_BLACKLIST = [
-        "shorts", "#shorts", "viral", "trending", "reels", "ytshorts",
-        "prank", "roast", "meme", "memes", "funny", "comedy", "funniest",
-        "hilarious", "challenge", "challenges", "gone wrong", "fails",
-        "reaction", "reactions", "reacts", "exposed",
-        "celebrity gossip", "celebrity news", "paparazzi", "relationship drama",
-        "dating drama", "breakup drama", "blind item", "controversy",
-        "shocking", "unbelievable", "you won't believe", "must watch",
-        "wait for it", "crazy", "insane", "secret revealed",
-        "mukbang", "fan cam", "whatsapp status", "dance status",
-        "music status", "lyrics video", "movie trailer", "reality show", "bigg boss",
-        "gaming highlights", "gameplay", "funny gaming moments"
-      ];
+      navigate(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(`view-${viewId}`).classList.add('active');
+        window.scrollTo(0, 0);
+      },
 
-      function createDefaultState() {
-        return {
-          version: 2,
-          apiKey: "",
-          settings: {
-            theme: "dark",
-            filterMode: "balanced",
-            sessionDuration: 20, // minutes
-            minimumVideoDuration: 240, // 4 minutes in seconds
-            maximumResults: MAX_RESULTS,
-            channelMode: "both", // "both" | "whitelist_only"
-            playbackMode: "embedded"
-          },
-          blockedKeywords: [...DEFAULT_BLACKLIST],
-          preferredChannels: [],
-          hiddenVideoIds: [],
-          savedVideos: [],
-          sessions: [],
-          activeSession: null, // { id, startTime, durationMs, pausedAt, remainingWhenPausedMs, status }
-          learningNotes: [],
-          statistics: {
-            sessionsStarted: 0,
-            sessionsCompleted: 0,
-            playbackSeconds: 0,
-            videosCompleted: 0,
-            dailyPlaybackSeconds: {} // { "YYYY-MM-DD": seconds }
+      renderProjects() {
+        const list = document.getElementById('projects-list');
+        list.innerHTML = '';
+        this.config.projects.forEach(p => {
+          const btn = document.createElement('button');
+          btn.className = 'btn full';
+          btn.style.textAlign = 'left';
+          btn.style.justifyContent = 'flex-start';
+          btn.innerHTML = `> ${p.name.toUpperCase()}`;
+          btn.onclick = () => this.openWorkspace(p);
+          list.appendChild(btn);
+        });
+      },
+
+      renderScratchpad() {
+        const list = document.getElementById('scratchpad-list');
+        if (this.state.scratchpad.length === 0) {
+          list.innerHTML = '<span class="muted">No recent queries.</span>';
+          return;
+        }
+        list.innerHTML = this.state.scratchpad.map(q => `<div>- ${q}</div>`).join('');
+      },
+
+      openWorkspace(project) {
+        this.state.activeProjectId = project.id;
+        document.getElementById('ws-title').innerText = `WORKSPACE: ${project.name.toUpperCase()}`;
+        document.getElementById('search-results-container').classList.add('hidden');
+        document.getElementById('ig-query').value = '';
+        document.getElementById('ig-purpose').value = '';
+        this.renderQueue();
+        this.navigate('workspace');
+      },
+
+      formatDuration(iso) {
+        const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/) || [];
+        const h = parseInt(match[1] || 0), m = parseInt(match[2] || 0), s = parseInt(match[3] || 0);
+        return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+      },
+
+      async handleSearch() {
+        const query = document.getElementById('ig-query').value.trim();
+        const purpose = document.getElementById('ig-purpose').value.trim();
+        const status = document.getElementById('search-status');
+        
+        if (!query || !purpose) {
+          status.innerText = "Error: Intention Gate requires both Query and Purpose.";
+          return;
+        }
+
+        // Log to scratchpad
+        this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 5);
+        this.saveState();
+
+        const project = this.config.projects.find(p => p.id === this.state.activeProjectId);
+        const fullQuery = `${query} ${project.context}`;
+        const apiKey = this.config.apiKey;
+
+        status.innerText = "Querying database...";
+        
+        try {
+          // 1. Search Candidates
+          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(fullQuery)}&type=video&maxResults=5&safeSearch=strict&order=relevance&key=${apiKey}`);
+          const searchData = await searchRes.json();
+          if (!searchRes.ok) throw new Error(searchData.error?.message || "API Error");
+          
+          const videoIds = (searchData.items || []).map(i => i.id.videoId);
+          if (videoIds.length === 0) throw new Error("No results found.");
+
+          // 2. Fetch Details (for exact duration)
+          const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`);
+          const vidData = await vidRes.json();
+
+          this.renderSearchResults(vidData.items, purpose);
+          status.innerText = "";
+        } catch (e) {
+          status.innerText = `Search failed: ${e.message}`;
+        }
+      },
+
+      renderSearchResults(items, purpose) {
+        document.getElementById('search-results-container').classList.remove('hidden');
+        const list = document.getElementById('search-results-list');
+        list.innerHTML = '';
+
+        items.forEach(v => {
+          const dur = this.formatDuration(v.contentDetails.duration);
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `
+            <div class="list-item-content">
+              <div class="list-item-title">${v.snippet.title}</div>
+              <div class="list-item-meta">${v.snippet.channelTitle} // ${dur}</div>
+            </div>
+            <button class="btn small">[ ADD ]</button>
+          `;
+          div.querySelector('button').onclick = () => {
+            const q = this.state.queue[this.state.activeProjectId] || [];
+            q.push({ id: v.id, title: v.snippet.title, channel: v.snippet.channelTitle, purpose });
+            this.state.queue[this.state.activeProjectId] = q;
+            this.saveState();
+            this.renderQueue();
+            div.innerHTML = '<span class="bold">ADDED</span>';
+          };
+          list.appendChild(div);
+        });
+      },
+
+      renderQueue() {
+        const list = document.getElementById('queue-list');
+        const q = this.state.queue[this.state.activeProjectId] || [];
+        list.innerHTML = '';
+        
+        if (q.length === 0) {
+          list.innerHTML = '<span class="muted">Queue empty. Curate videos above.</span>';
+          return;
+        }
+
+        q.forEach((v, index) => {
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `
+            <div class="list-item-content">
+              <div class="list-item-title">${v.title}</div>
+              <div class="list-item-meta">Intention: ${v.purpose}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn small btn-focus">FOCUS</button>
+              <button class="btn small btn-rm">DROP</button>
+            </div>
+          `;
+          div.querySelector('.btn-focus').onclick = () => this.startFocus(v);
+          div.querySelector('.btn-rm').onclick = () => {
+            q.splice(index, 1);
+            this.state.queue[this.state.activeProjectId] = q;
+            this.saveState();
+            this.renderQueue();
+          };
+          list.appendChild(div);
+        });
+      },
+
+      /* --- FOCUS MODE & PLAYER --- */
+      loadYouTubeAPI() {
+        window.onYouTubeIframeAPIReady = () => { this.apiReady = true; };
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
+      },
+
+      startFocus(videoInfo) {
+        this.state.activeVideo = videoInfo;
+        document.getElementById('focus-purpose').innerText = videoInfo.purpose;
+        this.renderLedger();
+        this.navigate('focus');
+
+        if (!this.apiReady) {
+          setTimeout(() => this.startFocus(videoInfo), 500);
+          return;
+        }
+
+        if (this.player) {
+          this.player.loadVideoById(videoInfo.id);
+        } else {
+          this.player = new YT.Player('yt-player', {
+            videoId: videoInfo.id,
+            host: 'https://www.youtube-nocookie.com',
+            playerVars: { rel: 0, playsinline: 1, modestbranding: 1, autoplay: 1 },
+            events: {
+              onStateChange: (e) => this.handlePlayerState(e)
+            }
+          });
+        }
+      },
+
+      handlePlayerState(e) {
+        const blackout = document.getElementById('blackout-overlay');
+        // If PAUSED (2) or ENDED (0), trigger Native Unhooking Blackout
+        if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+          blackout.classList.add('active');
+        } else {
+          blackout.classList.remove('active');
+        }
+      },
+
+      formatSecs(s) {
+        const m = Math.floor(s / 60);
+        const secs = Math.floor(s % 60);
+        return `${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      },
+
+      logNote() {
+        const input = document.getElementById('note-input');
+        let text = input.value.trim();
+        if (!text || !this.player) return;
+
+        const timeSecs = this.player.getCurrentTime();
+        let isTodo = false;
+        
+        if (text.toLowerCase().startsWith('/todo')) {
+          isTodo = true;
+          text = text.substring(5).trim();
+        }
+
+        const vidId = this.state.activeVideo.id;
+        if (!this.state.notes[vidId]) this.state.notes[vidId] = [];
+        
+        this.state.notes[vidId].push({ time: timeSecs, text, isTodo });
+        this.saveState();
+        input.value = '';
+        this.renderLedger();
+      },
+
+      renderLedger() {
+        const list = document.getElementById('ledger-list');
+        const notes = this.state.notes[this.state.activeVideo.id] || [];
+        list.innerHTML = '';
+
+        notes.forEach(n => {
+          const div = document.createElement('div');
+          div.className = 'ledger-entry';
+          
+          const timeSpan = document.createElement('span');
+          timeSpan.className = 'ledger-time';
+          timeSpan.innerText = `[${this.formatSecs(n.time)}]`;
+          timeSpan.onclick = () => {
+            this.player.seekTo(n.time, true);
+            this.player.playVideo();
+          };
+
+          const textSpan = document.createElement('span');
+          textSpan.innerHTML = n.isTodo ? `<span class="ledger-todo">[TODO]</span> ${n.text}` : n.text;
+
+          div.appendChild(timeSpan);
+          div.appendChild(textSpan);
+          list.appendChild(div);
+        });
+      },
+
+      exportMarkdown() {
+        const v = this.state.activeVideo;
+        const notes = this.state.notes[v.id] || [];
+        let md = `## ${v.title}\n**Channel:** ${v.channel}\n**Purpose:** ${v.purpose}\n\n`;
+        
+        notes.forEach(n => {
+          md += n.isTodo 
+            ? `- [ ] **[${this.formatSecs(n.time)}]** ${n.text}\n` 
+            : `- **[${this.formatSecs(n.time)}]** ${n.text}\n`;
+        });
+
+        navigator.clipboard.writeText(md).then(() => {
+          const btn = document.getElementById('btn-export');
+          btn.innerText = "[ COPIED TO CLIPBOARD ]";
+          setTimeout(() => btn.innerText = "[ COPY AS MARKDOWN ]", 2000);
+        });
+      },
+
+      startBuffer() {
+        if(this.player) this.player.stopVideo();
+        this.navigate('buffer');
+        
+        const timerEl = document.getElementById('buffer-timer');
+        const btn = document.getElementById('btn-exit-buffer');
+        let left = 15;
+        
+        btn.disabled = true;
+        btn.style.opacity = '0.3';
+        timerEl.innerText = left;
+
+        const interval = setInterval(() => {
+          left--;
+          timerEl.innerText = left;
+          if (left <= 0) {
+            clearInterval(interval);
+            btn.disabled = false;
+            btn.style.opacity = '1';
           }
+        }, 1000);
+      },
+
+      bindEvents() {
+        document.getElementById('btn-search').onclick = () => this.handleSearch();
+        
+        document.getElementById('btn-resume').onclick = () => {
+          if (this.player) this.player.playVideo();
+        };
+
+        const noteInput = document.getElementById('note-input');
+        noteInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.logNote();
+        });
+
+        document.getElementById('btn-export').onclick = () => this.exportMarkdown();
+        
+        document.getElementById('btn-abort-focus').onclick = () => {
+          if(this.player) this.player.pauseVideo();
+          this.navigate('workspace');
+        };
+
+        document.getElementById('btn-finish').onclick = () => this.startBuffer();
+
+        document.getElementById('btn-exit-buffer').onclick = () => {
+          // Remove finished video from queue
+          const q = this.state.queue[this.state.activeProjectId] || [];
+          this.state.queue[this.state.activeProjectId] = q.filter(v => v.id !== this.state.activeVideo.id);
+          this.saveState();
+          this.renderQueue();
+          this.navigate('workspace');
         };
       }
+    };
 
-      /* =====================================================================
-         2. STORAGE MODULE (Versioned persistence + JSON Backup)
-      ===================================================================== */
-      const Storage = {
-        state: createDefaultState(),
-
-        load() {
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) {
-              this.state = createDefaultState();
-              this.save();
-              return this.state;
-            }
-            const parsed = JSON.parse(raw);
-            if (!parsed || typeof parsed !== "object") {
-              throw new Error("Invalid state format");
-            }
-            const base = createDefaultState();
-            this.state = {
-              ...base,
-              ...parsed,
-              settings: { ...base.settings, ...(parsed.settings || {}) },
-              statistics: {
-                ...base.statistics,
-                ...(parsed.statistics || {}),
-                dailyPlaybackSeconds: {
-                  ...base.statistics.dailyPlaybackSeconds,
-                  ...((parsed.statistics && parsed.statistics.dailyPlaybackSeconds) || {})
-                }
-              },
-              blockedKeywords: Array.isArray(parsed.blockedKeywords) ? parsed.blockedKeywords : base.blockedKeywords,
-              preferredChannels: Array.isArray(parsed.preferredChannels) ? parsed.preferredChannels : [],
-              hiddenVideoIds: Array.isArray(parsed.hiddenVideoIds) ? parsed.hiddenVideoIds : [],
-              savedVideos: Array.isArray(parsed.savedVideos) ? parsed.savedVideos : [],
-              sessions: Array.isArray(parsed.sessions) ? parsed.sessions : [],
-              learningNotes: Array.isArray(parsed.learningNotes) ? parsed.learningNotes : []
-            };
-          } catch (err) {
-            console.warn("Corrupted MTube storage detected, resetting safely.", err);
-            this.state = createDefaultState();
-            this.save();
-          }
-          return this.state;
-        },
-
-        save() {
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-          } catch (err) {
-            console.error("Failed to save state to localStorage:", err);
-          }
-        },
-
-        exportJSON() {
-          const payload = {
-            exportedAt: new Date().toISOString(),
-            app: "MTube 2.0",
-            data: {
-              settings: this.state.settings,
-              blockedKeywords: this.state.blockedKeywords,
-              preferredChannels: this.state.preferredChannels,
-              savedVideos: this.state.savedVideos,
-              sessions: this.state.sessions,
-              learningNotes: this.state.learningNotes,
-              statistics: this.state.statistics
-            }
-          };
-          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `mtube-backup-${new Date().toISOString().slice(0, 10)}.json`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        },
-
-        importJSON(jsonText) {
-          const parsed = JSON.parse(jsonText);
-          const src = parsed && parsed.data ? parsed.data : parsed;
-          if (!src || typeof src !== "object") {
-            throw new Error("Invalid backup file structure.");
-          }
-          const currentKey = this.state.apiKey;
-          const next = createDefaultState();
-          next.apiKey = currentKey;
-
-          if (src.settings && typeof src.settings === "object") {
-            next.settings = {
-              ...next.settings,
-              sessionDuration: Number(src.settings.sessionDuration) || 20,
-              minimumVideoDuration: Math.max(60, Number(src.settings.minimumVideoDuration) || 240),
-              channelMode: src.settings.channelMode === "whitelist_only" ? "whitelist_only" : "both"
-            };
-          }
-          if (Array.isArray(src.blockedKeywords)) {
-            next.blockedKeywords = src.blockedKeywords.filter(k => typeof k === "string" && k.trim().length > 0);
-          }
-          if (Array.isArray(src.preferredChannels)) {
-            next.preferredChannels = src.preferredChannels.filter(id => ChannelEngine.isValidChannelId(id));
-          }
-          if (Array.isArray(src.savedVideos)) {
-            next.savedVideos = src.savedVideos.filter(v => v && YouTubeService.isValidVideoId(v.videoId));
-          }
-          if (Array.isArray(src.sessions)) {
-            next.sessions = src.sessions;
-          }
-          if (Array.isArray(src.learningNotes)) {
-            next.learningNotes = src.learningNotes;
-          }
-          if (src.statistics && typeof src.statistics === "object") {
-            next.statistics = { ...next.statistics, ...src.statistics };
-          }
-
-          this.state = next;
-          this.save();
-        },
-
-        resetAll() {
-          localStorage.removeItem(STORAGE_KEY);
-          localStorage.removeItem(CACHE_KEY);
-          this.state = createDefaultState();
-          this.save();
-        }
-      };
-
-      /* =====================================================================
-         3. CONTENT FILTERING ENGINE
-      ===================================================================== */
-      const FilterEngine = {
-        parseISODuration(iso) {
-          if (!iso || typeof iso !== "string") return 0;
-          const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
-          if (!match) return 0;
-          const hours = parseInt(match[1] || "0", 10);
-          const minutes = parseInt(match[2] || "0", 10);
-          const seconds = parseInt(match[3] || "0", 10);
-          return hours * 3600 + minutes * 60 + seconds;
-        },
-
-        formatDuration(totalSeconds) {
-          const hrs = Math.floor(totalSeconds / 3600);
-          const mins = Math.floor((totalSeconds % 3600) / 60);
-          const secs = totalSeconds % 60;
-          if (hrs > 0) {
-            return `${hrs}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-          }
-          return `${mins}:${String(secs).padStart(2, "0")}`;
-        },
-
-        normalizeText(text) {
-          return String(text || "")
-            .toLowerCase()
-            .replace(/[\u2018\u2019]/g, "'")
-            .replace(/[^\w\s#']/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-        },
-
-        matchesBlockedKeywords(video, blacklist) {
-          const haystack = this.normalizeText(`${video.title} ${video.channelTitle}`);
-          if (!haystack) return true;
-
-          for (const rawTerm of blacklist) {
-            const term = this.normalizeText(rawTerm);
-            if (!term) continue;
-            // Word-boundary-aware phrase check so broad words are not accidentally clipped
-            const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const regex = new RegExp(`(?:^|\\s)${escaped}(?:$|\\s)`, "i");
-            if (regex.test(haystack)) {
-              return true;
-            }
-          }
-          return false;
-        },
-
-        filterVideos(videos) {
-          const minDuration = Storage.state.settings.minimumVideoDuration || 240;
-          const blacklist = Storage.state.blockedKeywords || [];
-          const hiddenSet = new Set(Storage.state.hiddenVideoIds || []);
-
-          return videos.filter(video => {
-            if (!video || !YouTubeService.isValidVideoId(video.videoId)) return false;
-            if (hiddenSet.has(video.videoId)) return false;
-            if (video.embeddable === false) return false;
-            if (video.privacyStatus && video.privacyStatus !== "public") return false;
-            if (video.durationSeconds < minDuration) return false;
-            if (this.matchesBlockedKeywords(video, blacklist)) return false;
-            return true;
-          });
-        }
-      };
-
-      /* =====================================================================
-         4. CHANNEL PREFERENCE ENGINE
-      ===================================================================== */
-      const ChannelEngine = {
-        isValidChannelId(id) {
-          return typeof id === "string" && /^UC[a-zA-Z0-9_-]{22}$/.test(id.trim());
-        },
-
-        getApprovedSet() {
-          return new Set(Storage.state.preferredChannels || []);
-        },
-
-        applyChannelPreferences(videos) {
-          const approved = this.getApprovedSet();
-          const mode = Storage.state.settings.channelMode || "both";
-
-          // Annotate preferred status
-          const annotated = videos.map((v, idx) => ({
-            ...v,
-            isPreferred: approved.has(v.channelId),
-            originalRank: idx
-          }));
-
-          if (mode === "whitelist_only") {
-            return annotated.filter(v => v.isPreferred);
-          }
-
-          // Mode "both": boost preferred channels while preserving search relevance order within groups
-          return annotated.sort((a, b) => {
-            if (a.isPreferred !== b.isPreferred) {
-              return a.isPreferred ? -1 : 1;
-            }
-            return a.originalRank - b.originalRank;
-          });
-        }
-      };
-
-      /* =====================================================================
-         5. YOUTUBE DATA API V3 SERVICE
-      ===================================================================== */
-      const YouTubeService = {
-        isValidVideoId(id) {
-          return typeof id === "string" && /^[a-zA-Z0-9_-]{11}$/.test(id);
-        },
-
-        getCache(cacheKey) {
-          try {
-            const raw = localStorage.getItem(CACHE_KEY);
-            if (!raw) return null;
-            const cache = JSON.parse(raw);
-            const entry = cache[cacheKey];
-            if (!entry) return null;
-            if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
-              return null;
-            }
-            return entry.results;
-          } catch {
-            return null;
-          }
-        },
-
-        setCache(cacheKey, results) {
-          try {
-            const raw = localStorage.getItem(CACHE_KEY);
-            const cache = raw ? JSON.parse(raw) : {};
-            cache[cacheKey] = { timestamp: Date.now(), results };
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-          } catch {
-            // Ignore cache quota issues
-          }
-        },
-
-        mapApiError(status, data) {
-          const reason = data?.error?.errors?.[0]?.reason || "";
-          if (status === 400 || reason === "keyInvalid") {
-            return "Invalid YouTube API key. Please check your key in Settings.";
-          }
-          if (status === 403) {
-            if (reason === "quotaExceeded" || reason === "dailyLimitExceeded") {
-              return "YouTube API daily quota exceeded. Try again tomorrow or use saved videos.";
-            }
-            if (reason === "accessNotConfigured") {
-              return "YouTube Data API v3 is not enabled on this Google Cloud project.";
-            }
-            return "API request forbidden. Verify API key restrictions in Google Cloud Console.";
-          }
-          if (status === 404) {
-            return "Requested videos were unavailable.";
-          }
-          return "Unable to reach YouTube right now. Check your connection and try again.";
-        },
-
-        async fetchCandidates(query, apiKey, channelId = null) {
-          const params = new URLSearchParams({
-            part: "snippet",
-            q: query,
-            type: "video",
-            maxResults: "25",
-            videoEmbeddable: "true",
-            safeSearch: "strict",
-            order: "relevance",
-            regionCode: "IN",
-            relevanceLanguage: "en",
-            key: apiKey
-          });
-          if (channelId) {
-            params.set("channelId", channelId);
-          }
-
-          const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params.toString()}`);
-          const data = await res.json();
-          if (!res.ok) {
-            throw new Error(this.mapApiError(res.status, data));
-          }
-          return (data.items || [])
-            .map(item => item?.id?.videoId)
-            .filter(id => this.isValidVideoId(id));
-        },
-
-        async fetchVideoDetails(videoIds, apiKey) {
-          if (!videoIds.length) return [];
-          const params = new URLSearchParams({
-            part: "snippet,contentDetails,status",
-            id: videoIds.join(","),
-            key: apiKey
-          });
-
-          const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?${params.toString()}`);
-          const data = await res.json();
-          if (!res.ok) {
-            throw new Error(this.mapApiError(res.status, data));
-          }
-
-          return (data.items || []).map(item => {
-            const thumbs = item.snippet?.thumbnails || {};
-            const thumbUrl = thumbs.high?.url || thumbs.medium?.url || thumbs.default?.url || "";
-            return {
-              videoId: item.id,
-              title: item.snippet?.title || "Untitled Video",
-              channelTitle: item.snippet?.channelTitle || "Unknown Channel",
-              channelId: item.snippet?.channelId || "",
-              publishedAt: item.snippet?.publishedAt || "",
-              thumbnail: thumbUrl,
-              durationSeconds: FilterEngine.parseISODuration(item.contentDetails?.duration),
-              embeddable: item.status?.embeddable !== false,
-              privacyStatus: item.status?.privacyStatus || "public"
-            };
-          });
-        },
-
-        async search(rawQuery, categoryObj) {
-          const apiKey = (Storage.state.apiKey || "").trim();
-          if (!apiKey) {
-            throw new Error("Please add your YouTube Data API v3 key in Settings first.");
-          }
-
-          const cleanQuery = rawQuery.trim();
-          const finalQuery = cleanQuery
-            ? (categoryObj ? `${cleanQuery} ${categoryObj.context}` : cleanQuery)
-            : (categoryObj ? categoryObj.context : "");
-
-          if (!finalQuery) {
-            throw new Error("Select a learning category or enter what you want to learn.");
-          }
-
-          const mode = Storage.state.settings.channelMode;
-          const approvedChannels = Storage.state.preferredChannels || [];
-          const cacheKey = `${finalQuery.toLowerCase()}|${mode}|${approvedChannels.join(",")}|${Storage.state.settings.minimumVideoDuration}`;
-
-          let detailedVideos = this.getCache(cacheKey);
-
-          if (!detailedVideos) {
-            const candidateIds = new Set();
-
-            if (mode === "whitelist_only") {
-              if (!approvedChannels.length) {
-                throw new Error("Whitelist-only mode is active, but no approved channels are configured in Settings.");
-              }
-              // Query up to 5 approved channels separately to guarantee coverage
-              const channelSubset = approvedChannels.slice(0, 5);
-              const batches = await Promise.all(
-                channelSubset.map(chId => this.fetchCandidates(finalQuery, apiKey, chId))
-              );
-              batches.flat().forEach(id => candidateIds.add(id));
-            } else {
-              // Standard search + optional boost query from preferred channels
-              const openIds = await this.fetchCandidates(finalQuery, apiKey);
-              openIds.forEach(id => candidateIds.add(id));
-
-              if (approvedChannels.length > 0) {
-                const topPreferred = approvedChannels.slice(0, 2);
-                const prefBatches = await Promise.all(
-                  topPreferred.map(chId => this.fetchCandidates(finalQuery, apiKey, chId).catch(() => []))
-                );
-                prefBatches.flat().forEach(id => candidateIds.add(id));
-              }
-            }
-
-            const uniqueIds = Array.from(candidateIds).slice(0, 30);
-            detailedVideos = await this.fetchVideoDetails(uniqueIds, apiKey);
-            this.setCache(cacheKey, detailedVideos);
-          }
-
-          // Filter -> Channel Rank -> Deduplicate -> Cap at 5
-          const filtered = FilterEngine.filterVideos(detailedVideos);
-          const ranked = ChannelEngine.applyChannelPreferences(filtered);
-
-          const seen = new Set();
-          const finalFive = [];
-          for (const v of ranked) {
-            if (!seen.has(v.videoId)) {
-              seen.add(v.videoId);
-              finalFive.push(v);
-            }
-            if (finalFive.length >= MAX_RESULTS) break;
-          }
-
-          return finalFive;
-        }
-      };
-
-      /* =====================================================================
-         6. SESSION TIMER CONTROLLER (Timestamp-based, Safari-resilient)
-      ===================================================================== */
-      const TimerController = {
-        intervalId: null,
-
-        getRemainingMs() {
-          const s = Storage.state.activeSession;
-          const defaultMs = (Storage.state.settings.sessionDuration || 20) * 60 * 1000;
-          if (!s) return defaultMs;
-          if (s.status === "paused") {
-            return Math.max(0, s.remainingWhenPausedMs);
-          }
-          if (s.status === "running") {
-            const elapsed = Date.now() - s.startTime;
-            return Math.max(0, s.durationMs - elapsed);
-          }
-          return 0;
-        },
-
-        start() {
-          const durationMs = (Storage.state.settings.sessionDuration || 20) * 60 * 1000;
-          Storage.state.activeSession = {
-            id: `sess_${Date.now()}`,
-            startTime: Date.now(),
-            durationMs,
-            pausedAt: null,
-            remainingWhenPausedMs: durationMs,
-            status: "running"
-          };
-          Storage.state.statistics.sessionsStarted += 1;
-          Storage.save();
-          this.startTicker();
-          UI.renderTimer();
-        },
-
-        pause() {
-          const s = Storage.state.activeSession;
-          if (!s || s.status !== "running") return;
-          s.remainingWhenPausedMs = this.getRemainingMs();
-          s.pausedAt = Date.now();
-          s.status = "paused";
-          Storage.save();
-          this.stopTicker();
-          UI.renderTimer();
-        },
-
-        resume() {
-          const s = Storage.state.activeSession;
-          if (!s || s.status !== "paused") return;
-          s.durationMs = s.remainingWhenPausedMs;
-          s.startTime = Date.now();
-          s.pausedAt = null;
-          s.status = "running";
-          Storage.save();
-          this.startTicker();
-          UI.renderTimer();
-        },
-
-        end(completedNaturally = false) {
-          const s = Storage.state.activeSession;
-          this.stopTicker();
-          if (s) {
-            Storage.state.sessions.unshift({
-              id: s.id,
-              endedAt: new Date().toISOString(),
-              completedNaturally
-            });
-            if (completedNaturally) {
-              Storage.state.statistics.sessionsCompleted += 1;
-            }
-          }
-          Storage.state.activeSession = null;
-          Storage.save();
-          UI.renderTimer();
-          UI.renderDashboard();
-
-          if (completedNaturally) {
-            PlayerController.stop();
-            document.getElementById("sessionModal").classList.add("open");
-          }
-        },
-
-        tick() {
-          const s = Storage.state.activeSession;
-          if (!s || s.status !== "running") return;
-          const remaining = this.getRemainingMs();
-          UI.renderTimer();
-          if (remaining <= 0) {
-            this.end(true);
-          }
-        },
-
-        startTicker() {
-          this.stopTicker();
-          this.intervalId = window.setInterval(() => this.tick(), 1000);
-        },
-
-        stopTicker() {
-          if (this.intervalId) {
-            clearInterval(this.intervalId);
-            this.intervalId = null;
-          }
-        },
-
-        restoreOnBoot() {
-          const s = Storage.state.activeSession;
-          if (!s) {
-            UI.renderTimer();
-            return;
-          }
-          if (s.status === "running") {
-            if (this.getRemainingMs() <= 0) {
-              this.end(true);
-            } else {
-              this.startTicker();
-              UI.renderTimer();
-            }
-          } else {
-            UI.renderTimer();
-          }
-        }
-      };
-
-      /* =====================================================================
-         7. EMBEDDED PLAYER & ACTIVE PLAYBACK TRACKING
-      ===================================================================== */
-      const PlayerController = {
-        ytPlayer: null,
-        apiReady: false,
-        apiLoading: false,
-        pendingVideo: null,
-        currentVideo: null,
-        playStartTimestamp: null,
-        playbackTicker: null,
-
-        ensureYouTubeIFrameAPI() {
-          if (this.apiReady || this.apiLoading) return;
-          this.apiLoading = true;
-          window.onYouTubeIframeAPIReady = () => {
-            this.apiReady = true;
-            this.apiLoading = false;
-            if (this.pendingVideo) {
-              const v = this.pendingVideo;
-              this.pendingVideo = null;
-              this.mountPlayer(v);
-            }
-          };
-          const tag = document.createElement("script");
-          tag.src = "https://www.youtube.com/iframe_api";
-          document.head.appendChild(tag);
-        },
-
-        flushActivePlaybackSeconds() {
-          if (!this.playStartTimestamp) return;
-          const now = Date.now();
-          const deltaSec = Math.floor((now - this.playStartTimestamp) / 1000);
-          if (deltaSec > 0) {
-            Storage.state.statistics.playbackSeconds += deltaSec;
-            const todayKey = new Date().toISOString().slice(0, 10);
-            const daily = Storage.state.statistics.dailyPlaybackSeconds;
-            daily[todayKey] = (daily[todayKey] || 0) + deltaSec;
-            this.playStartTimestamp = now;
-            Storage.save();
-          }
-        },
-
-        startPlaybackTracking() {
-          if (!this.playStartTimestamp) {
-            this.playStartTimestamp = Date.now();
-          }
-          if (!this.playbackTicker) {
-            this.playbackTicker = window.setInterval(() => {
-              if (!document.hidden) {
-                this.flushActivePlaybackSeconds();
-                UI.renderDashboard();
-              }
-            }, 5000);
-          }
-        },
-
-        stopPlaybackTracking() {
-          this.flushActivePlaybackSeconds();
-          this.playStartTimestamp = null;
-          if (this.playbackTicker) {
-            clearInterval(this.playbackTicker);
-            this.playbackTicker = null;
-          }
-          UI.renderDashboard();
-        },
-
-        play(video) {
-          if (!video || !YouTubeService.isValidVideoId(video.videoId)) return;
-          this.stopPlaybackTracking();
-          this.currentVideo = video;
-
-          document.getElementById("playerVideoTitle").textContent = video.title;
-          document.getElementById("playerVideoChannel").textContent = video.channelTitle;
-          document.getElementById("playerContainer").classList.remove("hidden");
-          document.getElementById("playerContainer").scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-          if (!this.apiReady) {
-            this.pendingVideo = video;
-            this.ensureYouTubeIFrameAPI();
-            return;
-          }
-          this.mountPlayer(video);
-        },
-
-        mountPlayer(video) {
-          if (this.ytPlayer && typeof this.ytPlayer.loadVideoById === "function") {
-            this.ytPlayer.loadVideoById(video.videoId);
-            return;
-          }
-          this.ytPlayer = new YT.Player("ytPlayerTarget", {
-            host: "https://www.youtube-nocookie.com",
-            videoId: video.videoId,
-            playerVars: {
-              rel: 0,
-              playsinline: 1,
-              modestbranding: 1,
-              autoplay: 1
-            },
-            events: {
-              onStateChange: (event) => {
-                // YT.PlayerState.PLAYING === 1
-                if (event.data === 1) {
-                  this.startPlaybackTracking();
-                } else {
-                  this.stopPlaybackTracking();
-                }
-              }
-            }
-          });
-        },
-
-        stop() {
-          this.stopPlaybackTracking();
-          if (this.ytPlayer && typeof this.ytPlayer.stopVideo === "function") {
-            try {
-              this.ytPlayer.stopVideo();
-            } catch {
-              // Ignore teardown errors
-            }
-          }
-          document.getElementById("playerContainer").classList.add("hidden");
-        },
-
-        openReflectionForCurrent() {
-          const video = this.currentVideo;
-          this.stop();
-          if (!video) return;
-          LearningTracker.promptReflection(video);
-        }
-      };
-
-      /* =====================================================================
-         8. LEARNING CONFIRMATION & SAVED VIDEOS MANAGERS
-      ===================================================================== */
-      const LearningTracker = {
-        pendingVideo: null,
-
-        promptReflection(video) {
-          this.pendingVideo = video;
-          document.getElementById("learningModalVideo").textContent = `${video.title} — ${video.channelTitle}`;
-          document.getElementById("learningNoteInput").value = "";
-          document.getElementById("learningModal").classList.add("open");
-        },
-
-        completeVideo(noteText) {
-          const video = this.pendingVideo;
-          if (!video) return;
-          const cleanNote = (noteText || "").trim();
-
-          Storage.state.statistics.videosCompleted += 1;
-          if (cleanNote) {
-            Storage.state.learningNotes.unshift({
-              id: `note_${Date.now()}`,
-              videoId: video.videoId,
-              videoTitle: video.title,
-              channelTitle: video.channelTitle,
-              note: cleanNote,
-              completedAt: new Date().toISOString(),
-              sessionId: Storage.state.activeSession ? Storage.state.activeSession.id : null
-            });
-          }
-
-          Storage.save();
-          this.pendingVideo = null;
-          document.getElementById("learningModal").classList.remove("open");
-          UI.renderDashboard();
-        },
-
-        deleteNote(noteId) {
-          Storage.state.learningNotes = Storage.state.learningNotes.filter(n => n.id !== noteId);
-          Storage.save();
-          UI.renderDashboard();
-        }
-      };
-
-      const SavedManager = {
-        isSaved(videoId) {
-          return Storage.state.savedVideos.some(v => v.videoId === videoId);
-        },
-
-        toggleSave(video) {
-          if (this.isSaved(video.videoId)) {
-            this.remove(video.videoId);
-          } else {
-            Storage.state.savedVideos.unshift({
-              videoId: video.videoId,
-              title: video.title,
-              channelId: video.channelId,
-              channelTitle: video.channelTitle,
-              thumbnail: video.thumbnail,
-              durationSeconds: video.durationSeconds,
-              savedAt: new Date().toISOString()
-            });
-            Storage.save();
-          }
-          UI.renderSaved();
-          UI.renderDashboard();
-          UI.refreshSaveButtons();
-        },
-
-        remove(videoId) {
-          Storage.state.savedVideos = Storage.state.savedVideos.filter(v => v.videoId !== videoId);
-          Storage.save();
-          UI.renderSaved();
-          UI.renderDashboard();
-          UI.refreshSaveButtons();
-        }
-      };
-
-      /* =====================================================================
-         9. USER INTERFACE RENDERER (Safe DOM construction)
-      ===================================================================== */
-      const UI = {
-        selectedCategoryId: "technology",
-        lastResults: [],
-
-        init() {
-          this.renderCategories();
-          this.bindEvents();
-          this.syncSettingsForm();
-          this.updateApiBanner();
-          this.renderSaved();
-          this.renderDashboard();
-          TimerController.restoreOnBoot();
-        },
-
-        updateApiBanner() {
-          const hasKey = Boolean((Storage.state.apiKey || "").trim());
-          document.getElementById("apiKeyBanner").classList.toggle("hidden", hasKey);
-        },
-
-        switchTab(tabName) {
-          document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-          const targetView = document.getElementById(`view-${tabName}`);
-          const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-          if (targetView) targetView.classList.add("active");
-          if (targetBtn) targetBtn.classList.add("active");
-          if (tabName === "dashboard") this.renderDashboard();
-          if (tabName === "saved") this.renderSaved();
-        },
-
-        renderCategories() {
-          const grid = document.getElementById("categoryGrid");
-          grid.textContent = "";
-          CATEGORIES.forEach(cat => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = `cat-chip ${cat.id === this.selectedCategoryId ? "selected" : ""}`;
-            btn.textContent = cat.label;
-            btn.addEventListener("click", () => {
-              this.selectedCategoryId = cat.id;
-              this.renderCategories();
-            });
-            grid.appendChild(btn);
-          });
-        },
-
-        renderTimer() {
-          const s = Storage.state.activeSession;
-          const totalMs = (Storage.state.settings.sessionDuration || 20) * 60 * 1000;
-          const remainingMs = TimerController.getRemainingMs();
-          const mins = Math.floor(remainingMs / 60000);
-          const secs = Math.floor((remainingMs % 60000) / 1000);
-
-          const displayEl = document.getElementById("timerDisplay");
-          const statusEl = document.getElementById("timerStatusText");
-          const progressEl = document.getElementById("timerProgress");
-          const primaryBtn = document.getElementById("timerPrimaryBtn");
-          const endBtn = document.getElementById("timerEndBtn");
-          const pill = document.getElementById("focusPill");
-          const pillText = document.getElementById("focusPillText");
-
-          displayEl.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-          const pct = totalMs > 0 ? Math.min(100, Math.max(0, (remainingMs / totalMs) * 100)) : 0;
-          progressEl.style.width = `${pct}%`;
-
-          if (!s) {
-            displayEl.classList.remove("expired");
-            statusEl.textContent = `Idle • ${Storage.state.settings.sessionDuration} min limit`;
-            primaryBtn.textContent = "Start Session";
-            endBtn.disabled = true;
-            endBtn.style.opacity = "0.45";
-            pill.classList.remove("active");
-            pillText.textContent = "Ready";
-          } else if (s.status === "running") {
-            displayEl.classList.remove("expired");
-            statusEl.textContent = "Focus active";
-            primaryBtn.textContent = "Pause";
-            endBtn.disabled = false;
-            endBtn.style.opacity = "1";
-            pill.classList.add("active");
-            pillText.textContent = `${mins}m left`;
-          } else if (s.status === "paused") {
-            statusEl.textContent = "Session paused";
-            primaryBtn.textContent = "Resume";
-            endBtn.disabled = false;
-            endBtn.style.opacity = "1";
-            pill.classList.remove("active");
-            pillText.textContent = "Paused";
-          }
-        },
-
-        setSearchStatus(message, isError = false) {
-          const el = document.getElementById("searchStatus");
-          if (!message) {
-            el.classList.add("hidden");
-            el.textContent = "";
-            return;
-          }
-          el.textContent = message;
-          el.classList.toggle("error", isError);
-          el.classList.remove("hidden");
-        },
-
-        buildVideoCard(video, { isSavedView = false } = {}) {
-          const card = document.createElement("article");
-          card.className = "video-card";
-          card.dataset.videoId = video.videoId;
-
-          const thumbWrap = document.createElement("div");
-          thumbWrap.className = "thumb-wrap";
-
-          const img = document.createElement("img");
-          img.src = video.thumbnail;
-          img.alt = video.title;
-          img.loading = "lazy";
-          img.onerror = () => { img.style.display = "none"; };
-          thumbWrap.appendChild(img);
-
-          if (video.isPreferred) {
-            const wl = document.createElement("span");
-            wl.className = "whitelist-badge";
-            wl.textContent = "Preferred Channel";
-            thumbWrap.appendChild(wl);
-          }
-
-          const dur = document.createElement("span");
-          dur.className = "duration-badge";
-          dur.textContent = FilterEngine.formatDuration(video.durationSeconds);
-          thumbWrap.appendChild(dur);
-
-          const body = document.createElement("div");
-          body.className = "video-body";
-
-          const title = document.createElement("h3");
-          title.className = "video-title";
-          title.textContent = video.title;
-
-          const meta = document.createElement("div");
-          meta.className = "video-meta";
-          const dateLabel = video.publishedAt
-            ? new Date(video.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-            : "";
-          meta.textContent = dateLabel ? `${video.channelTitle} • ${dateLabel}` : video.channelTitle;
-
-          const actions = document.createElement("div");
-          actions.className = "video-actions";
-
-          const watchBtn = document.createElement("button");
-          watchBtn.type = "button";
-          watchBtn.className = "btn-primary";
-          watchBtn.textContent = "Watch";
-          watchBtn.addEventListener("click", () => PlayerController.play(video));
-
-          actions.appendChild(watchBtn);
-
-          if (isSavedView) {
-            const removeBtn = document.createElement("button");
-            removeBtn.type = "button";
-            removeBtn.className = "btn-danger";
-            removeBtn.textContent = "Remove";
-            removeBtn.addEventListener("click", () => SavedManager.remove(video.videoId));
-            actions.appendChild(removeBtn);
-            actions.style.gridTemplateColumns = "1.5fr 1fr";
-          } else {
-            const saveBtn = document.createElement("button");
-            saveBtn.type = "button";
-            saveBtn.className = "save-toggle-btn";
-            saveBtn.dataset.videoId = video.videoId;
-            saveBtn.textContent = SavedManager.isSaved(video.videoId) ? "Saved" : "Save";
-            saveBtn.addEventListener("click", () => SavedManager.toggleSave(video));
-
-            const hideBtn = document.createElement("button");
-            hideBtn.type = "button";
-            hideBtn.className = "btn-ghost";
-            hideBtn.setAttribute("aria-label", "Hide video");
-            hideBtn.textContent = "Hide";
-            hideBtn.addEventListener("click", () => {
-              Storage.state.hiddenVideoIds.push(video.videoId);
-              Storage.save();
-              this.lastResults = this.lastResults.filter(v => v.videoId !== video.videoId);
-              this.renderResults(this.lastResults);
-            });
-
-            actions.appendChild(saveBtn);
-            actions.appendChild(hideBtn);
-          }
-
-          body.appendChild(title);
-          body.appendChild(meta);
-          body.appendChild(actions);
-
-          card.appendChild(thumbWrap);
-          card.appendChild(body);
-          return card;
-        },
-
-        refreshSaveButtons() {
-          document.querySelectorAll(".save-toggle-btn").forEach(btn => {
-            const id = btn.dataset.videoId;
-            btn.textContent = SavedManager.isSaved(id) ? "Saved" : "Save";
-          });
-        },
-
-        renderResults(videos) {
-          this.lastResults = videos;
-          const section = document.getElementById("resultsSection");
-          const list = document.getElementById("resultsList");
-          const countText = document.getElementById("resultsCountText");
-
-          list.textContent = "";
-          if (!videos || videos.length === 0) {
-            section.classList.add("hidden");
-            this.setSearchStatus("Couldn’t find suitable videos. Try another topic or adjust your filters.", false);
-            return;
-          }
-
-          this.setSearchStatus("");
-          section.classList.remove("hidden");
-          countText.textContent = `Showing ${videos.length} of max 5`;
-
-          videos.slice(0, MAX_RESULTS).forEach(video => {
-            list.appendChild(this.buildVideoCard(video, { isSavedView: false }));
-          });
-        },
-
-        renderSaved() {
-          const list = document.getElementById("savedList");
-          const saved = Storage.state.savedVideos || [];
-          document.getElementById("tabSavedLabel").textContent = saved.length > 0 ? `Saved (${saved.length})` : "Saved";
-
-          list.textContent = "";
-          if (saved.length === 0) {
-            const empty = document.createElement("div");
-            empty.className = "card empty-state";
-            empty.textContent = "No saved videos yet. Save useful tutorials from Focus to watch intentionally later.";
-            list.appendChild(empty);
-            return;
-          }
-
-          saved.forEach(video => {
-            list.appendChild(this.buildVideoCard(video, { isSavedView: true }));
-          });
-        },
-
-        renderDashboard() {
-          const stats = Storage.state.statistics;
-          const notes = Storage.state.learningNotes || [];
-          const saved = Storage.state.savedVideos || [];
-          const todayKey = new Date().toISOString().slice(0, 10);
-          const todaySec = (stats.dailyPlaybackSeconds && stats.dailyPlaybackSeconds[todayKey]) || 0;
-
-          document.getElementById("statNotes").textContent = String(notes.length);
-          document.getElementById("statVideosCompleted").textContent = String(stats.videosCompleted || 0);
-          document.getElementById("statSessionsCompleted").textContent = String(stats.sessionsCompleted || 0);
-          document.getElementById("statMinutesWatched").textContent = `${Math.round((stats.playbackSeconds || 0) / 60)}m`;
-          document.getElementById("statTodayMinutes").textContent = `${Math.round(todaySec / 60)}m`;
-          document.getElementById("statSavedCount").textContent = String(saved.length);
-
-          const notesList = document.getElementById("notesList");
-          notesList.textContent = "";
-
-          if (notes.length === 0) {
-            const empty = document.createElement("div");
-            empty.className = "empty-state";
-            empty.style.padding = "16px 6px";
-            empty.textContent = "Complete a video and record one takeaway to build your learning log.";
-            notesList.appendChild(empty);
-            return;
-          }
-
-          notes.forEach(item => {
-            const row = document.createElement("div");
-            row.className = "note-item";
-
-            const p = document.createElement("p");
-            p.className = "note-text";
-            p.textContent = `“${item.note}”`;
-
-            const meta = document.createElement("div");
-            meta.className = "note-meta";
-
-            const info = document.createElement("span");
-            const dateStr = item.completedAt ? new Date(item.completedAt).toLocaleDateString() : "";
-            info.textContent = `${item.videoTitle} • ${dateStr}`;
-
-            const delBtn = document.createElement("button");
-            delBtn.type = "button";
-            delBtn.className = "btn-ghost";
-            delBtn.style.minHeight = "30px";
-            delBtn.style.padding = "2px 8px";
-            delBtn.style.fontSize = "12px";
-            delBtn.textContent = "Delete";
-            delBtn.addEventListener("click", () => LearningTracker.deleteNote(item.id));
-
-            meta.appendChild(info);
-            meta.appendChild(delBtn);
-
-            row.appendChild(p);
-            row.appendChild(meta);
-            notesList.appendChild(row);
-          });
-        },
-
-        syncSettingsForm() {
-          document.getElementById("apiKeyInput").value = Storage.state.apiKey || "";
-          document.getElementById("channelModeSelect").value = Storage.state.settings.channelMode || "both";
-          document.getElementById("minDurationInput").value = Storage.state.settings.minimumVideoDuration || 240;
-          document.getElementById("blacklistTextarea").value = (Storage.state.blockedKeywords || []).join("\n");
-          this.renderPreferredChannels();
-        },
-
-        renderPreferredChannels() {
-          const container = document.getElementById("preferredChannelsList");
-          container.textContent = "";
-          (Storage.state.preferredChannels || []).forEach(chId => {
-            const chip = document.createElement("span");
-            chip.className = "channel-chip";
-            chip.textContent = chId;
-
-            const rm = document.createElement("button");
-            rm.type = "button";
-            rm.setAttribute("aria-label", `Remove ${chId}`);
-            rm.textContent = "×";
-            rm.addEventListener("click", () => {
-              Storage.state.preferredChannels = Storage.state.preferredChannels.filter(id => id !== chId);
-              Storage.save();
-              this.renderPreferredChannels();
-            });
-
-            chip.appendChild(rm);
-            container.appendChild(chip);
-          });
-        },
-
-        async handleSearch() {
-          const btn = document.getElementById("searchBtn");
-          const input = document.getElementById("searchInput");
-          const categoryObj = CATEGORIES.find(c => c.id === this.selectedCategoryId);
-
-          input.blur();
-          btn.disabled = true;
-          btn.textContent = "Filtering up to 25 candidates...";
-          this.setSearchStatus("");
-
-          try {
-            const results = await YouTubeService.search(input.value, categoryObj);
-            this.renderResults(results);
-          } catch (err) {
-            document.getElementById("resultsSection").classList.add("hidden");
-            this.setSearchStatus(err.message || "Search failed.", true);
-          } finally {
-            btn.disabled = false;
-            btn.textContent = "Find up to 5 useful videos";
-          }
-        },
-
-        bindEvents() {
-          // Tab Navigation
-          document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.addEventListener("click", () => this.switchTab(btn.dataset.tab));
-          });
-
-          document.getElementById("bannerGoSettingsBtn").addEventListener("click", () => {
-            this.switchTab("settings");
-          });
-
-          // Timer Controls
-          document.getElementById("timerPrimaryBtn").addEventListener("click", () => {
-            const s = Storage.state.activeSession;
-            if (!s) TimerController.start();
-            else if (s.status === "running") TimerController.pause();
-            else if (s.status === "paused") TimerController.resume();
-          });
-
-          document.getElementById("timerEndBtn").addEventListener("click", () => {
-            if (Storage.state.activeSession) {
-              TimerController.end(false);
-            }
-          });
-
-          // Search
-          document.getElementById("searchBtn").addEventListener("click", () => this.handleSearch());
-          document.getElementById("searchInput").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              this.handleSearch();
-            }
-          });
-
-          // Player Controls
-          document.getElementById("closePlayerBtn").addEventListener("click", () => PlayerController.stop());
-          document.getElementById("finishVideoBtn").addEventListener("click", () => PlayerController.openReflectionForCurrent());
-
-          // Learning Modal
-          document.getElementById("saveLearningBtn").addEventListener("click", () => {
-            const note = document.getElementById("learningNoteInput").value;
-            LearningTracker.completeVideo(note);
-          });
-          document.getElementById("skipLearningBtn").addEventListener("click", () => {
-            LearningTracker.completeVideo("");
-          });
-
-          // Session Modal
-          document.getElementById("ackSessionModalBtn").addEventListener("click", () => {
-            document.getElementById("sessionModal").classList.remove("open");
-          });
-
-          // Settings: Save API Key
-          document.getElementById("saveApiKeyBtn").addEventListener("click", () => {
-            Storage.state.apiKey = document.getElementById("apiKeyInput").value.trim();
-            Storage.save();
-            this.updateApiBanner();
-            alert("YouTube API key saved locally.");
-          });
-
-          // Settings: Channel Mode & Whitelist
-          document.getElementById("channelModeSelect").addEventListener("change", (e) => {
-            Storage.state.settings.channelMode = e.target.value;
-            Storage.save();
-          });
-
-          document.getElementById("addChannelBtn").addEventListener("click", () => {
-            const input = document.getElementById("channelIdInput");
-            const id = input.value.trim();
-            if (!ChannelEngine.isValidChannelId(id)) {
-              alert("Please enter a valid YouTube Channel ID starting with 'UC' (24 characters total).");
-              return;
-            }
-            if (!Storage.state.preferredChannels.includes(id)) {
-              Storage.state.preferredChannels.push(id);
-              Storage.save();
-              this.renderPreferredChannels();
-            }
-            input.value = "";
-          });
-
-          // Settings: Filters
-          document.getElementById("saveFiltersBtn").addEventListener("click", () => {
-            const minSec = Math.max(60, parseInt(document.getElementById("minDurationInput").value, 10) || 240);
-            const lines = document.getElementById("blacklistTextarea").value
-              .split("\n")
-              .map(line => line.trim())
-              .filter(line => line.length > 0);
-
-            Storage.state.settings.minimumVideoDuration = minSec;
-            Storage.state.blockedKeywords = lines;
-            Storage.save();
-            localStorage.removeItem(CACHE_KEY);
-            alert("Filtering rules updated.");
-          });
-
-          document.getElementById("restoreFiltersBtn").addEventListener("click", () => {
-            Storage.state.settings.minimumVideoDuration = 240;
-            Storage.state.blockedKeywords = [...DEFAULT_BLACKLIST];
-            Storage.save();
-            localStorage.removeItem(CACHE_KEY);
-            this.syncSettingsForm();
-            alert("Default balanced filter rules restored.");
-          });
-
-          // Settings: Export / Import / Reset
-          document.getElementById("exportDataBtn").addEventListener("click", () => Storage.exportJSON());
-
-          document.getElementById("importDataBtn").addEventListener("click", () => {
-            document.getElementById("importFileInput").click();
-          });
-
-          document.getElementById("importFileInput").addEventListener("change", (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-              try {
-                Storage.importJSON(String(reader.result));
-                this.syncSettingsForm();
-                this.renderSaved();
-                this.renderDashboard();
-                TimerController.restoreOnBoot();
-                alert("Backup imported successfully.");
-              } catch (err) {
-                alert(`Import failed: ${err.message}`);
-              }
-            };
-            reader.readAsText(file);
-            e.target.value = "";
-          });
-
-          document.getElementById("resetAllBtn").addEventListener("click", () => {
-            if (confirm("Reset all MTube settings, saved videos, notes, and statistics? This cannot be undone.")) {
-              PlayerController.stop();
-              TimerController.stopTicker();
-              Storage.resetAll();
-              this.syncSettingsForm();
-              this.updateApiBanner();
-              this.renderSaved();
-              this.renderDashboard();
-              this.renderTimer();
-              document.getElementById("resultsSection").classList.add("hidden");
-            }
-          });
-
-          // Safari Backgrounding & Page Visibility Recalculation
-          document.addEventListener("visibilitychange", () => {
-            if (document.hidden) {
-              PlayerController.stopPlaybackTracking();
-            } else {
-              TimerController.tick();
-            }
-          });
-        }
-      };
-
-      // Boot Application
-      Storage.load();
-      UI.init();
-    })();
+    window.onload = () => App.init();
   </script>
 </body>
 </html>
