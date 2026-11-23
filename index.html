@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube / Research &amp; Sync</title>
+  <title>MTube / Second Brain</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='74' x='22' fill='white' font-family='monospace' font-size='68'>M</text></svg>">
 
   <style>
-    /* BRUTALIST PAPER — RESPONSIVE & SAFARI-SAFE */
+    /* BRUTALIST NOTION THEME — RESPONSIVE & SAFARI-SAFE */
     :root {
-      --bg: #F5F5F0;
-      --ink: #000000;
-      --ink-light: #52524E;
+      --bg: #F9F9F8;
+      --ink: #111111;
+      --ink-light: #666666;
       --paper: #FFFFFF;
       --border: 2px solid var(--ink);
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, "Courier New", monospace;
       --font-serif: "New York", Georgia, "Times New Roman", serif;
     }
@@ -23,104 +24,102 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
+    html, body {
       width: 100%;
       overflow-x: hidden;
-      -webkit-text-size-adjust: 100%;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       background-color: var(--bg);
       color: var(--ink);
-      font-family: var(--font-mono);
-      margin: 0;
-      padding: calc(12px + env(safe-area-inset-top)) 16px calc(48px + env(safe-area-inset-bottom));
+      font-family: var(--font-sans);
+      padding-bottom: calc(48px + env(safe-area-inset-bottom));
       line-height: 1.5;
-      width: 100%;
-      overflow-x: hidden;
     }
 
     .container {
       width: 100%;
-      max-width: 960px;
+      max-width: 1000px;
       margin: 0 auto;
+      padding: 0 16px;
     }
 
     /* Typography */
     h1, h2, h3 {
       font-family: var(--font-serif);
-      font-weight: normal;
+      font-weight: 600;
       margin: 0 0 14px 0;
       letter-spacing: -0.02em;
       word-wrap: break-word;
     }
-    h1 {
-      font-size: clamp(24px, 5vw, 34px);
-      border-bottom: var(--border);
-      padding-bottom: 8px;
-      margin-top: 20px;
-      text-transform: uppercase;
-    }
-    h2 {
-      font-size: 18px;
-      margin-top: 22px;
-      border-bottom: 1px solid var(--ink);
-      padding-bottom: 4px;
-      text-transform: uppercase;
-    }
+    h1 { font-size: clamp(26px, 5vw, 36px); margin-top: 24px; text-transform: uppercase; }
+    h2 { font-size: 16px; margin-top: 22px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
 
     p { margin: 0 0 14px; }
     .muted { color: var(--ink-light); font-size: 13px; }
     .bold { font-weight: bold; }
 
-    /* Clean Header Bar (Replaces Weird Clock) */
+    /* Top Navigation Status Bar */
     .top-status-bar {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 10px 14px;
+      background: var(--paper);
+      border-bottom: 1px solid #E5E5E5;
+      padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
       font-size: 12px;
-      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
+    .sync-badge { font-weight: bold; }
+    .sync-badge.ok { color: #2A8F3D; }
+    .sync-badge.err { color: #D93025; }
 
-    .sync-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: bold;
+    /* Notion-Style Cover Banner */
+    .notion-cover {
+      width: 100%;
+      height: 22vh;
+      min-height: 140px;
+      background-color: #E5E5E5;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border-bottom: 1px solid #E5E5E5;
+      margin-bottom: 16px;
     }
+    .cover-actions {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .notion-cover:hover .cover-actions { opacity: 1; }
 
-    /* Responsive Web Grid */
+    /* Layout Grids (Strict boundaries prevent overflow) */
     .web-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
       align-items: start;
     }
-
     @media (min-width: 768px) {
-      .web-grid {
-        grid-template-columns: 1.15fr 0.85fr;
-      }
-      .focus-grid {
-        display: grid;
-        grid-template-columns: 1.25fr 0.75fr;
-        gap: 20px;
-        align-items: start;
-      }
+      .web-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+      .focus-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); display: grid; gap: 24px; align-items: start; }
     }
 
-    /* Brutalist Boxes & Controls */
+    /* Brutalist Components */
     .box {
       background: var(--paper);
-      border: var(--border);
-      padding: 16px;
+      border: 1px solid #E5E5E5;
+      padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 5px 5px 0 var(--ink);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
       width: 100%;
     }
 
@@ -129,129 +128,51 @@
       -webkit-appearance: none;
       background: var(--paper);
       color: var(--ink);
-      border: var(--border);
-      border-radius: 0;
-      font-family: var(--font-mono);
+      border: 1px solid #E5E5E5;
+      border-radius: 4px;
+      font-family: var(--font-sans);
       font-size: 13px;
-      font-weight: bold;
-      text-transform: uppercase;
-      min-height: 44px;
-      padding: 10px 14px;
+      font-weight: 600;
+      min-height: 38px;
+      padding: 8px 14px;
       cursor: pointer;
-      box-shadow: 4px 4px 0 var(--ink);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      text-align: center;
+      transition: background 0.1s, border 0.1s;
     }
-    .btn:active {
-      transform: translate(3px, 3px);
-      box-shadow: 1px 1px 0 var(--ink);
-    }
+    .btn:hover { background: #F5F5F0; }
+    .btn:active { background: #E5E5E5; }
     .btn.full { width: 100%; margin-bottom: 12px; }
-    .btn.inverse { background: var(--ink); color: var(--paper); }
-    .btn.small {
-      min-height: 36px;
-      padding: 6px 10px;
-      font-size: 11px;
-      box-shadow: 2px 2px 0 var(--ink);
-    }
+    .btn.inverse { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .btn.inverse:hover { background: #333; }
+    .btn.small { min-height: 28px; padding: 4px 10px; font-size: 12px; }
 
-    /* Safari 16px input rule prevents auto-zoom */
-    input, textarea {
+    input[type="text"], input[type="password"], textarea {
       width: 100%;
       max-width: 100%;
-      background: var(--bg);
-      border: var(--border);
-      border-radius: 0;
+      background: var(--paper);
+      border: 1px solid #D1D1D1;
+      border-radius: 4px;
       color: var(--ink);
-      font-family: var(--font-mono);
-      font-size: 16px;
-      padding: 11px 12px;
+      font-family: var(--font-sans);
+      font-size: 16px; /* 16px strictly prevents iOS Safari Zoom */
+      padding: 10px 12px;
       margin-bottom: 14px;
       outline: none;
-      display: block;
+      transition: border-color 0.2s;
     }
-    input:focus, textarea:focus { background: var(--paper); }
-
-    /* Giphy Ambient Frame */
-    .giphy-frame {
-      width: 100%;
-      border: var(--border);
-      background: var(--paper);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-    .giphy-frame img {
-      width: 100%;
-      max-height: 220px;
-      object-fit: cover;
-      display: block;
-      filter: grayscale(100%) contrast(115%);
-    }
+    input:focus, textarea:focus { border-color: var(--ink); }
 
     /* Project Rows */
-    .project-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      width: 100%;
-    }
-    .project-row .btn.main-proj {
-      flex: 1;
-      margin-bottom: 0;
-      justify-content: space-between;
-      text-align: left;
-      overflow: hidden;
-    }
-    .project-row .btn.del-proj {
-      margin-bottom: 0;
-      width: 46px;
-      flex-shrink: 0;
-    }
-
-    /* Habit Matrix & Concept Map */
-    .habit-strip {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px dashed var(--ink);
-      padding-bottom: 10px;
-      margin-bottom: 12px;
-      font-size: 12px;
-    }
-    .habit-cells { display: flex; gap: 4px; }
-    .habit-cell {
-      width: 14px;
-      height: 14px;
-      border: 1px solid var(--ink);
-      background: var(--bg);
-    }
-    .habit-cell.done { background: var(--ink); }
-
-    .mindmap-nodes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .node-chip {
-      border: 1px solid var(--ink);
-      background: var(--bg);
-      padding: 5px 9px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .node-chip.hub {
-      background: var(--ink);
-      color: var(--paper);
-      font-weight: bold;
-    }
+    .project-row { display: flex; gap: 8px; margin-bottom: 8px; width: 100%; }
+    .project-row .btn.main-proj { flex: 1; margin-bottom: 0; justify-content: flex-start; text-align: left; }
+    .project-row .btn.del-proj { margin-bottom: 0; width: 38px; flex-shrink: 0; color: #D93025; }
 
     /* Video Result Items */
     .list-item {
-      border-bottom: 1px solid var(--ink);
-      padding: 14px 0;
+      border-bottom: 1px solid #E5E5E5;
+      padding: 16px 0;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -259,60 +180,40 @@
     }
     .list-item:last-child { border-bottom: none; }
     .list-item-content { flex: 1; min-width: 0; }
-    .list-item-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-      font-family: var(--font-serif);
-      font-size: 17px;
-      line-height: 1.3;
-      word-wrap: break-word;
-    }
+    .list-item-title { font-weight: 600; margin-bottom: 4px; font-family: var(--font-serif); font-size: 17px; line-height: 1.3; }
     .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 6px; }
-    .list-item-desc {
-      font-size: 12px;
-      color: var(--ink);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
+    
     .score-badge {
       display: inline-block;
-      background: var(--ink);
-      color: var(--paper);
+      background: #EAEAEA;
+      color: var(--ink);
       padding: 2px 6px;
+      border-radius: 3px;
       font-size: 10px;
-      font-weight: bold;
+      font-weight: 700;
       margin-right: 6px;
-      vertical-align: middle;
+      vertical-align: text-bottom;
     }
 
-    /* Responsive 16:9 Video Player */
+    /* Video Player */
     .player-wrapper {
       position: relative;
       width: 100%;
       padding-bottom: 56.25%;
       height: 0;
       background: var(--ink);
-      border: var(--border);
+      border-radius: 6px;
       margin-bottom: 16px;
       overflow: hidden;
     }
-    .player-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
+    .player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    
     /* Native Unhooking Blackout */
     #blackout-overlay {
       position: absolute;
       inset: 0;
-      background: var(--paper);
+      background: var(--ink);
+      color: var(--paper);
       display: none;
       flex-direction: column;
       align-items: center;
@@ -323,39 +224,46 @@
     }
     #blackout-overlay.active { display: flex; }
 
-    /* Inline Video Brief (Replaces External Gemini Assistant) */
-    .brief-box {
-      background: var(--paper);
-      border: var(--border);
-      padding: 14px;
-      margin-bottom: 20px;
-    }
+    /* Inline Video Brief (Chapters) */
     .brief-chapter {
       padding: 6px 0;
-      border-bottom: 1px dashed #ccc;
+      border-bottom: 1px dashed #E5E5E5;
       font-size: 13px;
+      display: flex;
+      gap: 8px;
     }
     .brief-chapter:last-child { border-bottom: none; }
-    .chapter-time {
-      font-weight: bold;
-      text-decoration: underline;
-      cursor: pointer;
-      margin-right: 8px;
-    }
+    .chapter-time { font-family: var(--font-mono); font-weight: 600; color: #0055CC; cursor: pointer; }
 
-    /* Timestamped Ledger */
+    /* Notion-Style To-Do Ledger */
     .ledger-entry {
       display: flex;
-      justify-content: space-between;
       align-items: flex-start;
       gap: 10px;
       margin-bottom: 10px;
       font-size: 14px;
-      border-left: 2px solid var(--ink);
-      padding-left: 10px;
+      padding: 8px;
+      background: #F9F9F9;
+      border-radius: 4px;
     }
-    .ledger-time { cursor: pointer; text-decoration: underline; font-weight: bold; margin-right: 6px; }
-    .ledger-todo { font-weight: bold; display: inline-block; margin-right: 4px; }
+    .ledger-time { cursor: pointer; color: #0055CC; font-family: var(--font-mono); font-weight: bold; flex-shrink: 0; }
+    .ledger-text { flex: 1; word-wrap: break-word; }
+    .ledger-text.done { text-decoration: line-through; color: var(--ink-light); }
+    
+    .custom-checkbox {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--ink-light);
+      border-radius: 3px;
+      margin-top: 2px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-checkbox:checked { background: var(--ink); border-color: var(--ink); }
+    .custom-checkbox:checked::after { content: "✓"; color: #fff; font-size: 12px; font-weight: bold; }
 
     .view { display: none; }
     .view.active { display: block; }
@@ -363,61 +271,66 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    
-    <!-- CLEAN STATUS & CLOUD SYNC HEADER -->
-    <div class="top-status-bar">
-      <span>MTUBE // RESEARCH OS</span>
-      <span class="sync-badge" id="sync-status">LOCAL CACHE</span>
-    </div>
 
-    <!-- VIEW 0: CONFIG ERROR -->
-    <div id="view-error" class="view">
-      <h1>SYSTEM HALT</h1>
-      <div class="box">
-        <p class="bold">config.json missing or invalid.</p>
-        <p>Ensure config.json exists in your GitHub repository root with your YouTube API key.</p>
+  <!-- GLOBAL STATUS BAR -->
+  <div class="top-status-bar">
+    <span>MTUBE // RESEARCH OS</span>
+    <span class="sync-badge" id="sync-status">INITIALIZING...</span>
+  </div>
+
+  <!-- NOTION COVER (DYNAMIC GIPHY) -->
+  <div class="notion-cover hidden" id="ws-cover">
+    <div class="cover-actions">
+      <button class="btn small" id="btn-change-cover" style="background:rgba(255,255,255,0.8); border:none;">Change Cover</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- VIEW 0: VAULT SETUP (Replaces config.json) -->
+    <div id="view-setup" class="view">
+      <h1>SECURE VAULT SETUP</h1>
+      <p class="muted">Your API keys will be stored securely in a Private GitHub repo, never exposed to the public internet.</p>
+      <div class="box web-grid">
+        <div>
+          <h2>1. GITHUB CREDENTIALS</h2>
+          <input type="password" id="setup-gh-token" placeholder="GitHub Personal Access Token (ghp_...)" />
+          <input type="text" id="setup-gh-repo" placeholder="Private Repo Name (e.g. Mtube-Vault)" />
+          
+          <h2>2. YOUTUBE API KEY</h2>
+          <input type="password" id="setup-yt-key" placeholder="YouTube Data API v3 Key (AIza...)" />
+          
+          <button class="btn full inverse" id="btn-save-vault" style="margin-top:16px;">SECURE &amp; CONNECT VAULT</button>
+          <div id="setup-error" style="color:#D93025; font-size:12px; font-weight:bold; margin-top:8px;"></div>
+        </div>
+        <div>
+          <h2 style="margin-top:0;">IOS SHORTCUT BYPASS</h2>
+          <p class="muted">Apple Safari clears local data every 7 days. To prevent logging in repeatedly, MTube will generate a secure URL for your Apple Shortcuts app after you connect.</p>
+        </div>
       </div>
     </div>
 
-    <!-- VIEW 1: DIRECTORY & MULTI-DEVICE DASHBOARD -->
-    <div id="view-projects" class="view active">
+    <!-- VIEW 1: DIRECTORY -->
+    <div id="view-projects" class="view">
       <h1>DIRECTORY</h1>
-      <p class="muted">Cross-device PARA workspaces synced via GitHub.</p>
-
       <div class="web-grid">
-        <!-- Left Column: Active Projects -->
+        <!-- Left Column: Workspaces -->
         <div>
+          <h2 style="margin-top:0;">ACTIVE WORKSPACES</h2>
           <div id="projects-list"></div>
-
-          <div class="box">
+          <div class="box" style="margin-top:16px;">
             <h2 style="margin-top:0;">+ NEW WORKSPACE</h2>
-            <input type="text" id="new-proj-name" placeholder="Project Name (e.g., 'Podcasts & Startups')" />
+            <input type="text" id="new-proj-name" placeholder="Name (e.g., 'SwiftUI Development')" />
             <button class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
           </div>
         </div>
-
-        <!-- Right Column: Second Brain, Habit Matrix & Giphy -->
+        <!-- Right Column: Setup Shortcut -->
         <div>
-          <div class="box">
-            <h2 style="margin-top:0;">HABIT &amp; CONCEPT GRAPH</h2>
-            <div class="habit-strip">
-              <span class="bold">7-DAY DELIBERATE REPS:</span>
-              <div class="habit-cells" id="habit-cells"></div>
-            </div>
-            <div class="mindmap-nodes" id="mindmap-nodes"></div>
-          </div>
-
-          <div class="box">
-            <h2 style="margin-top:0;">VISUAL ANCHOR (GIPHY)</h2>
-            <div id="giphy-container" class="giphy-frame hidden">
-              <img id="giphy-img" src="" alt="Focus Visual Anchor" />
-            </div>
-            <input type="text" id="giphy-url-input" placeholder="Paste Giphy GIF URL (.gif or giphy.com link)" />
-            <div style="display:flex; gap:8px;">
-              <button class="btn small inverse" style="flex:1;" id="btn-save-giphy">SET GIF</button>
-              <button class="btn small" id="btn-clear-giphy">CLEAR</button>
-            </div>
+          <div class="box" style="background: #F4F4F4; border-color: #E5E5E5;">
+            <h2 style="margin-top:0;">PERMANENT ACCESS SHORTCUT</h2>
+            <p class="muted">Copy this link and paste it into a new iOS Shortcut ("Open URLs" action) to bypass the Safari 7-day wipe.</p>
+            <input type="text" id="shortcut-url" readonly style="font-size:12px; color:#555;" />
+            <button class="btn small" id="btn-copy-shortcut">COPY URL</button>
           </div>
         </div>
       </div>
@@ -434,11 +347,10 @@
       <div class="web-grid">
         <div>
           <div class="box">
-            <h2 style="margin-top:0;">INTENTION GATE</h2>
-            <p class="muted">Podcasts &amp; long-form talks are automatically preserved.</p>
-            <input type="text" id="ig-query" placeholder="Query (e.g., 'Latest podcast of Figuring it out')" />
-            <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Learn from founder experiences')" />
-            <button class="btn full inverse" id="btn-search">SEARCH DATABASE</button>
+            <h2 style="margin-top:0;">IMPLEMENTATION INTENTION</h2>
+            <input type="text" id="ig-query" placeholder="Query (e.g., 'Latest Podcast Raj Shamani')" />
+            <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Learn from founder experience on Figuring Out')" />
+            <button class="btn full inverse" id="btn-search">SEARCH YOUTUBE</button>
             <div id="search-status" class="bold" style="margin-top:8px;"></div>
           </div>
 
@@ -452,8 +364,7 @@
           <h2 style="margin-top:0;">ACTIVE QUEUE</h2>
           <div class="box" id="queue-list"></div>
 
-          <h2>30-DAY KNOWLEDGE VAULT</h2>
-          <p class="muted">Synced across your devices with notes attached.</p>
+          <h2>KNOWLEDGE VAULT (30 DAYS)</h2>
           <div class="box" id="archive-list"></div>
         </div>
       </div>
@@ -465,36 +376,35 @@
         <span class="bold">FOCUS MODE</span>
         <button class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
       </div>
-
-      <div class="box" style="background:var(--ink); color:var(--paper); margin-bottom:16px;">
-        <div style="font-size:11px; color:#aaa;">STATED PURPOSE:</div>
-        <div id="focus-purpose" class="bold" style="font-family:var(--font-serif); font-size:18px;"></div>
+      
+      <!-- Stated Purpose Bar -->
+      <div style="background:#EAEAEA; padding: 12px 16px; border-radius: 4px; margin-bottom: 24px;">
+        <div style="font-size:11px; color:var(--ink-light); font-weight:bold; letter-spacing:0.05em;">STATED PURPOSE:</div>
+        <div id="focus-purpose" style="font-family:var(--font-serif); font-size:18px; font-weight:bold;"></div>
       </div>
 
       <div class="focus-grid">
-        <!-- Left: Video + Inline Brief Directly Below -->
+        <!-- Left: Video + Inline Brief -->
         <div>
           <div class="player-wrapper">
             <div id="yt-player"></div>
             <div id="blackout-overlay">
               <h2 style="margin:0 0 8px;">PAUSED</h2>
-              <p class="muted">YouTube recommendations suppressed.</p>
-              <button class="btn" id="btn-resume">RESUME VIDEO</button>
+              <button class="btn inverse" id="btn-resume">RESUME VIDEO</button>
             </div>
           </div>
 
-          <!-- Inline Video Summary & Chapter Breakdown Right Below Player -->
-          <div class="brief-box">
-            <h2 style="margin-top:0;">INLINE VIDEO BRIEF &amp; CHAPTERS</h2>
-            <div id="inline-video-brief" class="muted">Loading video structure...</div>
+          <div class="box">
+            <h2 style="margin-top:0;">INLINE VIDEO CHAPTERS</h2>
+            <div id="inline-video-brief" class="muted">Extracting timestamps...</div>
           </div>
         </div>
 
         <!-- Right: Timestamped Ledger -->
         <div>
-          <div class="box">
+          <div class="box" style="border: 2px solid var(--ink);">
             <h2 style="margin-top:0;">TIMESTAMPED LEDGER</h2>
-            <p class="muted">Auto-syncs to GitHub. Tap a timestamp to jump.</p>
+            <p class="muted">Type <code>/todo</code> to create a clickable checkbox task.</p>
             <input type="text" id="note-input" placeholder="Type insight or /todo... (Enter)" />
             <div id="ledger-list"></div>
             <button class="btn full inverse" style="margin-top:16px;" id="btn-finish">COMPLETE &amp; ARCHIVE</button>
@@ -503,269 +413,237 @@
       </div>
     </div>
 
-    <!-- VIEW 4: POST-VIDEO BUFFER -->
-    <div id="view-buffer" class="view">
-      <div class="box" style="text-align:center; padding: 48px 20px; margin-top: 24px;">
-        <h1 style="border:none;">ASSIMILATION</h1>
-        <p>Video and notes saved to your synced Knowledge Vault.</p>
-        <div style="font-size: 44px; font-weight:bold; margin: 20px 0;" id="buffer-timer">15</div>
-        <button class="btn" id="btn-exit-buffer" disabled style="opacity:0.3;">RETURN TO WORKSPACE</button>
-      </div>
-    </div>
-
   </div>
 
   <script>
     const App = {
-      config: null,
       ghFileSha: null,
       syncTimeout: null,
+      credentials: {
+        token: "",
+        owner: "",
+        repo: "",
+        ytKey: ""
+      },
       state: {
-        activeProjectId: null,
-        activeVideo: null,
-        customProjects: [],
-        deletedProjectIds: [],
+        projects: [],
         queue: {},
         archive: {},
-        scratchpad: [],
         notes: {},
-        habitDates: [],
-        giphyUrl: ""
+        covers: {}
       },
       player: null,
       apiReady: false,
 
-      // Only block obvious junk in the TITLE (never in description, so podcasts pass cleanly)
-      titleJunkKeywords: ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "try not to laugh", "gossip", "drama"],
+      // Block junk ONLY in title so long-form podcasts pass safely
+      titleJunkKeywords: ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "gossip"],
 
       async init() {
-        this.loadLocalCache();
-        try {
-          const res = await fetch(`config.json?t=${Date.now()}`);
-          if (!res.ok) throw new Error();
-          this.config = await res.json();
-          if (!this.config.apiKey) throw new Error();
-
-          await this.pullFromGitHub();
-          this.pruneOldArchive();
-          this.renderProjects();
-          this.renderMindmapAndHabits();
-          this.renderGiphy();
-          this.bindEvents();
-          this.loadYouTubeAPI();
-        } catch (e) {
-          this.navigate('error');
+        this.bindEvents();
+        this.loadYouTubeAPI();
+        
+        if (this.tryLoadAuthFromHash() || this.tryLoadAuthFromLocal()) {
+          await this.pullFromVault();
+        } else {
+          this.setSyncBadge("SETUP REQUIRED");
+          this.navigate('setup');
         }
       },
 
-      loadLocalCache() {
+      setSyncBadge(text, type = "") {
+        const badge = document.getElementById('sync-status');
+        badge.innerText = text;
+        badge.className = `sync-badge ${type}`;
+      },
+
+      /* --- AUTH & VAULT LOGIC --- */
+      tryLoadAuthFromHash() {
+        const hash = window.location.hash;
+        if (hash.startsWith('#vault=')) {
+          try {
+            const decoded = atob(hash.replace('#vault=', ''));
+            const [token, owner, repo] = decoded.split('|');
+            if (token && owner && repo) {
+              this.credentials = { token, owner, repo, ytKey: "" }; // ytKey loaded from Vault
+              localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
+              history.replaceState(null, null, ' '); // Hide hash securely
+              return true;
+            }
+          } catch(e) {}
+        }
+        return false;
+      },
+
+      tryLoadAuthFromLocal() {
         try {
-          const cached = JSON.parse(localStorage.getItem('mtube_cloud_cache') || 'null');
-          if (cached) {
-            this.state = { ...this.state, ...cached };
+          const auth = JSON.parse(localStorage.getItem('mtube_auth'));
+          if (auth && auth.token) {
+            this.credentials = auth;
+            return true;
           }
-        } catch {}
+        } catch(e) {}
+        return false;
       },
 
-      setSyncBadge(text) {
-        document.getElementById('sync-status').innerText = text;
+      generateShortcutUrl() {
+        // Creates a secure #vault= payload for iOS Shortcuts
+        const payload = btoa(`${this.credentials.token}|${this.credentials.owner}|${this.credentials.repo}`);
+        const url = `${window.location.origin}${window.location.pathname}#vault=${payload}`;
+        document.getElementById('shortcut-url').value = url;
       },
 
-      /* =====================================================================
-         GITHUB API TWO-WAY CLOUD SYNC (data.json)
-      ===================================================================== */
-      async pullFromGitHub() {
-        const { githubToken, githubOwner, githubRepo } = this.config || {};
-        if (!githubToken || !githubOwner || !githubRepo) {
-          this.setSyncBadge("LOCAL ONLY (ADD GITHUB TOKEN)");
+      async handleSetupSubmit() {
+        const token = document.getElementById('setup-gh-token').value.trim();
+        const repoInput = document.getElementById('setup-gh-repo').value.trim();
+        const ytKey = document.getElementById('setup-yt-key').value.trim();
+        const err = document.getElementById('setup-error');
+        err.innerText = "";
+
+        if (!token || !repoInput || !ytKey) {
+          err.innerText = "All fields are required.";
           return;
         }
 
-        this.setSyncBadge("SYNCING...");
+        // Get owner from token if possible, else ask user (Assume owner is current user for PAT)
+        let owner = "your-username"; 
         try {
-          const url = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data.json?t=${Date.now()}`;
-          const res = await fetch(url, {
-            headers: {
-              "Authorization": `Bearer ${githubToken}`,
-              "Accept": "application/vnd.github+json"
-            }
-          });
+          const uRes = await fetch('https://api.github.com/user', { headers: { "Authorization": `Bearer ${token}` }});
+          const uData = await uRes.json();
+          owner = uData.login;
+        } catch(e) {
+          err.innerText = "Invalid GitHub Token."; return;
+        }
+
+        this.credentials = { token, owner, repo: repoInput, ytKey };
+        localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
+        
+        // Attempt initial push to create vault
+        const success = await this.pushToVault(true);
+        if (success) {
+          this.generateShortcutUrl();
+          this.navigate('projects');
+        } else {
+          err.innerText = "Failed to access private repo. Check permissions.";
+        }
+      },
+
+      async pullFromVault() {
+        this.setSyncBadge("SYNCING...", "");
+        try {
+          const { token, owner, repo } = this.credentials;
+          const url = `https://api.github.com/repos/${owner}/${repo}/contents/mtube_data.json?t=${Date.now()}`;
+          const res = await fetch(url, { headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }});
 
           if (res.status === 404) {
-            // Initialize data.json on GitHub for the first time
-            await this.pushToGitHub();
+            this.setSyncBadge("VAULT EMPTY, CREATING...", "");
+            await this.pushToVault();
             return;
           }
-          if (!res.ok) throw new Error("GitHub pull failed");
+          if (!res.ok) throw new Error("Pull failed");
 
           const fileData = await res.json();
           this.ghFileSha = fileData.sha;
           const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
-          const remoteState = JSON.parse(decoded);
+          const remoteData = JSON.parse(decoded);
 
-          this.state = {
-            ...this.state,
-            customProjects: remoteState.customProjects || [],
-            deletedProjectIds: remoteState.deletedProjectIds || [],
-            queue: remoteState.queue || {},
-            archive: remoteState.archive || {},
-            scratchpad: remoteState.scratchpad || [],
-            notes: remoteState.notes || {},
-            habitDates: remoteState.habitDates || [],
-            giphyUrl: remoteState.giphyUrl || ""
-          };
-          localStorage.setItem('mtube_cloud_cache', JSON.stringify(this.state));
-          this.setSyncBadge("GITHUB SYNCED ✓");
+          this.state = remoteData.state || this.state;
+          // Hydrate ytKey from vault if we logged in via Hash
+          if (!this.credentials.ytKey && remoteData.ytKey) {
+            this.credentials.ytKey = remoteData.ytKey;
+          }
+
+          this.setSyncBadge("SYNCED ✓", "ok");
+          this.generateShortcutUrl();
+          this.navigate('projects');
         } catch (err) {
-          console.warn(err);
-          this.setSyncBadge("OFFLINE CACHE");
+          console.error(err);
+          this.setSyncBadge("SYNC FAILED", "err");
+          this.navigate('setup'); // Fallback if token is dead
         }
       },
 
-      saveState() {
-        localStorage.setItem('mtube_cloud_cache', JSON.stringify(this.state));
-        clearTimeout(this.syncTimeout);
-        this.syncTimeout = setTimeout(() => this.pushToGitHub(), 900);
-      },
-
-      async pushToGitHub() {
-        const { githubToken, githubOwner, githubRepo } = this.config || {};
-        if (!githubToken || !githubOwner || !githubRepo) return;
-
-        this.setSyncBadge("SAVING TO GITHUB...");
+      async pushToVault(isInit = false) {
+        if (!this.credentials.token) return false;
+        if (!isInit) this.setSyncBadge("SAVING...", "");
+        
         try {
+          const { token, owner, repo, ytKey } = this.credentials;
           const payload = {
             updatedAt: new Date().toISOString(),
-            customProjects: this.state.customProjects,
-            deletedProjectIds: this.state.deletedProjectIds,
-            queue: this.state.queue,
-            archive: this.state.archive,
-            scratchpad: this.state.scratchpad,
-            notes: this.state.notes,
-            habitDates: this.state.habitDates,
-            giphyUrl: this.state.giphyUrl
+            ytKey: ytKey,
+            state: this.state
           };
 
           const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
-          const url = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data.json`;
-
-          const body = {
-            message: "Sync MTube research state",
-            content: encodedContent
-          };
+          const url = `https://api.github.com/repos/${owner}/${repo}/contents/mtube_data.json`;
+          const body = { message: "Sync MTube Vault", content: encodedContent };
           if (this.ghFileSha) body.sha = this.ghFileSha;
 
           const res = await fetch(url, {
             method: "PUT",
-            headers: {
-              "Authorization": `Bearer ${githubToken}`,
-              "Accept": "application/vnd.github+json",
-              "Content-Type": "application/json"
-            },
+            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
             body: JSON.stringify(body)
           });
 
           if (!res.ok) throw new Error("Push failed");
           const result = await res.json();
           this.ghFileSha = result.content.sha;
-          this.setSyncBadge("GITHUB SYNCED ✓");
+          if (!isInit) this.setSyncBadge("SYNCED ✓", "ok");
+          return true;
         } catch (err) {
-          console.warn(err);
-          this.setSyncBadge("SYNC RETRY PENDING");
+          if (!isInit) this.setSyncBadge("SAVE FAILED", "err");
+          return false;
         }
       },
 
-      getAllProjects() {
-        const base = (this.config?.projects || []).filter(p => !this.state.deletedProjectIds.includes(p.id));
-        return [...base, ...this.state.customProjects];
+      queueSync() {
+        clearTimeout(this.syncTimeout);
+        this.syncTimeout = setTimeout(() => this.pushToVault(), 1000);
       },
 
-      pruneOldArchive() {
-        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-        const now = Date.now();
-        let changed = false;
-
-        Object.keys(this.state.archive).forEach(projId => {
-          const list = this.state.archive[projId] || [];
-          const filtered = list.filter(v => !v.archivedAt || (now - v.archivedAt) <= thirtyDaysMs);
-          if (filtered.length !== list.length) {
-            this.state.archive[projId] = filtered;
-            changed = true;
-          }
-        });
-        if (changed) this.saveState();
-      },
-
-      recordHabitRep() {
-        const today = new Date().toISOString().slice(0, 10);
-        if (!this.state.habitDates.includes(today)) {
-          this.state.habitDates.push(today);
-          this.saveState();
-        }
-      },
-
+      /* --- NAVIGATION & RENDERING --- */
       navigate(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(`view-${viewId}`).classList.add('active');
+        const cover = document.getElementById('ws-cover');
+        
         if (viewId === 'projects') {
+          cover.classList.add('hidden');
           this.renderProjects();
-          this.renderMindmapAndHabits();
-          this.renderGiphy();
+        } else if (viewId === 'workspace') {
+          cover.classList.remove('hidden');
+          this.renderCover();
+        } else {
+          cover.classList.add('hidden');
         }
         window.scrollTo(0, 0);
-      },
-
-      renderGiphy() {
-        const container = document.getElementById('giphy-container');
-        const img = document.getElementById('giphy-img');
-        const input = document.getElementById('giphy-url-input');
-        const url = (this.state.giphyUrl || "").trim();
-
-        input.value = url;
-        if (!url) {
-          container.classList.add('hidden');
-          return;
-        }
-        // Convert giphy.com/gifs/name-ID to direct media.giphy.com/media/ID/giphy.gif if needed
-        let directUrl = url;
-        const giphyMatch = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
-        if (giphyMatch && giphyMatch[1]) {
-          directUrl = `https://media.giphy.com/media/${giphyMatch[1]}/giphy.gif`;
-        }
-        img.src = directUrl;
-        container.classList.remove('hidden');
       },
 
       renderProjects() {
         const list = document.getElementById('projects-list');
         list.innerHTML = '';
-        const projects = this.getAllProjects();
+        
+        if (this.state.projects.length === 0) {
+          list.innerHTML = '<span class="muted">No workspaces yet. Create one below.</span>';
+        }
 
-        projects.forEach(p => {
-          const qCount = (this.state.queue[p.id] || []).length;
-          const aCount = (this.state.archive[p.id] || []).length;
-
+        this.state.projects.forEach(p => {
           const row = document.createElement('div');
           row.className = 'project-row';
 
           const openBtn = document.createElement('button');
           openBtn.className = 'btn main-proj';
-          openBtn.innerHTML = `<span>&gt; ${p.name.toUpperCase()}</span><span style="font-size:11px;">[Q:${qCount} | V:${aCount}]</span>`;
+          openBtn.innerText = p.name;
           openBtn.onclick = () => this.openWorkspace(p);
 
           const delBtn = document.createElement('button');
           delBtn.className = 'btn del-proj';
-          delBtn.title = "Delete Workspace";
           delBtn.innerText = "X";
           delBtn.onclick = () => {
             if (confirm(`Delete workspace "${p.name}"?`)) {
-              this.state.customProjects = this.state.customProjects.filter(cp => cp.id !== p.id);
-              if (!this.state.deletedProjectIds.includes(p.id)) {
-                this.state.deletedProjectIds.push(p.id);
-              }
-              this.saveState();
+              this.state.projects = this.state.projects.filter(cp => cp.id !== p.id);
+              this.queueSync();
               this.renderProjects();
-              this.renderMindmapAndHabits();
             }
           };
 
@@ -779,78 +657,11 @@
         const input = document.getElementById('new-proj-name');
         const name = input.value.trim();
         if (!name) return;
-
         const id = 'proj_' + Date.now();
-        this.state.customProjects.push({ id, name });
-        this.saveState();
+        this.state.projects.push({ id, name });
+        this.queueSync();
         input.value = '';
         this.renderProjects();
-        this.renderMindmapAndHabits();
-      },
-
-      renderMindmapAndHabits() {
-        const cellsEl = document.getElementById('habit-cells');
-        cellsEl.innerHTML = '';
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
-          const cell = document.createElement('div');
-          cell.className = 'habit-cell' + (this.state.habitDates.includes(d) ? ' done' : '');
-          cell.title = d;
-          cellsEl.appendChild(cell);
-        }
-
-        const nodesEl = document.getElementById('mindmap-nodes');
-        nodesEl.innerHTML = '';
-
-        const projects = this.getAllProjects();
-        projects.forEach(p => {
-          const hub = document.createElement('span');
-          hub.className = 'node-chip hub';
-          hub.innerText = `#${p.name.toUpperCase()}`;
-          hub.onclick = () => this.openWorkspace(p);
-          nodesEl.appendChild(hub);
-        });
-
-        const stopWords = new Set(['about', 'after', 'before', 'between', 'could', 'from', 'have', 'into', 'just', 'like', 'more', 'other', 'should', 'some', 'such', 'than', 'that', 'their', 'there', 'these', 'they', 'this', 'those', 'through', 'under', 'very', 'what', 'when', 'where', 'which', 'while', 'with', 'would', 'your', 'understand', 'learn', 'tutorial', 'video', 'latest']);
-        const freq = {};
-
-        this.state.scratchpad.forEach(q => {
-          q.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).forEach(w => {
-            if (w.length > 3 && !stopWords.has(w)) freq[w] = (freq[w] || 0) + 2;
-          });
-        });
-
-        Object.values(this.state.notes).flat().forEach(n => {
-          n.text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).forEach(w => {
-            if (w.length > 3 && !stopWords.has(w)) freq[w] = (freq[w] || 0) + 1;
-          });
-        });
-
-        const topConcepts = Object.entries(freq)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 10)
-          .map(entry => entry[0]);
-
-        if (topConcepts.length === 0) {
-          const hint = document.createElement('span');
-          hint.className = 'muted';
-          hint.innerText = 'Search topics & take notes to grow your concept map.';
-          nodesEl.appendChild(hint);
-        } else {
-          topConcepts.forEach(concept => {
-            const chip = document.createElement('span');
-            chip.className = 'node-chip';
-            chip.innerText = `↔ ${concept}`;
-            chip.onclick = () => {
-              const firstProj = projects[0];
-              if (firstProj) {
-                this.openWorkspace(firstProj);
-                document.getElementById('ig-query').value = concept;
-              }
-            };
-            nodesEl.appendChild(chip);
-          });
-        }
       },
 
       openWorkspace(project) {
@@ -864,7 +675,28 @@
         this.navigate('workspace');
       },
 
+      renderCover() {
+        const url = this.state.covers[this.state.activeProjectId] || "";
+        const cover = document.getElementById('ws-cover');
+        cover.style.backgroundImage = url ? `url('${url}')` : 'none';
+      },
+
+      changeCover() {
+        let url = prompt("Paste Giphy GIF URL (or image link):");
+        if (url !== null) {
+          const giphyMatch = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
+          if (giphyMatch && giphyMatch[1]) {
+            url = `https://media.giphy.com/media/${giphyMatch[1]}/giphy.gif`;
+          }
+          this.state.covers[this.state.activeProjectId] = url;
+          this.queueSync();
+          this.renderCover();
+        }
+      },
+
+      /* --- YOUTUBE SEARCH & PARSING --- */
       parseDuration(iso) {
+        if (!iso) return { totalSeconds: 0, h: 0, m: 0, s: 0 };
         const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/) || [];
         const h = parseInt(match[1] || 0), m = parseInt(match[2] || 0), s = parseInt(match[3] || 0);
         return { totalSeconds: (h * 3600) + (m * 60) + s, h, m, s };
@@ -876,8 +708,8 @@
       },
 
       scoreRelevance(video, query, purpose) {
-        const title = video.snippet.title.toLowerCase();
-        const desc = (video.snippet.description || "").toLowerCase();
+        const title = (video.snippet?.title || "").toLowerCase();
+        const desc = (video.snippet?.description || "").toLowerCase();
         const intentWords = (query + " " + purpose).toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 3);
         let score = 0;
         intentWords.forEach(word => {
@@ -893,51 +725,43 @@
         const status = document.getElementById('search-status');
         
         if (!query || !purpose) {
-          status.innerText = "Error: Intention Gate requires both Query and Purpose.";
+          status.innerText = "Error: Need both Query and Purpose.";
           return;
         }
-
-        this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 12);
-        this.saveState();
 
         status.innerText = "Searching YouTube...";
         
         try {
-          const apiKey = this.config.apiKey;
-          // If user asks for "latest", sort by date so newest podcast episodes appear first
-          const orderParam = /\b(latest|newest|recent)\b/i.test(query) ? "date" : "relevance";
-          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=25&order=${orderParam}&safeSearch=strict&key=${apiKey}`);
+          const ytKey = this.credentials.ytKey;
+          // Ensure YouTube gets the full context but forces English to avoid irrelevant localized content
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query + " " + purpose)}&type=video&relevanceLanguage=en&maxResults=25&safeSearch=strict&key=${ytKey}`;
+          
+          const searchRes = await fetch(searchUrl);
           const searchData = await searchRes.json();
           if (!searchRes.ok) throw new Error(searchData.error?.message || "API Error");
           
-          const videoIds = (searchData.items || []).map(i => i.id.videoId);
+          const videoIds = (searchData.items || []).map(i => i.id?.videoId).filter(Boolean);
           if (videoIds.length === 0) throw new Error("No results found.");
 
-          const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`);
+          const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${ytKey}`);
           const vidData = await vidRes.json();
 
           let validVideos = vidData.items.filter(v => {
-            const dur = this.parseDuration(v.contentDetails.duration);
-            // Block Shorts & clips under 3 minutes (180 seconds)
-            if (dur.totalSeconds < 180) return false;
-            
-            // Any long-form podcast/lecture >= 20 minutes (1200s) is automatically allowed
+            const dur = this.parseDuration(v.contentDetails?.duration);
+            // Allow Podcasts > 20 mins bypass junk filter
             if (dur.totalSeconds >= 1200) return true;
-
-            // Check ONLY the title for junk keywords (not description, which often mentions Shorts channels)
-            const titleLower = v.snippet.title.toLowerCase();
+            if (dur.totalSeconds > 0 && dur.totalSeconds < 180) return false; // Block shorts
+            
+            const titleLower = (v.snippet?.title || "").toLowerCase();
             if (this.titleJunkKeywords.some(junk => titleLower.includes(junk))) return false;
             return true;
           });
 
-          validVideos.forEach(v => {
-             v.intentScore = this.scoreRelevance(v, query, purpose);
-          });
-          
+          validVideos.forEach(v => { v.intentScore = this.scoreRelevance(v, query, purpose); });
           validVideos.sort((a, b) => b.intentScore - a.intentScore);
+          
           const finalCuratedList = validVideos.slice(0, 10);
-
-          if (finalCuratedList.length === 0) throw new Error("No videos over 3 minutes matched. Try broadening your query.");
+          if (finalCuratedList.length === 0) throw new Error("No videos over 3 minutes matched.");
 
           this.renderSearchResults(finalCuratedList, purpose);
           status.innerText = "";
@@ -952,16 +776,16 @@
         list.innerHTML = '';
 
         items.forEach(v => {
-          const durObj = this.parseDuration(v.contentDetails.duration);
+          const durObj = this.parseDuration(v.contentDetails?.duration);
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">
-                <span class="score-badge">MATCH:${v.intentScore}</span>${v.snippet.title}
+                <span class="score-badge">MATCH:${v.intentScore}</span>${v.snippet?.title || "Untitled"}
               </div>
-              <div class="list-item-meta">${v.snippet.channelTitle} // ${this.formatDuration(durObj)}</div>
-              <div class="list-item-desc">${v.snippet.description || "No description provided."}</div>
+              <div class="list-item-meta">${v.snippet?.channelTitle || "Unknown"} // ${this.formatDuration(durObj)}</div>
+              <div class="list-item-desc">${v.snippet?.description || ""}</div>
             </div>
             <button class="btn small">[ ADD ]</button>
           `;
@@ -976,7 +800,7 @@
                 purpose
               });
               this.state.queue[this.state.activeProjectId] = q;
-              this.saveState();
+              this.queueSync();
               this.renderQueue();
             }
             div.innerHTML = '<span class="bold">ADDED</span>';
@@ -996,16 +820,15 @@
         }
 
         q.forEach((v, index) => {
-          const noteCount = (this.state.notes[v.id] || []).length;
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">Purpose: ${v.purpose} ${noteCount > 0 ? `• [${noteCount} Notes]` : ''}</div>
+              <div class="list-item-meta">Purpose: ${v.purpose}</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="btn small btn-focus">FOCUS</button>
+              <button class="btn small inverse btn-focus">FOCUS</button>
               <button class="btn small btn-rm">DROP</button>
             </div>
           `;
@@ -1013,108 +836,33 @@
           div.querySelector('.btn-rm').onclick = () => {
             q.splice(index, 1);
             this.state.queue[this.state.activeProjectId] = q;
-            this.saveState();
+            this.queueSync();
             this.renderQueue();
           };
           list.appendChild(div);
         });
       },
 
-      renderArchive() {
-        const list = document.getElementById('archive-list');
-        const arch = this.state.archive[this.state.activeProjectId] || [];
-        list.innerHTML = '';
-
-        if (arch.length === 0) {
-          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay synced here for 30 days.</span>';
-          return;
-        }
-
-        arch.forEach((v, index) => {
-          const notes = this.state.notes[v.id] || [];
-          const daysAgo = Math.floor((Date.now() - (v.archivedAt || Date.now())) / 86400000);
-          const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `
-            <div class="list-item-content">
-              <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes</div>
-              <div class="list-item-desc">${notes.length > 0 ? notes.map(n => `[${this.formatSecs(n.time)}] ${n.text}`).join(' | ') : 'No notes recorded.'}</div>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <button class="btn small btn-reopen">REVIEW</button>
-              <button class="btn small btn-del-arch">PURGE</button>
-            </div>
-          `;
-          div.querySelector('.btn-reopen').onclick = () => this.startFocus(v);
-          div.querySelector('.btn-del-arch').onclick = () => {
-            arch.splice(index, 1);
-            this.state.archive[this.state.activeProjectId] = arch;
-            this.saveState();
-            this.renderArchive();
-          };
-          list.appendChild(div);
-        });
-      },
-
-      loadYouTubeAPI() {
-        window.onYouTubeIframeAPIReady = () => { this.apiReady = true; };
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(tag);
-      },
-
-      /* =====================================================================
-         INLINE VIDEO BRIEF & CHAPTER EXTRACTOR (Right below video player)
-      ===================================================================== */
-      async renderInlineBrief(videoInfo) {
+      /* --- FOCUS MODE & INLINE CHAPTERS --- */
+      renderInlineBrief(videoInfo) {
         const container = document.getElementById('inline-video-brief');
-        container.innerHTML = '<span class="muted">Extracting video chapters &amp; summary...</span>';
-
-        let desc = videoInfo.description || "";
-        if (!desc && this.config?.apiKey) {
-          try {
-            const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoInfo.id}&key=${this.config.apiKey}`);
-            const data = await res.json();
-            desc = data.items?.[0]?.snippet?.description || "";
-            videoInfo.description = desc;
-          } catch {}
-        }
-
+        const desc = videoInfo.description || "";
         const lines = desc.split('\n').map(l => l.trim()).filter(Boolean);
-        const chapterRegex = /(?:^|\s)(\d{1,2}:\d{2}(?::\d{2})?)\s*[-–—]?\s*(.+)/;
+        
+        // Match robust timestamps: 00:00, 1:23, 12:34:56
+        const chapterRegex = /(?:^|\s)((?:\d{1,2}:)?\d{1,2}:\d{2})\s*[-–—|]*\s*(.+)/;
         const chapters = [];
-        const summaryLines = [];
 
         lines.forEach(line => {
-          if (/^https?:\/\//i.test(line)) return; // skip raw promotional URLs
+          if (/^https?:\/\//i.test(line)) return; 
           const m = line.match(chapterRegex);
-          if (m) {
-            chapters.push({ timeStr: m[1], label: m[2] });
-          } else if (summaryLines.length < 4 && line.length > 25) {
-            summaryLines.push(line);
-          }
+          if (m) chapters.push({ timeStr: m[1], label: m[2] });
         });
 
         container.innerHTML = '';
 
-        if (summaryLines.length > 0) {
-          const sumDiv = document.createElement('p');
-          sumDiv.style.fontSize = '13px';
-          sumDiv.style.color = 'var(--ink)';
-          sumDiv.innerText = summaryLines.join(' ');
-          container.appendChild(sumDiv);
-        }
-
         if (chapters.length > 0) {
-          const chHeader = document.createElement('div');
-          chHeader.className = 'bold';
-          chHeader.style.fontSize = '12px';
-          chHeader.style.marginBottom = '6px';
-          chHeader.innerText = 'KEY SECTIONS (TAP TO JUMP):';
-          container.appendChild(chHeader);
-
-          chapters.slice(0, 15).forEach(ch => {
+          chapters.slice(0, 20).forEach(ch => {
             const row = document.createElement('div');
             row.className = 'brief-chapter';
 
@@ -1132,14 +880,20 @@
 
             const txt = document.createElement('span');
             txt.innerText = ch.label;
-
             row.appendChild(timeLink);
             row.appendChild(txt);
             container.appendChild(row);
           });
-        } else if (summaryLines.length === 0) {
-          container.innerHTML = '<span class="muted">No creator chapters or summary notes provided in metadata. Log your key points in the Timestamped Ledger.</span>';
+        } else {
+          container.innerHTML = '<span class="muted">No timestamps found in creator metadata.</span>';
         }
+      },
+
+      loadYouTubeAPI() {
+        window.onYouTubeIframeAPIReady = () => { this.apiReady = true; };
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
       },
 
       startFocus(videoInfo) {
@@ -1161,9 +915,7 @@
             videoId: videoInfo.id,
             host: 'https://www.youtube-nocookie.com',
             playerVars: { rel: 0, playsinline: 1, modestbranding: 1, autoplay: 1 },
-            events: {
-              onStateChange: (e) => this.handlePlayerState(e)
-            }
+            events: { onStateChange: (e) => this.handlePlayerState(e) }
           });
         }
       },
@@ -1185,6 +937,7 @@
         return `${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
       },
 
+      /* --- NOTION-STYLE LEDGER & CHECKBOXES --- */
       logNote() {
         const input = document.getElementById('note-input');
         let text = input.value.trim();
@@ -1201,9 +954,8 @@
         const vidId = this.state.activeVideo.id;
         if (!this.state.notes[vidId]) this.state.notes[vidId] = [];
         
-        this.state.notes[vidId].push({ time: timeSecs, text, isTodo });
-        this.recordHabitRep();
-        this.saveState();
+        this.state.notes[vidId].push({ id: Date.now(), time: timeSecs, text, isTodo, isDone: false });
+        this.queueSync();
         input.value = '';
         this.renderLedger();
       },
@@ -1214,11 +966,23 @@
         const notes = this.state.notes[vidId] || [];
         list.innerHTML = '';
 
-        notes.forEach((n, idx) => {
+        notes.forEach((n) => {
           const div = document.createElement('div');
           div.className = 'ledger-entry';
           
-          const left = document.createElement('div');
+          if (n.isTodo) {
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'custom-checkbox';
+            cb.checked = n.isDone;
+            cb.onchange = () => {
+              n.isDone = cb.checked;
+              this.queueSync();
+              this.renderLedger();
+            };
+            div.appendChild(cb);
+          }
+
           const timeSpan = document.createElement('span');
           timeSpan.className = 'ledger-time';
           timeSpan.innerText = `[${this.formatSecs(n.time)}]`;
@@ -1226,24 +990,25 @@
             this.player.seekTo(n.time, true);
             this.player.playVideo();
           };
+          div.appendChild(timeSpan);
 
           const textSpan = document.createElement('span');
-          textSpan.innerHTML = n.isTodo ? `<span class="ledger-todo">[TODO]</span> ${n.text}` : n.text;
-
-          left.appendChild(timeSpan);
-          left.appendChild(textSpan);
+          textSpan.className = `ledger-text ${n.isDone ? 'done' : ''}`;
+          textSpan.innerText = n.text;
+          div.appendChild(textSpan);
 
           const delBtn = document.createElement('button');
           delBtn.className = 'btn small';
           delBtn.innerText = 'X';
+          delBtn.style.border = "none";
+          delBtn.style.boxShadow = "none";
           delBtn.onclick = () => {
-            this.state.notes[vidId].splice(idx, 1);
-            this.saveState();
+            this.state.notes[vidId] = this.state.notes[vidId].filter(x => x.id !== n.id);
+            this.queueSync();
             this.renderLedger();
           };
-
-          div.appendChild(left);
           div.appendChild(delBtn);
+
           list.appendChild(div);
         });
       },
@@ -1255,16 +1020,14 @@
         const vid = this.state.activeVideo;
         if (projId && vid) {
           const arch = this.state.archive[projId] || [];
-          const existingIdx = arch.findIndex(item => item.id === vid.id);
-          const entry = { ...vid, archivedAt: Date.now() };
-          if (existingIdx >= 0) arch[existingIdx] = entry;
-          else arch.unshift(entry);
+          if (!arch.some(item => item.id === vid.id)) {
+            arch.unshift({ ...vid, archivedAt: Date.now() });
+          }
           this.state.archive[projId] = arch;
 
           const q = this.state.queue[projId] || [];
           this.state.queue[projId] = q.filter(item => item.id !== vid.id);
-          this.recordHabitRep();
-          this.saveState();
+          this.queueSync();
         }
 
         this.navigate('buffer');
@@ -1289,53 +1052,54 @@
       },
 
       bindEvents() {
+        // Vault Setup
+        document.getElementById('btn-save-vault').onclick = () => this.handleSetupSubmit();
+        document.getElementById('btn-copy-shortcut').onclick = () => {
+          const url = document.getElementById('shortcut-url');
+          url.select();
+          navigator.clipboard.writeText(url.value);
+        };
+
+        // Project Creation & Cover
         document.getElementById('btn-create-project').onclick = () => this.createCustomProject();
-        document.getElementById('new-proj-name').addEventListener('keypress', (e) => {
+        document.getElementById('new-proj-name').addEventListener('keydown', (e) => {
           if (e.key === 'Enter') this.createCustomProject();
         });
+        document.getElementById('btn-change-cover').onclick = () => this.changeCover();
 
-        document.getElementById('btn-save-giphy').onclick = () => {
-          this.state.giphyUrl = document.getElementById('giphy-url-input').value.trim();
-          this.saveState();
-          this.renderGiphy();
-        };
-
-        document.getElementById('btn-clear-giphy').onclick = () => {
-          this.state.giphyUrl = "";
-          this.saveState();
-          this.renderGiphy();
-        };
-
-        document.getElementById('btn-force-sync').onclick = async () => {
-          await this.pullFromGitHub();
-          this.renderQueue();
-          this.renderArchive();
-        };
-
+        // Keyboard flow for Intention Gate
+        document.getElementById('ig-query').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') document.getElementById('ig-purpose').focus();
+        });
+        document.getElementById('ig-purpose').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.handleSearch();
+        });
         document.getElementById('btn-search').onclick = () => this.handleSearch();
         
+        // Focus & Player events
         document.getElementById('btn-resume').onclick = () => {
           if (this.player) this.player.playVideo();
         };
 
-        const noteInput = document.getElementById('note-input');
-        noteInput.addEventListener('keypress', (e) => {
+        document.getElementById('note-input').addEventListener('keydown', (e) => {
           if (e.key === 'Enter') this.logNote();
         });
         
         document.getElementById('btn-abort-focus').onclick = () => {
           if (this.player && typeof this.player.pauseVideo === 'function') this.player.pauseVideo();
           this.renderQueue();
-          this.renderArchive();
           this.navigate('workspace');
         };
 
         document.getElementById('btn-finish').onclick = () => this.startBuffer();
-
         document.getElementById('btn-exit-buffer').onclick = () => {
           this.renderQueue();
-          this.renderArchive();
           this.navigate('workspace');
+        };
+        
+        document.getElementById('btn-force-sync').onclick = async () => {
+          await this.pullFromVault();
+          if (this.state.activeProjectId) this.renderQueue();
         };
       }
     };
