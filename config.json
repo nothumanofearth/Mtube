@@ -1,0 +1,20 @@
+{
+  "apiKey": "YOUR_AIZA_YOUTUBE_API_KEY_HERE",
+  "projects": [
+    {
+      "id": "home-server",
+      "name": "Home Server & Self-Hosting",
+      "context": "self hosted proxmox docker home server"
+    },
+    {
+      "id": "8-ball",
+      "name": "8-Ball Pool Mechanics",
+      "context": "8 ball pool billiards technique tutorial"
+    },
+    {
+      "id": "tech-news",
+      "name": "Tech Architecture & News",
+      "context": "software architecture tech news analysis"
+    }
+  ]
+}
