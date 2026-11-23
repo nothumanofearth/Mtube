@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube / Dashboard</title>
+  <title>MTube / Second Brain</title>
   
   <!-- Brutalist Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='75' x='22' fill='white' font-family='monospace' font-size='70'>M</text></svg>">
@@ -15,6 +15,7 @@
       --ink: #000000;
       --ink-light: #555555;
       --paper: #FFFFFF;
+      --accent-bg: #EAEAE2;
       --border: 2px solid var(--ink);
       --font-mono: "Courier New", Courier, ui-monospace, monospace;
       --font-serif: "Times New Roman", Times, ui-serif, serif;
@@ -46,10 +47,10 @@
       margin: 0 0 16px 0;
       letter-spacing: -0.02em;
     }
-    h1 { font-size: 32px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; text-transform: uppercase; }
-    h2 { font-size: 20px; margin-top: 24px; border-bottom: 1px solid var(--ink); padding-bottom: 4px;}
+    h1 { font-size: 30px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; text-transform: uppercase; }
+    h2 { font-size: 19px; margin-top: 24px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; text-transform: uppercase; }
     
-    p { margin: 0 0 16px; }
+    p { margin: 0 0 14px; }
     .muted { color: var(--ink-light); font-size: 13px; }
     .bold { font-weight: bold; }
 
@@ -65,8 +66,8 @@
       font-family: var(--font-mono);
       box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
     }
-    .dash-time { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
-    .dash-ascii { font-size: 18px; white-space: pre; }
+    .dash-time { font-size: 22px; font-weight: bold; letter-spacing: 2px; }
+    .dash-ascii { font-size: 16px; white-space: pre; }
 
     /* Brutalist Components */
     .box {
@@ -83,23 +84,25 @@
       color: var(--ink);
       border: var(--border);
       font-family: var(--font-mono);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
       text-transform: uppercase;
-      padding: 10px 16px;
+      padding: 10px 14px;
       cursor: pointer;
       box-shadow: 4px 4px 0 var(--ink);
       transition: transform 0.1s, box-shadow 0.1s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
     }
     .btn:active {
       transform: translate(4px, 4px);
       box-shadow: 0px 0px 0 var(--ink);
     }
     .btn.full { width: 100%; margin-bottom: 12px; }
-    .btn.small { padding: 4px 8px; font-size: 12px; box-shadow: 2px 2px 0 var(--ink); }
+    .btn.inverse { background: var(--ink); color: var(--paper); }
+    .btn.small { padding: 5px 9px; font-size: 11px; box-shadow: 2px 2px 0 var(--ink); }
     .btn.small:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
 
     input, textarea {
@@ -108,13 +111,80 @@
       border: var(--border);
       color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 16px;
-      padding: 12px;
-      margin-bottom: 16px;
+      font-size: 15px;
+      padding: 11px;
+      margin-bottom: 14px;
       outline: none;
     }
     input:focus, textarea:focus { background: var(--paper); }
-    
+
+    /* Project Row with Delete */
+    .project-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .project-row .btn.main-proj {
+      flex: 1;
+      margin-bottom: 0;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .project-row .btn.del-proj {
+      margin-bottom: 0;
+      padding: 10px 12px;
+    }
+
+    /* Zettelkasten Mindmap & Habit Matrix */
+    .mindmap-canvas {
+      width: 100%;
+      background: var(--paper);
+      border: var(--border);
+      padding: 14px;
+      margin-bottom: 24px;
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .habit-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--ink);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+    .habit-cells {
+      display: flex;
+      gap: 4px;
+    }
+    .habit-cell {
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--ink);
+      background: var(--bg);
+    }
+    .habit-cell.done {
+      background: var(--ink);
+    }
+    .mindmap-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .node-chip {
+      border: 1px solid var(--ink);
+      background: var(--bg);
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .node-chip.hub {
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: bold;
+    }
+
     /* Lists & Results */
     .list-item {
       border-bottom: 1px solid var(--ink);
@@ -122,11 +192,11 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 16px;
+      gap: 14px;
     }
     .list-item:last-child { border-bottom: none; }
     .list-item-content { flex: 1; }
-    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; line-height: 1.2; }
+    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; line-height: 1.25; }
     .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 4px; }
     .list-item-desc { font-size: 12px; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     
@@ -147,7 +217,7 @@
       aspect-ratio: 16/9;
       background: var(--ink);
       border: var(--border);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .player-wrapper iframe { width: 100%; height: 100%; border: none; }
     
@@ -167,16 +237,49 @@
     }
     #blackout-overlay.active { display: flex; }
 
+    /* In-Screen Gemini Assistant Drawer */
+    .gemini-drawer {
+      background: var(--paper);
+      border: var(--border);
+      padding: 14px;
+      margin-bottom: 20px;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+    .suggestion-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .suggestion-card {
+      text-align: left;
+      background: var(--bg);
+      border: 1px solid var(--ink);
+      padding: 9px 11px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .suggestion-card:active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
     /* Timestamped Ledger */
     .ledger-entry {
       display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
       font-size: 14px;
       border-left: 2px solid var(--ink);
-      padding-left: 12px;
+      padding-left: 10px;
     }
-    .ledger-time { cursor: pointer; text-decoration: underline; font-weight: bold; }
+    .ledger-time { cursor: pointer; text-decoration: underline; font-weight: bold; margin-right: 6px; }
     .ledger-todo { font-weight: bold; display: inline-block; margin-right: 4px; }
 
     .view { display: none; }
@@ -202,50 +305,68 @@
       </div>
     </div>
 
-    <!-- VIEW 1: PROJECTS DIRECTORY -->
+    <!-- VIEW 1: PROJECTS DIRECTORY & SECOND BRAIN -->
     <div id="view-projects" class="view active">
       <h1>DIRECTORY</h1>
-      <p class="muted">Select a workspace to isolate your research.</p>
-      <div id="projects-list"></div>
+      <p class="muted">PARA Workspaces: Isolate every learning session by active project.</p>
       
-      <h2>SCRATCHPAD</h2>
-      <p class="muted">Your recent queries.</p>
-      <div id="scratchpad-list" style="font-size:14px;"></div>
+      <div id="projects-list"></div>
+
+      <!-- In-UI Custom Project Creation -->
+      <div class="box" style="margin-top: 16px;">
+        <h2 style="margin-top:0;">+ NEW PROJECT WORKSPACE</h2>
+        <input type="text" id="new-proj-name" placeholder="Project Name (e.g., '8-Ball Pool Cue Control')" />
+        <button class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
+      </div>
+      
+      <h2>ZETTELKASTEN CONCEPT MAP</h2>
+      <p class="muted">Synthesized from your Atomic Habits streak, intentions, and saved notes.</p>
+      <div class="mindmap-canvas">
+        <div class="habit-strip">
+          <span class="bold">7-DAY DELIBERATE REPS:</span>
+          <div class="habit-cells" id="habit-cells"></div>
+        </div>
+        <div class="mindmap-nodes" id="mindmap-nodes"></div>
+      </div>
     </div>
 
-    <!-- VIEW 2: WORKSPACE (Intention Gate & Curation) -->
+    <!-- VIEW 2: WORKSPACE (Intention Gate, Queue & 30-Day Archive) -->
     <div id="view-workspace" class="view">
       <button class="btn small" style="margin-bottom: 16px;" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
       <h1 id="ws-title">WORKSPACE</h1>
       
       <div class="box">
-        <h2>INTENTION GATE</h2>
-        <p class="muted" style="margin-bottom: 8px;">Be highly specific. Results are scored against your purpose.</p>
-        <input type="text" id="ig-query" placeholder="Query (e.g., 'iOS app development swift')" />
-        <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'How to pass data between views')" />
+        <h2 style="margin-top:0;">IMPLEMENTATION INTENTION</h2>
+        <p class="muted" style="margin-bottom: 8px;">State what you are looking for and why. Results are ranked against your Purpose.</p>
+        <input type="text" id="ig-query" placeholder="Query (e.g., 'Proxmox ZFS mirror setup')" />
+        <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Understand drive redundancy before buying')" />
         <button class="btn full" id="btn-search">SEARCH DATABASE</button>
         <div id="search-status" class="bold" style="margin-top:8px;"></div>
       </div>
 
       <div id="search-results-container" class="hidden">
         <h2>CURATED RESULTS (TOP 10)</h2>
-        <p class="muted">Shorts & junk purged. Sorted by relevance to your Purpose.</p>
+        <p class="muted">Shorts &amp; entertainment purged. Sorted by Purpose match.</p>
         <div class="box" id="search-results-list"></div>
       </div>
 
-      <h2>CURATION QUEUE</h2>
+      <h2>ACTIVE QUEUE</h2>
       <div class="box" id="queue-list"></div>
+
+      <h2>SAVED KNOWLEDGE VAULT (30-DAY ARCHIVE)</h2>
+      <p class="muted">Completed videos with your attached timestamped notes.</p>
+      <div class="box" id="archive-list"></div>
     </div>
 
-    <!-- VIEW 3: FOCUS MODE -->
+    <!-- VIEW 3: FOCUS MODE & IN-SCREEN GEMINI -->
     <div id="view-focus" class="view">
-      <div style="display:flex; justify-content:space-between; margin-bottom: 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
         <span class="bold" style="text-transform:uppercase;">Focus Mode</span>
-        <button class="btn small" id="btn-abort-focus">ABORT</button>
+        <button class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
       </div>
 
-      <div class="box" style="background:var(--ink); color:var(--paper);">
-        <div style="font-size:12px; color:#aaa;">PURPOSE:</div>
+      <div class="box" style="background:var(--ink); color:var(--paper); margin-bottom:16px;">
+        <div style="font-size:11px; color:#aaa;">STATED PURPOSE:</div>
         <div id="focus-purpose" class="bold" style="font-family:var(--font-serif); font-size:18px;"></div>
       </div>
 
@@ -258,19 +379,41 @@
         </div>
       </div>
 
-      <h2>TIMESTAMPED LEDGER</h2>
-      <input type="text" id="note-input" placeholder="Type note or /todo... (Press Enter to log time)" />
+      <!-- In-Screen Gemini Toggle -->
+      <button class="btn full inverse" id="btn-toggle-gemini" style="margin-bottom: 16px;">✦ GEMINI VIDEO ASSISTANT</button>
+
+      <!-- In-Screen Gemini Assistant Panel -->
+      <div id="gemini-drawer" class="gemini-drawer hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="bold" style="font-size:13px;">✦ GEMINI PROMPT SYNTHESIZER</span>
+          <button class="btn small" id="btn-close-gemini">X</button>
+        </div>
+        <p class="muted" style="font-size:12px; margin-bottom:10px;">
+          Tap a suggestion card below to build a prompt containing this video, your purpose, and your timestamped notes:
+        </p>
+        <div id="gemini-suggestions" class="suggestion-grid"></div>
+        <textarea id="gemini-prompt-box" rows="5" placeholder="Select a card above or write a custom question about this video..."></textarea>
+        <div style="display:flex; gap:8px;">
+          <button class="btn small inverse" style="flex:1;" id="btn-copy-gemini-prompt">COPY PROMPT</button>
+          <a id="gemini-launch-link" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer" class="btn small" style="text-decoration:none;">OPEN GEMINI &nearr;</a>
+        </div>
+      </div>
+
+      <h2>TIMESTAMPED LEDGER (AUTO-SAVED)</h2>
+      <p class="muted">Notes remain attached to this video in your Workspace Vault.</p>
+      <input type="text" id="note-input" placeholder="Type insight or /todo... (Press Enter to stamp time)" />
       <div id="ledger-list"></div>
       
-      <button class="btn full" id="btn-export" style="margin-top:24px;">[ COPY AS MARKDOWN ]</button>
-      <button class="btn full" id="btn-finish">FINISH VIDEO</button>
+      <div style="margin-top: 24px;">
+        <button class="btn full" id="btn-finish">COMPLETE &amp; ARCHIVE VIDEO</button>
+      </div>
     </div>
 
     <!-- VIEW 4: ONE-SEC POST BUFFER -->
     <div id="view-buffer" class="view">
       <div class="box" style="text-align:center; padding: 60px 20px;">
         <h1 style="border:none;">ASSIMILATION</h1>
-        <p>Video complete. Transition out of passive consumption.</p>
+        <p>Video archived with your notes. Pause to consolidate what you learned.</p>
         <div style="font-size: 48px; font-weight:bold; margin: 24px 0;" id="buffer-timer">15</div>
         <button class="btn" id="btn-exit-buffer" disabled style="opacity:0.3;">RETURN TO WORKSPACE</button>
       </div>
@@ -284,14 +427,17 @@
       state: {
         activeProjectId: null,
         activeVideo: null,
+        customProjects: JSON.parse(localStorage.getItem('mtube_custom_projects') || '[]'),
+        deletedProjectIds: JSON.parse(localStorage.getItem('mtube_deleted_projects') || '[]'),
         queue: JSON.parse(localStorage.getItem('mtube_queue') || '{}'),
+        archive: JSON.parse(localStorage.getItem('mtube_archive') || '{}'),
         scratchpad: JSON.parse(localStorage.getItem('mtube_scratchpad') || '[]'),
-        notes: JSON.parse(localStorage.getItem('mtube_notes') || '{}')
+        notes: JSON.parse(localStorage.getItem('mtube_notes') || '{}'),
+        habitDates: JSON.parse(localStorage.getItem('mtube_habit_dates') || '[]')
       },
       player: null,
       apiReady: false,
       
-      // The Anti-Rot Junk Filter
       junkKeywords: ["shorts", "vlog", "prank", "funny", "comedy", "tiktok", "meme", "challenge", "reaction", "gossip", "drama"],
 
       async init() {
@@ -302,8 +448,9 @@
           this.config = await res.json();
           if (!this.config.apiKey) throw new Error();
           
+          this.pruneOldArchive();
           this.renderProjects();
-          this.renderScratchpad();
+          this.renderMindmapAndHabits();
           this.bindEvents();
           this.loadYouTubeAPI();
         } catch (e) {
@@ -311,14 +458,42 @@
         }
       },
 
+      getAllProjects() {
+        const base = (this.config?.projects || []).filter(p => !this.state.deletedProjectIds.includes(p.id));
+        return [...base, ...this.state.customProjects];
+      },
+
+      pruneOldArchive() {
+        // Keep archived videos & attached notes for 30 days
+        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        let changed = false;
+
+        Object.keys(this.state.archive).forEach(projId => {
+          const list = this.state.archive[projId] || [];
+          const filtered = list.filter(v => !v.archivedAt || (now - v.archivedAt) <= thirtyDaysMs);
+          if (filtered.length !== list.length) {
+            this.state.archive[projId] = filtered;
+            changed = true;
+          }
+        });
+        if (changed) this.saveState();
+      },
+
+      recordHabitRep() {
+        const today = new Date().toISOString().slice(0, 10);
+        if (!this.state.habitDates.includes(today)) {
+          this.state.habitDates.push(today);
+          this.saveState();
+        }
+      },
+
       startDashboardClock() {
-        // Clock
         setInterval(() => {
           const now = new Date();
           document.getElementById('clock-display').innerText = now.toLocaleTimeString('en-US', { hour12: false });
         }, 1000);
 
-        // Brutalist ASCII Spinner (Acts as the thematic GIF)
         const frames = ["[ - ]", "[ \\ ]", "[ | ]", "[ / ]"];
         let frameIdx = 0;
         setInterval(() => {
@@ -328,38 +503,143 @@
       },
 
       saveState() {
+        localStorage.setItem('mtube_custom_projects', JSON.stringify(this.state.customProjects));
+        localStorage.setItem('mtube_deleted_projects', JSON.stringify(this.state.deletedProjectIds));
         localStorage.setItem('mtube_queue', JSON.stringify(this.state.queue));
+        localStorage.setItem('mtube_archive', JSON.stringify(this.state.archive));
         localStorage.setItem('mtube_scratchpad', JSON.stringify(this.state.scratchpad));
         localStorage.setItem('mtube_notes', JSON.stringify(this.state.notes));
+        localStorage.setItem('mtube_habit_dates', JSON.stringify(this.state.habitDates));
       },
 
       navigate(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(`view-${viewId}`).classList.add('active');
+        if (viewId === 'projects') {
+          this.renderProjects();
+          this.renderMindmapAndHabits();
+        }
         window.scrollTo(0, 0);
       },
 
       renderProjects() {
         const list = document.getElementById('projects-list');
         list.innerHTML = '';
-        this.config.projects.forEach(p => {
-          const btn = document.createElement('button');
-          btn.className = 'btn full';
-          btn.style.textAlign = 'left';
-          btn.style.justifyContent = 'flex-start';
-          btn.innerHTML = `> ${p.name.toUpperCase()}`;
-          btn.onclick = () => this.openWorkspace(p);
-          list.appendChild(btn);
+        const projects = this.getAllProjects();
+
+        projects.forEach(p => {
+          const qCount = (this.state.queue[p.id] || []).length;
+          const aCount = (this.state.archive[p.id] || []).length;
+
+          const row = document.createElement('div');
+          row.className = 'project-row';
+
+          const openBtn = document.createElement('button');
+          openBtn.className = 'btn main-proj';
+          openBtn.innerHTML = `<span>&gt; ${p.name.toUpperCase()}</span><span style="font-size:11px;">[Q:${qCount} | V:${aCount}]</span>`;
+          openBtn.onclick = () => this.openWorkspace(p);
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn del-proj';
+          delBtn.title = "Delete Workspace";
+          delBtn.innerText = "X";
+          delBtn.onclick = () => {
+            if (confirm(`Delete workspace "${p.name}"?`)) {
+              this.state.customProjects = this.state.customProjects.filter(cp => cp.id !== p.id);
+              if (!this.state.deletedProjectIds.includes(p.id)) {
+                this.state.deletedProjectIds.push(p.id);
+              }
+              this.saveState();
+              this.renderProjects();
+              this.renderMindmapAndHabits();
+            }
+          };
+
+          row.appendChild(openBtn);
+          row.appendChild(delBtn);
+          list.appendChild(row);
         });
       },
 
-      renderScratchpad() {
-        const list = document.getElementById('scratchpad-list');
-        if (this.state.scratchpad.length === 0) {
-          list.innerHTML = '<span class="muted">No recent queries.</span>';
-          return;
+      createCustomProject() {
+        const input = document.getElementById('new-proj-name');
+        const name = input.value.trim();
+        if (!name) return;
+
+        const id = 'proj_' + Date.now();
+        this.state.customProjects.push({ id, name, context: name.toLowerCase() });
+        this.saveState();
+        input.value = '';
+        this.renderProjects();
+        this.renderMindmapAndHabits();
+      },
+
+      renderMindmapAndHabits() {
+        // 1. Atomic Habits 7-Day Consistency Strip
+        const cellsEl = document.getElementById('habit-cells');
+        cellsEl.innerHTML = '';
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+          const cell = document.createElement('div');
+          cell.className = 'habit-cell' + (this.state.habitDates.includes(d) ? ' done' : '');
+          cell.title = d;
+          cellsEl.appendChild(cell);
         }
-        list.innerHTML = this.state.scratchpad.map(q => `<div>- ${q}</div>`).join('');
+
+        // 2. Zettelkasten Concept Nodes (Links Projects + Extracted Concepts from Notes/Queries)
+        const nodesEl = document.getElementById('mindmap-nodes');
+        nodesEl.innerHTML = '';
+
+        const projects = this.getAllProjects();
+        projects.forEach(p => {
+          const hub = document.createElement('span');
+          hub.className = 'node-chip hub';
+          hub.innerText = `#${p.name.toUpperCase()}`;
+          hub.onclick = () => this.openWorkspace(p);
+          nodesEl.appendChild(hub);
+        });
+
+        // Extract meaningful keywords from recent queries & notes to form linked concept nodes
+        const stopWords = new Set(['about', 'after', 'before', 'between', 'could', 'from', 'have', 'into', 'just', 'like', 'more', 'other', 'should', 'some', 'such', 'than', 'that', 'their', 'there', 'these', 'they', 'this', 'those', 'through', 'under', 'very', 'what', 'when', 'where', 'which', 'while', 'with', 'would', 'your', 'understand', 'learn', 'tutorial', 'video']);
+        const freq = {};
+
+        this.state.scratchpad.forEach(q => {
+          q.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).forEach(w => {
+            if (w.length > 3 && !stopWords.has(w)) freq[w] = (freq[w] || 0) + 2;
+          });
+        });
+
+        Object.values(this.state.notes).flat().forEach(n => {
+          n.text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).forEach(w => {
+            if (w.length > 3 && !stopWords.has(w)) freq[w] = (freq[w] || 0) + 1;
+          });
+        });
+
+        const topConcepts = Object.entries(freq)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10)
+          .map(entry => entry[0]);
+
+        if (topConcepts.length === 0) {
+          const hint = document.createElement('span');
+          hint.className = 'muted';
+          hint.innerText = 'Search topics & take notes to grow your concept map.';
+          nodesEl.appendChild(hint);
+        } else {
+          topConcepts.forEach(concept => {
+            const chip = document.createElement('span');
+            chip.className = 'node-chip';
+            chip.innerText = `↔ ${concept}`;
+            chip.onclick = () => {
+              const firstProj = projects[0];
+              if (firstProj) {
+                this.openWorkspace(firstProj);
+                document.getElementById('ig-query').value = concept;
+              }
+            };
+            nodesEl.appendChild(chip);
+          });
+        }
       },
 
       openWorkspace(project) {
@@ -369,6 +649,7 @@
         document.getElementById('ig-query').value = '';
         document.getElementById('ig-purpose').value = '';
         this.renderQueue();
+        this.renderArchive();
         this.navigate('workspace');
       },
 
@@ -383,16 +664,11 @@
         return `${durObj.m}:${String(durObj.s).padStart(2,'0')}`;
       },
 
-      // Client-side Intelligence: Scores description/title based on words in Query + Purpose
       scoreRelevance(video, query, purpose) {
         const haystack = (video.snippet.title + " " + video.snippet.description).toLowerCase();
-        
-        // Extract meaningful words from user intent (longer than 3 chars)
         const intentWords = (query + " " + purpose).toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 3);
-        
         let score = 0;
         intentWords.forEach(word => {
-          // Weight words that appear in the video's data
           if (haystack.includes(word)) score += 1;
         });
         return score;
@@ -404,17 +680,16 @@
         const status = document.getElementById('search-status');
         
         if (!query || !purpose) {
-          status.innerText = "Error: Intention Gate requires both Query and Purpose.";
+          status.innerText = "Error: Implementation Intention requires both Query and Purpose.";
           return;
         }
 
-        this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 5);
+        this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 12);
         this.saveState();
 
         status.innerText = "Fetching and analyzing database...";
         
         try {
-          // Fetch up to 25 videos using pure query (so you can explore outside the project bounds)
           const apiKey = this.config.apiKey;
           const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=25&safeSearch=strict&key=${apiKey}`);
           const searchData = await searchRes.json();
@@ -423,32 +698,22 @@
           const videoIds = (searchData.items || []).map(i => i.id.videoId);
           if (videoIds.length === 0) throw new Error("No results found.");
 
-          // Fetch descriptions & exact durations
           const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`);
           const vidData = await vidRes.json();
 
-          // 1. FILTERING
           let validVideos = vidData.items.filter(v => {
             const dur = this.parseDuration(v.contentDetails.duration);
-            // Block anything under 3 minutes (180 seconds)
             if (dur.totalSeconds < 180) return false; 
-            
-            // Block Junk Categories
             const textContent = (v.snippet.title + " " + v.snippet.description).toLowerCase();
             if (this.junkKeywords.some(junk => textContent.includes(junk))) return false;
-
             return true;
           });
 
-          // 2. SCORING & SORTING
           validVideos.forEach(v => {
              v.intentScore = this.scoreRelevance(v, query, purpose);
           });
           
-          // Sort by highest score first
           validVideos.sort((a, b) => b.intentScore - a.intentScore);
-
-          // 3. CAP AT 10 RESULTS
           const finalCuratedList = validVideos.slice(0, 10);
 
           if (finalCuratedList.length === 0) throw new Error("All results were flagged as shorts or junk. Try a different query.");
@@ -481,10 +746,12 @@
           `;
           div.querySelector('button').onclick = () => {
             const q = this.state.queue[this.state.activeProjectId] || [];
-            q.push({ id: v.id, title: v.snippet.title, channel: v.snippet.channelTitle, purpose });
-            this.state.queue[this.state.activeProjectId] = q;
-            this.saveState();
-            this.renderQueue();
+            if (!q.some(item => item.id === v.id)) {
+              q.push({ id: v.id, title: v.snippet.title, channel: v.snippet.channelTitle, purpose });
+              this.state.queue[this.state.activeProjectId] = q;
+              this.saveState();
+              this.renderQueue();
+            }
             div.innerHTML = '<span class="bold">ADDED</span>';
           };
           list.appendChild(div);
@@ -497,17 +764,18 @@
         list.innerHTML = '';
         
         if (q.length === 0) {
-          list.innerHTML = '<span class="muted">Queue empty. Search to curate.</span>';
+          list.innerHTML = '<span class="muted">Queue empty. Search above to curate.</span>';
           return;
         }
 
         q.forEach((v, index) => {
+          const noteCount = (this.state.notes[v.id] || []).length;
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
             <div class="list-item-content">
               <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">Intention: ${v.purpose}</div>
+              <div class="list-item-meta">Purpose: ${v.purpose} ${noteCount > 0 ? `• [${noteCount} Notes Attached]` : ''}</div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <button class="btn small btn-focus">FOCUS</button>
@@ -525,7 +793,43 @@
         });
       },
 
-      /* --- FOCUS MODE & PLAYER --- */
+      renderArchive() {
+        const list = document.getElementById('archive-list');
+        const arch = this.state.archive[this.state.activeProjectId] || [];
+        list.innerHTML = '';
+
+        if (arch.length === 0) {
+          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay here for 30 days with your notes attached.</span>';
+          return;
+        }
+
+        arch.forEach((v, index) => {
+          const notes = this.state.notes[v.id] || [];
+          const daysAgo = Math.floor((Date.now() - (v.archivedAt || Date.now())) / 86400000);
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `
+            <div class="list-item-content">
+              <div class="list-item-title">${v.title}</div>
+              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes attached</div>
+              <div class="list-item-desc">${notes.length > 0 ? notes.map(n => `[${this.formatSecs(n.time)}] ${n.text}`).join(' | ') : 'No notes recorded.'}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn small btn-reopen">REVIEW</button>
+              <button class="btn small btn-del-arch">PURGE</button>
+            </div>
+          `;
+          div.querySelector('.btn-reopen').onclick = () => this.startFocus(v);
+          div.querySelector('.btn-del-arch').onclick = () => {
+            arch.splice(index, 1);
+            this.state.archive[this.state.activeProjectId] = arch;
+            this.saveState();
+            this.renderArchive();
+          };
+          list.appendChild(div);
+        });
+      },
+
       loadYouTubeAPI() {
         window.onYouTubeIframeAPIReady = () => { this.apiReady = true; };
         const tag = document.createElement('script');
@@ -536,7 +840,9 @@
       startFocus(videoInfo) {
         this.state.activeVideo = videoInfo;
         document.getElementById('focus-purpose').innerText = videoInfo.purpose;
+        document.getElementById('gemini-drawer').classList.add('hidden');
         this.renderLedger();
+        this.renderGeminiSuggestions();
         this.navigate('focus');
 
         if (!this.apiReady) {
@@ -590,20 +896,24 @@
         if (!this.state.notes[vidId]) this.state.notes[vidId] = [];
         
         this.state.notes[vidId].push({ time: timeSecs, text, isTodo });
+        this.recordHabitRep();
         this.saveState();
         input.value = '';
         this.renderLedger();
+        this.renderGeminiSuggestions();
       },
 
       renderLedger() {
         const list = document.getElementById('ledger-list');
-        const notes = this.state.notes[this.state.activeVideo.id] || [];
+        const vidId = this.state.activeVideo.id;
+        const notes = this.state.notes[vidId] || [];
         list.innerHTML = '';
 
-        notes.forEach(n => {
+        notes.forEach((n, idx) => {
           const div = document.createElement('div');
           div.className = 'ledger-entry';
           
+          const left = document.createElement('div');
           const timeSpan = document.createElement('span');
           timeSpan.className = 'ledger-time';
           timeSpan.innerText = `[${this.formatSecs(n.time)}]`;
@@ -615,32 +925,96 @@
           const textSpan = document.createElement('span');
           textSpan.innerHTML = n.isTodo ? `<span class="ledger-todo">[TODO]</span> ${n.text}` : n.text;
 
-          div.appendChild(timeSpan);
-          div.appendChild(textSpan);
+          left.appendChild(timeSpan);
+          left.appendChild(textSpan);
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn small';
+          delBtn.innerText = 'X';
+          delBtn.onclick = () => {
+            this.state.notes[vidId].splice(idx, 1);
+            this.saveState();
+            this.renderLedger();
+            this.renderGeminiSuggestions();
+          };
+
+          div.appendChild(left);
+          div.appendChild(delBtn);
           list.appendChild(div);
         });
       },
 
-      exportMarkdown() {
+      buildNotesContext() {
         const v = this.state.activeVideo;
         const notes = this.state.notes[v.id] || [];
-        let md = `## ${v.title}\n**Channel:** ${v.channel}\n**Purpose:** ${v.purpose}\n\n`;
-        
-        notes.forEach(n => {
-          md += n.isTodo 
-            ? `- [ ] **[${this.formatSecs(n.time)}]** ${n.text}\n` 
-            : `- **[${this.formatSecs(n.time)}]** ${n.text}\n`;
-        });
+        if (notes.length === 0) return "";
+        const formatted = notes.map(n => `- [${this.formatSecs(n.time)}] ${n.isTodo ? '(TODO) ' : ''}${n.text}`).join('\n');
+        return `\n\nMy Timestamped Notes so far:\n${formatted}`;
+      },
 
-        navigator.clipboard.writeText(md).then(() => {
-          const btn = document.getElementById('btn-export');
-          btn.innerText = "[ COPIED TO CLIPBOARD ]";
-          setTimeout(() => btn.innerText = "[ COPY AS MARKDOWN ]", 2000);
+      renderGeminiSuggestions() {
+        const container = document.getElementById('gemini-suggestions');
+        const v = this.state.activeVideo;
+        if (!v) return;
+
+        const ytUrl = `https://www.youtube.com/watch?v=${v.id}`;
+        const notesBlock = this.buildNotesContext();
+
+        const suggestions = [
+          {
+            label: "1. Summarize key concepts for my purpose",
+            prompt: `Analyze this YouTube video: ${ytUrl}\nTitle: ${v.title}\nMy Purpose: ${v.purpose}${notesBlock}\n\nSummarize the core concepts, technical steps, and key timestamps that directly answer my purpose.`
+          },
+          {
+            label: "2. Expand & verify my timestamped notes",
+            prompt: `Review my timestamped notes on this video (${ytUrl} — "${v.title}"):\nMy Purpose: ${v.purpose}${notesBlock}\n\nFill in any missing technical context around my timestamps, correct any misunderstandings, and highlight the most critical takeaway.`
+          },
+          {
+            label: "3. Create an actionable implementation checklist",
+            prompt: `Based on this video (${ytUrl} — "${v.title}") and my goal ("${v.purpose}")${notesBlock}\n\nTurn the concepts into a step-by-step practical checklist I can execute immediately.`
+          },
+          {
+            label: "4. Quiz me to test retention (Active Recall)",
+            prompt: `I just watched "${v.title}" (${ytUrl}) to learn: ${v.purpose}.${notesBlock}\n\nAsk me 3 targeted active-recall questions to test whether I truly understood the material.`
+          }
+        ];
+
+        container.innerHTML = '';
+        suggestions.forEach(s => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'suggestion-card';
+          card.innerHTML = `<span>${s.label}</span><span>[USE]</span>`;
+          card.onclick = () => {
+            const box = document.getElementById('gemini-prompt-box');
+            box.value = s.prompt;
+            navigator.clipboard.writeText(s.prompt).catch(() => {});
+          };
+          container.appendChild(card);
         });
       },
 
       startBuffer() {
-        if(this.player) this.player.stopVideo();
+        if (this.player) this.player.stopVideo();
+        
+        // Archive video with timestamp so notes stay attached for 30 days
+        const projId = this.state.activeProjectId;
+        const vid = this.state.activeVideo;
+        if (projId && vid) {
+          const arch = this.state.archive[projId] || [];
+          const existingIdx = arch.findIndex(item => item.id === vid.id);
+          const entry = { ...vid, archivedAt: Date.now() };
+          if (existingIdx >= 0) arch[existingIdx] = entry;
+          else arch.unshift(entry);
+          this.state.archive[projId] = arch;
+
+          // Remove from active queue
+          const q = this.state.queue[projId] || [];
+          this.state.queue[projId] = q.filter(item => item.id !== vid.id);
+          this.recordHabitRep();
+          this.saveState();
+        }
+
         this.navigate('buffer');
         
         const timerEl = document.getElementById('buffer-timer');
@@ -663,6 +1037,11 @@
       },
 
       bindEvents() {
+        document.getElementById('btn-create-project').onclick = () => this.createCustomProject();
+        document.getElementById('new-proj-name').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.createCustomProject();
+        });
+
         document.getElementById('btn-search').onclick = () => this.handleSearch();
         
         document.getElementById('btn-resume').onclick = () => {
@@ -674,20 +1053,46 @@
           if (e.key === 'Enter') this.logNote();
         });
 
-        document.getElementById('btn-export').onclick = () => this.exportMarkdown();
+        // In-Screen Gemini Drawer Controls
+        document.getElementById('btn-toggle-gemini').onclick = () => {
+          const drawer = document.getElementById('gemini-drawer');
+          drawer.classList.toggle('hidden');
+          if (!drawer.classList.contains('hidden')) {
+            this.renderGeminiSuggestions();
+            const box = document.getElementById('gemini-prompt-box');
+            if (!box.value.trim()) {
+              const firstCard = document.querySelector('.suggestion-card');
+              if (firstCard) firstCard.click();
+            }
+          }
+        };
+
+        document.getElementById('btn-close-gemini').onclick = () => {
+          document.getElementById('gemini-drawer').classList.add('hidden');
+        };
+
+        document.getElementById('btn-copy-gemini-prompt').onclick = () => {
+          const box = document.getElementById('gemini-prompt-box');
+          if (!box.value.trim()) return;
+          navigator.clipboard.writeText(box.value).then(() => {
+            const btn = document.getElementById('btn-copy-gemini-prompt');
+            btn.innerText = "COPIED TO CLIPBOARD";
+            setTimeout(() => btn.innerText = "COPY PROMPT", 2000);
+          });
+        };
         
         document.getElementById('btn-abort-focus').onclick = () => {
-          if(this.player) this.player.pauseVideo();
+          if (this.player) this.player.pauseVideo();
+          this.renderQueue();
+          this.renderArchive();
           this.navigate('workspace');
         };
 
         document.getElementById('btn-finish').onclick = () => this.startBuffer();
 
         document.getElementById('btn-exit-buffer').onclick = () => {
-          const q = this.state.queue[this.state.activeProjectId] || [];
-          this.state.queue[this.state.activeProjectId] = q.filter(v => v.id !== this.state.activeVideo.id);
-          this.saveState();
           this.renderQueue();
+          this.renderArchive();
           this.navigate('workspace');
         };
       }
