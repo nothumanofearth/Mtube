@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube / Research</title>
+  <title>MTube / Dashboard</title>
+  
+  <!-- Brutalist Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='75' x='22' fill='white' font-family='monospace' font-size='70'>M</text></svg>">
+
   <style>
     /* BRUTALIST PAPER THEME */
     :root {
@@ -26,7 +30,7 @@
       color: var(--ink);
       font-family: var(--font-mono);
       margin: 0;
-      padding: env(safe-area-inset-top) 16px 40px;
+      padding: env(safe-area-inset-top) 16px 60px;
       line-height: 1.5;
     }
 
@@ -42,12 +46,27 @@
       margin: 0 0 16px 0;
       letter-spacing: -0.02em;
     }
-    h1 { font-size: 32px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; }
-    h2 { font-size: 24px; margin-top: 24px; }
+    h1 { font-size: 32px; border-bottom: var(--border); padding-bottom: 8px; margin-top: 24px; text-transform: uppercase; }
+    h2 { font-size: 20px; margin-top: 24px; border-bottom: 1px solid var(--ink); padding-bottom: 4px;}
     
     p { margin: 0 0 16px; }
-    .muted { color: var(--ink-light); font-size: 14px; }
+    .muted { color: var(--ink-light); font-size: 13px; }
     .bold { font-weight: bold; }
+
+    /* Dashboard Header Widget */
+    .dash-widget {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 12px 16px;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+    }
+    .dash-time { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+    .dash-ascii { font-size: 18px; white-space: pre; }
 
     /* Brutalist Components */
     .box {
@@ -107,8 +126,19 @@
     }
     .list-item:last-child { border-bottom: none; }
     .list-item-content { flex: 1; }
-    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; }
-    .list-item-meta { font-size: 12px; color: var(--ink-light); }
+    .list-item-title { font-weight: bold; margin-bottom: 4px; font-family: var(--font-serif); font-size: 18px; line-height: 1.2; }
+    .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 4px; }
+    .list-item-desc { font-size: 12px; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    .score-badge {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: bold;
+      margin-right: 6px;
+    }
 
     /* Focus Mode & Player */
     .player-wrapper {
@@ -121,7 +151,7 @@
     }
     .player-wrapper iframe { width: 100%; height: 100%; border: none; }
     
-    /* The Native Unhooking Blackout */
+    /* Native Unhooking Blackout */
     #blackout-overlay {
       position: absolute;
       inset: 0;
@@ -146,14 +176,9 @@
       border-left: 2px solid var(--ink);
       padding-left: 12px;
     }
-    .ledger-time {
-      cursor: pointer;
-      text-decoration: underline;
-      font-weight: bold;
-    }
+    .ledger-time { cursor: pointer; text-decoration: underline; font-weight: bold; }
     .ledger-todo { font-weight: bold; display: inline-block; margin-right: 4px; }
 
-    /* Views */
     .view { display: none; }
     .view.active { display: block; }
     .hidden { display: none !important; }
@@ -162,36 +187,29 @@
 <body>
   <div class="container">
     
+    <!-- DASHBOARD HEADER -->
+    <div class="dash-widget" id="main-dashboard">
+      <div class="dash-time" id="clock-display">00:00:00</div>
+      <div class="dash-ascii" id="ascii-spinner">[ - ]</div>
+    </div>
+
     <!-- VIEW 0: CONFIG ERROR -->
     <div id="view-error" class="view">
       <h1>SYSTEM HALT</h1>
       <div class="box">
         <p class="bold">config.json not found or invalid.</p>
-        <p>To use MTube, create a <span class="bold">config.json</span> file in your GitHub repository root next to this HTML file.</p>
-        <p class="muted">Template:</p>
-        <pre style="font-size:11px; overflow-x:auto;">
-{
-  "apiKey": "AIzaSy...",
-  "projects": [
-    {
-      "id": "home-server",
-      "name": "Home Server",
-      "context": "self hosted proxmox"
-    }
-  ]
-}
-        </pre>
+        <p>Ensure config.json exists in your repo root with a valid apiKey.</p>
       </div>
     </div>
 
     <!-- VIEW 1: PROJECTS DIRECTORY -->
     <div id="view-projects" class="view active">
       <h1>DIRECTORY</h1>
-      <p>Select a workspace to isolate your research.</p>
+      <p class="muted">Select a workspace to isolate your research.</p>
       <div id="projects-list"></div>
       
-      <h2 style="font-size:18px; border-top:var(--border); padding-top:16px;">SCRATCHPAD</h2>
-      <p class="muted">Your recent un-projected queries.</p>
+      <h2>SCRATCHPAD</h2>
+      <p class="muted">Your recent queries.</p>
       <div id="scratchpad-list" style="font-size:14px;"></div>
     </div>
 
@@ -202,24 +220,24 @@
       
       <div class="box">
         <h2>INTENTION GATE</h2>
-        <input type="text" id="ig-query" placeholder="Query (e.g., 'Docker bridge network')" />
-        <input type="text" id="ig-purpose" placeholder="Purpose (Why are you watching this?)" />
+        <p class="muted" style="margin-bottom: 8px;">Be highly specific. Results are scored against your purpose.</p>
+        <input type="text" id="ig-query" placeholder="Query (e.g., 'iOS app development swift')" />
+        <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'How to pass data between views')" />
         <button class="btn full" id="btn-search">SEARCH DATABASE</button>
-        <div id="search-status" class="muted" style="margin-top:8px;"></div>
+        <div id="search-status" class="bold" style="margin-top:8px;"></div>
       </div>
 
       <div id="search-results-container" class="hidden">
-        <h2>RESULTS</h2>
-        <p class="muted">Text-first indexing. Thumbnails suppressed.</p>
+        <h2>CURATED RESULTS (TOP 10)</h2>
+        <p class="muted">Shorts & junk purged. Sorted by relevance to your Purpose.</p>
         <div class="box" id="search-results-list"></div>
       </div>
 
       <h2>CURATION QUEUE</h2>
-      <p class="muted">Videos staged for Focus Mode.</p>
       <div class="box" id="queue-list"></div>
     </div>
 
-    <!-- VIEW 3: FOCUS MODE (Native Unhook + Ledger) -->
+    <!-- VIEW 3: FOCUS MODE -->
     <div id="view-focus" class="view">
       <div style="display:flex; justify-content:space-between; margin-bottom: 16px;">
         <span class="bold" style="text-transform:uppercase;">Focus Mode</span>
@@ -233,7 +251,6 @@
 
       <div class="player-wrapper">
         <div id="yt-player"></div>
-        <!-- Native Unhooking Blackout -->
         <div id="blackout-overlay">
           <h2 style="margin:0 0 8px;">PAUSED</h2>
           <p class="muted">YouTube recommendations suppressed.</p>
@@ -242,8 +259,7 @@
       </div>
 
       <h2>TIMESTAMPED LEDGER</h2>
-      <input type="text" id="note-input" placeholder="Type note or /todo... (Press Enter to log timestamp)" />
-      
+      <input type="text" id="note-input" placeholder="Type note or /todo... (Press Enter to log time)" />
       <div id="ledger-list"></div>
       
       <button class="btn full" id="btn-export" style="margin-top:24px;">[ COPY AS MARKDOWN ]</button>
@@ -254,7 +270,7 @@
     <div id="view-buffer" class="view">
       <div class="box" style="text-align:center; padding: 60px 20px;">
         <h1 style="border:none;">ASSIMILATION</h1>
-        <p>Video complete. Transition out of passive consumption mode.</p>
+        <p>Video complete. Transition out of passive consumption.</p>
         <div style="font-size: 48px; font-weight:bold; margin: 24px 0;" id="buffer-timer">15</div>
         <button class="btn" id="btn-exit-buffer" disabled style="opacity:0.3;">RETURN TO WORKSPACE</button>
       </div>
@@ -268,17 +284,19 @@
       state: {
         activeProjectId: null,
         activeVideo: null,
-        purpose: "",
         queue: JSON.parse(localStorage.getItem('mtube_queue') || '{}'),
         scratchpad: JSON.parse(localStorage.getItem('mtube_scratchpad') || '[]'),
         notes: JSON.parse(localStorage.getItem('mtube_notes') || '{}')
       },
       player: null,
       apiReady: false,
+      
+      // The Anti-Rot Junk Filter
+      junkKeywords: ["shorts", "vlog", "prank", "funny", "comedy", "tiktok", "meme", "challenge", "reaction", "gossip", "drama"],
 
       async init() {
+        this.startDashboardClock();
         try {
-          // Fetch stateless cloud profile
           const res = await fetch(`config.json?t=${Date.now()}`);
           if (!res.ok) throw new Error();
           this.config = await res.json();
@@ -291,6 +309,22 @@
         } catch (e) {
           this.navigate('error');
         }
+      },
+
+      startDashboardClock() {
+        // Clock
+        setInterval(() => {
+          const now = new Date();
+          document.getElementById('clock-display').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        }, 1000);
+
+        // Brutalist ASCII Spinner (Acts as the thematic GIF)
+        const frames = ["[ - ]", "[ \\ ]", "[ | ]", "[ / ]"];
+        let frameIdx = 0;
+        setInterval(() => {
+          document.getElementById('ascii-spinner').innerText = frames[frameIdx];
+          frameIdx = (frameIdx + 1) % frames.length;
+        }, 200);
       },
 
       saveState() {
@@ -330,7 +364,7 @@
 
       openWorkspace(project) {
         this.state.activeProjectId = project.id;
-        document.getElementById('ws-title').innerText = `WORKSPACE: ${project.name.toUpperCase()}`;
+        document.getElementById('ws-title').innerText = `${project.name.toUpperCase()}`;
         document.getElementById('search-results-container').classList.add('hidden');
         document.getElementById('ig-query').value = '';
         document.getElementById('ig-purpose').value = '';
@@ -338,10 +372,30 @@
         this.navigate('workspace');
       },
 
-      formatDuration(iso) {
+      parseDuration(iso) {
         const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/) || [];
         const h = parseInt(match[1] || 0), m = parseInt(match[2] || 0), s = parseInt(match[3] || 0);
-        return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+        return { totalSeconds: (h * 3600) + (m * 60) + s, h, m, s };
+      },
+
+      formatDuration(durObj) {
+        if (durObj.h > 0) return `${durObj.h}:${String(durObj.m).padStart(2,'0')}:${String(durObj.s).padStart(2,'0')}`;
+        return `${durObj.m}:${String(durObj.s).padStart(2,'0')}`;
+      },
+
+      // Client-side Intelligence: Scores description/title based on words in Query + Purpose
+      scoreRelevance(video, query, purpose) {
+        const haystack = (video.snippet.title + " " + video.snippet.description).toLowerCase();
+        
+        // Extract meaningful words from user intent (longer than 3 chars)
+        const intentWords = (query + " " + purpose).toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 3);
+        
+        let score = 0;
+        intentWords.forEach(word => {
+          // Weight words that appear in the video's data
+          if (haystack.includes(word)) score += 1;
+        });
+        return score;
       },
 
       async handleSearch() {
@@ -354,30 +408,52 @@
           return;
         }
 
-        // Log to scratchpad
         this.state.scratchpad = [query, ...this.state.scratchpad.filter(q => q !== query)].slice(0, 5);
         this.saveState();
 
-        const project = this.config.projects.find(p => p.id === this.state.activeProjectId);
-        const fullQuery = `${query} ${project.context}`;
-        const apiKey = this.config.apiKey;
-
-        status.innerText = "Querying database...";
+        status.innerText = "Fetching and analyzing database...";
         
         try {
-          // 1. Search Candidates
-          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(fullQuery)}&type=video&maxResults=5&safeSearch=strict&order=relevance&key=${apiKey}`);
+          // Fetch up to 25 videos using pure query (so you can explore outside the project bounds)
+          const apiKey = this.config.apiKey;
+          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=25&safeSearch=strict&key=${apiKey}`);
           const searchData = await searchRes.json();
           if (!searchRes.ok) throw new Error(searchData.error?.message || "API Error");
           
           const videoIds = (searchData.items || []).map(i => i.id.videoId);
           if (videoIds.length === 0) throw new Error("No results found.");
 
-          // 2. Fetch Details (for exact duration)
+          // Fetch descriptions & exact durations
           const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`);
           const vidData = await vidRes.json();
 
-          this.renderSearchResults(vidData.items, purpose);
+          // 1. FILTERING
+          let validVideos = vidData.items.filter(v => {
+            const dur = this.parseDuration(v.contentDetails.duration);
+            // Block anything under 3 minutes (180 seconds)
+            if (dur.totalSeconds < 180) return false; 
+            
+            // Block Junk Categories
+            const textContent = (v.snippet.title + " " + v.snippet.description).toLowerCase();
+            if (this.junkKeywords.some(junk => textContent.includes(junk))) return false;
+
+            return true;
+          });
+
+          // 2. SCORING & SORTING
+          validVideos.forEach(v => {
+             v.intentScore = this.scoreRelevance(v, query, purpose);
+          });
+          
+          // Sort by highest score first
+          validVideos.sort((a, b) => b.intentScore - a.intentScore);
+
+          // 3. CAP AT 10 RESULTS
+          const finalCuratedList = validVideos.slice(0, 10);
+
+          if (finalCuratedList.length === 0) throw new Error("All results were flagged as shorts or junk. Try a different query.");
+
+          this.renderSearchResults(finalCuratedList, purpose);
           status.innerText = "";
         } catch (e) {
           status.innerText = `Search failed: ${e.message}`;
@@ -390,13 +466,16 @@
         list.innerHTML = '';
 
         items.forEach(v => {
-          const dur = this.formatDuration(v.contentDetails.duration);
+          const durObj = this.parseDuration(v.contentDetails.duration);
           const div = document.createElement('div');
           div.className = 'list-item';
           div.innerHTML = `
             <div class="list-item-content">
-              <div class="list-item-title">${v.snippet.title}</div>
-              <div class="list-item-meta">${v.snippet.channelTitle} // ${dur}</div>
+              <div class="list-item-title">
+                <span class="score-badge">SCORE:${v.intentScore}</span>${v.snippet.title}
+              </div>
+              <div class="list-item-meta">${v.snippet.channelTitle} // ${this.formatDuration(durObj)}</div>
+              <div class="list-item-desc">${v.snippet.description || "No description provided."}</div>
             </div>
             <button class="btn small">[ ADD ]</button>
           `;
@@ -418,7 +497,7 @@
         list.innerHTML = '';
         
         if (q.length === 0) {
-          list.innerHTML = '<span class="muted">Queue empty. Curate videos above.</span>';
+          list.innerHTML = '<span class="muted">Queue empty. Search to curate.</span>';
           return;
         }
 
@@ -481,7 +560,6 @@
 
       handlePlayerState(e) {
         const blackout = document.getElementById('blackout-overlay');
-        // If PAUSED (2) or ENDED (0), trigger Native Unhooking Blackout
         if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
           blackout.classList.add('active');
         } else {
@@ -606,7 +684,6 @@
         document.getElementById('btn-finish').onclick = () => this.startBuffer();
 
         document.getElementById('btn-exit-buffer').onclick = () => {
-          // Remove finished video from queue
           const q = this.state.queue[this.state.activeProjectId] || [];
           this.state.queue[this.state.activeProjectId] = q.filter(v => v.id !== this.state.activeVideo.id);
           this.saveState();
