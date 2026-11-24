@@ -3,20 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube / Second Brain</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='74' x='22' fill='white' font-family='monospace' font-size='68'>M</text></svg>">
+  <title>MTube 3.0 // Research OS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text y='74' x='22' fill='%23FFFFFF' font-family='monospace' font-size='68'>M</text></svg>">
 
   <style>
-    /* BRUTALIST NOTION THEME — RESPONSIVE & SAFARI-SAFE */
+    /* =====================================================================
+       BRUTALIST NOTION + YOUTUBE DESIGN SYSTEM
+    ===================================================================== */
     :root {
-      --bg: #F9F9F8;
-      --ink: #111111;
-      --ink-light: #666666;
+      --bg: #F8F8F6;
       --paper: #FFFFFF;
-      --border: 2px solid var(--ink);
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, "Courier New", monospace;
+      --subtle: #F1F1EE;
+      --ink: #111111;
+      --ink-muted: #666662;
+      --border: #E0E0DC;
+      --border-strong: #111111;
+      --accent: #0055CC;
+      --ok: #1E7E34;
+      --err: #C92A2A;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       --font-serif: "New York", Georgia, "Times New Roman", serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, "Courier New", monospace;
     }
 
     *, *::before, *::after {
@@ -25,207 +32,440 @@
     }
 
     html, body {
-      width: 100%;
-      overflow-x: hidden;
       margin: 0;
       padding: 0;
-    }
-
-    body {
-      background-color: var(--bg);
+      width: 100%;
+      overflow-x: hidden;
+      background: var(--bg);
       color: var(--ink);
       font-family: var(--font-sans);
-      padding-bottom: calc(48px + env(safe-area-inset-bottom));
       line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-
-    /* Typography */
-    h1, h2, h3 {
-      font-family: var(--font-serif);
-      font-weight: 600;
-      margin: 0 0 14px 0;
-      letter-spacing: -0.02em;
-      word-wrap: break-word;
-    }
-    h1 { font-size: clamp(26px, 5vw, 36px); margin-top: 24px; text-transform: uppercase; }
-    h2 { font-size: 15px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
-
-    p { margin: 0 0 14px; }
-    .muted { color: var(--ink-light); font-size: 13px; }
-    .bold { font-weight: bold; }
-
-    /* Top Navigation Status Bar */
-    .top-status-bar {
+    /* Top Global Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       background: var(--paper);
-      border-bottom: 1px solid #E5E5E5;
-      padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
-      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+      padding: calc(8px + env(safe-area-inset-top)) 14px 8px;
+      min-height: 48px;
+    }
+
+    .topbar-left, .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .brand-btn {
       font-family: var(--font-mono);
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      background: none;
+      border: none;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 4px 6px;
+      white-space: nowrap;
     }
-    .sync-badge { font-weight: bold; }
-    .sync-badge.ok { color: #2A8F3D; }
-    .sync-badge.err { color: #D93025; }
 
-    /* Notion-Style Cover Banner */
-    .notion-cover {
+    .sync-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 3px;
+      background: var(--subtle);
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+    .sync-pill.ok { color: var(--ok); background: #EBF7EE; }
+    .sync-pill.err { color: var(--err); background: #FFF0F0; }
+
+    /* Shell Layout: Left Sidebar + Main Canvas + Right Gemini Dock */
+    .app-shell {
+      display: flex;
       width: 100%;
-      height: 22vh;
-      min-height: 140px;
-      background-color: #EAEAE6;
-      background-size: cover;
-      background-position: center;
+      min-height: calc(100vh - 48px);
       position: relative;
-      border-bottom: 1px solid #E5E5E5;
-      margin-bottom: 16px;
-    }
-    .cover-actions {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      opacity: 0.85;
-      transition: opacity 0.2s;
-    }
-    .notion-cover:hover .cover-actions { opacity: 1; }
-
-    /* Layout Grids (Strict boundaries prevent overflow) */
-    .web-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 24px;
-      align-items: start;
-    }
-    @media (min-width: 768px) {
-      .web-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
-      .focus-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); display: grid; gap: 24px; align-items: start; }
     }
 
-    /* Cards & Controls */
-    .box {
-      background: var(--paper);
-      border: 1px solid #E5E5E5;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    /* Left Notion Sidebar */
+    .left-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--subtle);
+      border-right: 1px solid var(--border);
+      padding: 16px 12px calc(32px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (max-width: 860px) {
+      .left-sidebar {
+        position: fixed;
+        top: calc(48px + env(safe-area-inset-top));
+        bottom: 0;
+        left: 0;
+        z-index: 55;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        box-shadow: 6px 0 24px rgba(0,0,0,0.12);
+      }
+      .left-sidebar.open {
+        transform: translateX(0);
+      }
+    }
+
+    .nav-section-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0 8px 6px;
+    }
+
+    .nav-item {
       width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
     }
+    .nav-item:hover, .nav-item.active {
+      background: #E4E4DF;
+      font-weight: 600;
+    }
+
+    /* Main Workspace Canvas */
+    .main-canvas {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+
+    .canvas-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* Right Collapsible Gemini Dock */
+    .gemini-dock {
+      width: 350px;
+      flex-shrink: 0;
+      background: var(--paper);
+      border-left: 2px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 48px - env(safe-area-inset-top));
+      position: sticky;
+      top: calc(48px + env(safe-area-inset-top));
+      z-index: 52;
+    }
+
+    .gemini-dock.hidden {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .gemini-dock {
+        position: fixed;
+        top: calc(48px + env(safe-area-inset-top));
+        right: 0;
+        bottom: 0;
+        width: min(100vw, 380px);
+        height: auto;
+        box-shadow: -8px 0 28px rgba(0,0,0,0.16);
+      }
+    }
+
+    .gemini-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--subtle);
+    }
+
+    .gemini-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .gemini-footer {
+      padding: 10px 14px calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--border);
+      background: var(--paper);
+    }
+
+    .ai-msg {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .ai-msg.user {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .ai-insert-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* Typography & Controls */
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(24px, 4.5vw, 34px);
+      font-weight: 700;
+      margin: 20px 0 8px;
+      letter-spacing: -0.02em;
+      word-wrap: break-word;
+    }
+
+    h2 {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin: 20px 0 10px;
+    }
+
+    .muted { color: var(--ink-muted); font-size: 13px; }
+    .bold { font-weight: 700; }
 
     .btn {
       appearance: none;
       -webkit-appearance: none;
       background: var(--paper);
       color: var(--ink);
-      border: 1px solid #D8D8D8;
-      border-radius: 4px;
+      border: 1px solid #CFCFC9;
+      border-radius: 5px;
       font-family: var(--font-sans);
       font-size: 13px;
       font-weight: 600;
-      min-height: 40px;
-      padding: 8px 14px;
+      min-height: 36px;
+      padding: 6px 12px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.1s, border 0.1s;
+      gap: 6px;
+      white-space: nowrap;
     }
-    .btn:hover { background: #F5F5F0; }
-    .btn:active { background: #E5E5E5; }
-    .btn.full { width: 100%; margin-bottom: 12px; }
+    .btn:hover { background: var(--subtle); }
     .btn.inverse { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-    .btn.inverse:hover { background: #333333; }
-    .btn.small { min-height: 32px; padding: 5px 10px; font-size: 12px; }
+    .btn.inverse:hover { background: #2B2B2B; }
+    .btn.small { min-height: 28px; padding: 4px 8px; font-size: 11px; }
+    .btn.full { width: 100%; }
 
-    input[type="text"], input[type="password"], textarea {
+    input[type="text"], input[type="password"], textarea, select {
       width: 100%;
       max-width: 100%;
       background: var(--paper);
-      border: 1px solid #D1D1D1;
-      border-radius: 4px;
+      border: 1px solid #CFCFC9;
+      border-radius: 5px;
       color: var(--ink);
       font-family: var(--font-sans);
-      font-size: 16px; /* 16px strictly prevents iOS Safari Zoom */
-      padding: 10px 12px;
-      margin-bottom: 14px;
+      font-size: 16px; /* Prevents iOS Safari zoom */
+      padding: 9px 11px;
+      margin-bottom: 10px;
       outline: none;
-      transition: border-color 0.2s;
     }
-    input:focus, textarea:focus { border-color: var(--ink); }
+    input:focus, textarea:focus, select:focus { border-color: var(--ink); }
 
-    /* Project Rows */
-    .project-row { display: flex; gap: 8px; margin-bottom: 8px; width: 100%; }
-    .project-row .btn.main-proj { flex: 1; margin-bottom: 0; justify-content: space-between; text-align: left; }
-    .project-row .btn.del-proj { margin-bottom: 0; width: 40px; flex-shrink: 0; color: #D93025; }
+    /* Cards & Grids */
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
 
-    /* Video Result Items */
-    .list-item {
-      border-bottom: 1px solid #E5E5E5;
-      padding: 14px 0;
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    @media (min-width: 820px) {
+      .grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
+    }
+
+    /* Notion Cover Banner & Giphy Studio */
+    .notion-cover {
+      width: 100%;
+      height: 170px;
+      background-color: #E7E7E2;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .cover-controls {
+      position: absolute;
+      bottom: 10px;
+      right: 14px;
+      display: flex;
+      gap: 6px;
+    }
+    .cover-popover {
+      position: absolute;
+      top: 100%;
+      right: 14px;
+      width: min(340px, calc(100vw - 28px));
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      padding: 12px;
+      z-index: 45;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+    }
+    .gif-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .gif-thumb {
+      width: 100%;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    /* Multi-View Database (List, Kanban Board, Table) */
+    .view-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .kanban-col {
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 180px;
+    }
+    .kanban-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .notion-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table.notion-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .notion-table th, .notion-table td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .notion-table th {
+      background: var(--subtle);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    /* Video List Row */
+    .list-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
     }
-    .list-item:last-child { border-bottom: none; }
-    .list-item-content { flex: 1; min-width: 0; }
-    .list-item-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-      font-family: var(--font-serif);
-      font-size: 17px;
-      line-height: 1.3;
-      word-wrap: break-word;
-    }
-    .list-item-meta { font-size: 12px; color: var(--ink-light); margin-bottom: 6px; }
-    .list-item-desc {
-      font-size: 12px;
-      color: var(--ink);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
-    
-    .score-badge {
-      display: inline-block;
-      background: #EAEAEA;
-      color: var(--ink);
-      padding: 2px 6px;
-      border-radius: 3px;
+    .list-row:last-child { border-bottom: none; }
+    .score-tag {
+      font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 3px;
       margin-right: 6px;
-      vertical-align: text-bottom;
     }
 
-    /* Video Player */
-    .player-wrapper {
+    /* Responsive Video Player */
+    .player-box {
       position: relative;
       width: 100%;
       padding-bottom: 56.25%;
       height: 0;
-      background: var(--ink);
+      background: #000;
       border-radius: 6px;
-      margin-bottom: 16px;
       overflow: hidden;
+      margin-bottom: 14px;
     }
-    .player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-    
-    /* Native Unhooking Blackout */
-    #blackout-overlay {
+    .player-box iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .blackout-screen {
       position: absolute;
       inset: 0;
       background: var(--ink);
@@ -235,1032 +475,1564 @@
       align-items: center;
       justify-content: center;
       z-index: 10;
-      text-align: center;
       padding: 16px;
+      text-align: center;
     }
-    #blackout-overlay.active { display: flex; }
+    .blackout-screen.active { display: flex; }
 
-    /* Inline Video Brief (Chapters) */
-    .brief-chapter {
-      padding: 7px 0;
-      border-bottom: 1px dashed #E5E5E5;
-      font-size: 13px;
-      display: flex;
-      gap: 10px;
-      align-items: baseline;
-    }
-    .brief-chapter:last-child { border-bottom: none; }
-    .chapter-time { font-family: var(--font-mono); font-weight: 600; color: #0055CC; cursor: pointer; flex-shrink: 0; }
-
-    /* Notion-Style To-Do Ledger */
-    .ledger-entry {
+    /* Notion Block Canvas (Inside Video) */
+    .block-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
-      font-size: 14px;
+      gap: 8px;
       padding: 8px 10px;
-      background: #F6F6F5;
-      border-radius: 4px;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      background: var(--bg);
+      border: 1px solid transparent;
     }
-    .ledger-time { cursor: pointer; color: #0055CC; font-family: var(--font-mono); font-weight: bold; flex-shrink: 0; }
-    .ledger-text { flex: 1; word-wrap: break-word; min-width: 0; }
-    .ledger-text.done { text-decoration: line-through; color: var(--ink-light); }
-    
-    .custom-checkbox {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border: 1.5px solid var(--ink-light);
-      border-radius: 3px;
-      margin-top: 2px;
+    .block-item:hover { border-color: var(--border); }
+    .block-item.callout {
+      background: #F2F2EC;
+      border-left: 4px solid var(--ink);
+      font-weight: 500;
+    }
+    .block-item.quote {
+      background: transparent;
+      border-left: 3px solid var(--ink-muted);
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+    .block-item.h1 {
+      background: transparent;
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 700;
+      padding-left: 2px;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+    }
+    .block-divider {
+      width: 100%;
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 10px 0;
+    }
+    .block-time {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       flex-shrink: 0;
-      background: var(--paper);
     }
-    .custom-checkbox:checked { background: var(--ink); border-color: var(--ink); }
-    .custom-checkbox:checked::after { content: "✓"; color: #fff; font-size: 12px; font-weight: bold; }
+    .block-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 14px;
+      word-wrap: break-word;
+    }
+    .block-text.done {
+      text-decoration: line-through;
+      color: var(--ink-muted);
+    }
+    .wikilink {
+      background: #E8F0FE;
+      color: var(--accent);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Command Palette Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 90;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 64px 16px 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    }
 
     .view { display: none; }
     .view.active { display: block; }
     .hidden { display: none !important; }
+    .mobile-only { display: none; }
+    @media (max-width: 860px) {
+      .mobile-only { display: inline-flex; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- GLOBAL STATUS BAR -->
-  <div class="top-status-bar">
-    <span>MTUBE // RESEARCH OS</span>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <span class="sync-badge" id="sync-status">INITIALIZING...</span>
-      <button type="button" class="btn small" id="btn-open-settings" style="min-height:24px; padding:2px 8px; font-size:11px;">VAULT</button>
+  <!-- TOP NAVIGATION BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="btn small mobile-only" id="btn-mobile-menu">☰</button>
+      <button type="button" class="brand-btn" onclick="App.navigate('directory')">MTUBE // OS</button>
+      <span class="sync-pill" id="sync-pill">BOOTING...</span>
     </div>
-  </div>
-
-  <!-- NOTION COVER (DYNAMIC GIPHY) -->
-  <div class="notion-cover hidden" id="ws-cover">
-    <div class="cover-actions">
-      <button type="button" class="btn small" id="btn-change-cover" style="background:rgba(255,255,255,0.92);">Change Cover</button>
+    <div class="topbar-right">
+      <button type="button" class="btn small" id="btn-cmd-k">⌕ SEARCH</button>
+      <button type="button" class="btn small inverse" id="btn-toggle-gemini">✦ GEMINI</button>
     </div>
-  </div>
+  </header>
 
-  <div class="container">
+  <div class="app-shell">
+    <!-- LEFT NOTION SIDEBAR -->
+    <aside class="left-sidebar" id="left-sidebar">
+      <div>
+        <div class="nav-section-title">Second Brain</div>
+        <button type="button" class="nav-item active" data-nav="directory" onclick="App.navigate('directory')">
+          <span>◈ Directory &amp; Graph</span>
+        </button>
+        <button type="button" class="nav-item" data-nav="todos" onclick="App.navigate('todos')">
+          <span>☑ Master To-Dos</span>
+          <span class="muted" id="sidebar-todo-count">0</span>
+        </button>
+      </div>
 
-    <!-- VIEW 0: VAULT SETUP -->
-    <div id="view-setup" class="view">
-      <h1>SECURE VAULT SETUP</h1>
-      <p class="muted">Your API keys are stored inside your Private GitHub repository (<code>Mtube-Vault</code>), never exposed publicly.</p>
-      <div class="box web-grid">
-        <div>
-          <h2 style="margin-top:0;">1. GITHUB CREDENTIALS</h2>
-          <input type="password" id="setup-gh-token" placeholder="GitHub Personal Access Token (ghp_... or github_pat_...)" />
-          <input type="text" id="setup-gh-repo" placeholder="Private Repo Name (e.g. Mtube-Vault)" />
-          
-          <h2>2. YOUTUBE API KEY</h2>
-          <input type="password" id="setup-yt-key" placeholder="YouTube Data API v3 Key (AIza...)" />
-          
-          <button type="button" class="btn full inverse" id="btn-save-vault" style="margin-top:8px;">SECURE &amp; CONNECT VAULT</button>
-          <div id="setup-error" style="color:#D93025; font-size:13px; font-weight:bold; margin-top:8px;"></div>
-        </div>
-        <div>
-          <h2 style="margin-top:0;">IOS SHORTCUT BYPASS</h2>
-          <p class="muted">Apple Safari clears local storage after 7 days of inactivity. Once connected, MTube generates a permanent Shortcut URL that authenticates your Vault automatically.</p>
+      <div style="flex:1; overflow-y:auto;">
+        <div class="nav-section-title">Workspaces</div>
+        <div id="sidebar-workspaces"></div>
+        <div style="margin-top:10px; padding:0 4px;">
+          <input type="text" id="sidebar-new-ws" placeholder="+ New workspace..." style="font-size:13px; padding:7px 9px; margin-bottom:6px;" />
+          <button type="button" class="btn small full" id="btn-sidebar-add-ws">Add Workspace</button>
         </div>
       </div>
-    </div>
 
-    <!-- VIEW 1: DIRECTORY -->
-    <div id="view-projects" class="view">
-      <h1>DIRECTORY</h1>
-      <div class="web-grid">
-        <!-- Left Column: Workspaces -->
-        <div>
-          <h2 style="margin-top:0;">ACTIVE WORKSPACES</h2>
-          <div id="projects-list"></div>
-          <div class="box" style="margin-top:16px;">
-            <h2 style="margin-top:0;">+ NEW WORKSPACE</h2>
-            <input type="text" id="new-proj-name" placeholder="Name (e.g., 'SwiftUI Development')" />
-            <button type="button" class="btn full inverse" id="btn-create-project">CREATE WORKSPACE</button>
+      <div>
+        <button type="button" class="btn small full" id="btn-manual-sync">↻ Sync Vault Now</button>
+      </div>
+    </aside>
+
+    <!-- MAIN NOTION + YOUTUBE CANVAS -->
+    <main class="main-canvas">
+
+      <!-- VIEW 1: DIRECTORY & CONCEPT GRAPH -->
+      <section id="view-directory" class="view active">
+        <div class="canvas-inner">
+          <h1>Directory</h1>
+          <p class="muted">Cross-device video workspaces &amp; Zettelkasten knowledge graph synced privately to <code>Mtube-Vault</code>.</p>
+
+          <div class="grid-2">
+            <div>
+              <h2>Active Workspaces</h2>
+              <div id="directory-ws-list"></div>
+
+              <div class="card">
+                <h2 style="margin-top:0;">+ Create Workspace</h2>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="dir-ws-icon" value="◈" maxlength="3" style="width:54px; text-align:center;" />
+                  <input type="text" id="dir-ws-name" placeholder="Workspace name (e.g., 'Home Server', 'Podcasts')" />
+                </div>
+                <button type="button" class="btn inverse full" id="btn-dir-create-ws">Create Workspace</button>
+              </div>
+            </div>
+
+            <div>
+              <h2>Concept Wikilinks ([[Topic]])</h2>
+              <div class="card">
+                <p class="muted" style="margin-bottom:10px;">Type <code>[[Concept]]</code> inside any video note to auto-link ideas across workspaces.</p>
+                <div id="concept-cloud" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+              </div>
+
+              <h2>Recent Vault Activity</h2>
+              <div class="card" id="recent-activity-list"></div>
+            </div>
           </div>
         </div>
-        <!-- Right Column: Setup Shortcut -->
-        <div>
-          <div class="box" style="background: #F4F4F4; border-color: #E5E5E5;">
-            <h2 style="margin-top:0;">PERMANENT ACCESS SHORTCUT</h2>
-            <p class="muted">Copy this link into an iOS Shortcut ("Open URLs" action) so your Vault stays logged in across Safari resets and devices.</p>
-            <input type="text" id="shortcut-url" readonly style="font-size:12px; color:#555;" />
-            <button type="button" class="btn small" id="btn-copy-shortcut">COPY URL</button>
+      </section>
+
+      <!-- VIEW 2: MASTER TO-DO ROLLUP -->
+      <section id="view-todos" class="view">
+        <div class="canvas-inner">
+          <h1>Master Action List</h1>
+          <p class="muted">All <code>/todo</code> blocks extracted across every video and workspace.</p>
+          <div class="card" id="master-todo-list"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: WORKSPACE (Cover + Intention Search + List/Board/Table) -->
+      <section id="view-workspace" class="view">
+        <!-- Notion Cover Banner -->
+        <div class="notion-cover" id="ws-cover">
+          <div class="cover-controls">
+            <button type="button" class="btn small" id="btn-toggle-cover-studio" style="background:rgba(255,255,255,0.92);">Change Cover</button>
+          </div>
+          <!-- Cover Studio Popover -->
+          <div class="cover-popover hidden" id="cover-studio">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span class="bold" style="font-size:12px;">WORKSPACE COVER (GIPHY)</span>
+              <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <input type="text" id="giphy-search-input" placeholder="Search Giphy (e.g. 'matrix rain', 'coding')" style="font-size:13px; padding:6px 8px; margin-bottom:6px;" />
+              <button type="button" class="btn small inverse" id="btn-giphy-search">Go</button>
+            </div>
+            <div class="gif-grid" id="giphy-results-grid"></div>
+            <div style="margin-top:8px; border-top:1px solid var(--border); padding-top:8px;">
+              <input type="text" id="custom-cover-url" placeholder="Or paste direct .gif / image URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply URL</button>
+                <button type="button" class="btn small" id="btn-remove-cover">Remove</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- VIEW 2: WORKSPACE -->
-    <div id="view-workspace" class="view">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
-        <button type="button" class="btn small" onclick="App.navigate('projects')">&lt; DIRECTORY</button>
-        <button type="button" class="btn small" id="btn-force-sync">SYNC NOW</button>
-      </div>
-      <h1 id="ws-title">WORKSPACE</h1>
-      
-      <div class="web-grid">
-        <div>
-          <div class="box">
-            <h2 style="margin-top:0;">IMPLEMENTATION INTENTION</h2>
-            <input type="text" id="ig-query" placeholder="Query (e.g., 'Latest Podcast Raj Shamani')" />
-            <input type="text" id="ig-purpose" placeholder="Purpose (e.g., 'Learn from founder experience on Figuring Out')" />
-            <button type="button" class="btn full inverse" id="btn-search">SEARCH YOUTUBE</button>
-            <div id="search-status" class="bold" style="margin-top:8px;"></div>
-          </div>
+        <div class="canvas-inner">
+          <h1 id="ws-heading">Workspace</h1>
 
-          <div id="search-results-container" class="hidden">
-            <h2>CURATED RESULTS (TOP 10)</h2>
-            <div class="box" id="search-results-list"></div>
-          </div>
-        </div>
+          <!-- Implementation Intention Search -->
+          <div class="card">
+            <h2 style="margin-top:0;">Implementation Intention Search</h2>
+            <div class="grid-2" style="gap:10px;">
+              <input type="text" id="search-query" placeholder="Topic / Query (e.g., 'Latest Podcast Figuring Out')" style="margin-bottom:0;" />
+              <input type="text" id="search-purpose" placeholder="Purpose (e.g., 'Learn from founder mistakes')" style="margin-bottom:0;" />
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+              <button type="button" class="btn inverse" style="flex:1;" id="btn-run-search">Curate Videos</button>
+              <button type="button" class="btn" id="btn-ai-suggest-queries">✦ AI Query Ideas</button>
+            </div>
+            <div id="search-feedback" class="bold" style="font-size:13px; margin-top:8px;"></div>
 
-        <div>
-          <h2 style="margin-top:0;">ACTIVE QUEUE</h2>
-          <div class="box" id="queue-list"></div>
-
-          <h2>KNOWLEDGE VAULT (30 DAYS)</h2>
-          <div class="box" id="archive-list"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- VIEW 3: FOCUS MODE & INLINE BRIEF -->
-    <div id="view-focus" class="view">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin: 16px 0;">
-        <span class="bold">FOCUS MODE</span>
-        <button type="button" class="btn small" id="btn-abort-focus">BACK TO WORKSPACE</button>
-      </div>
-      
-      <div style="background:#EAEAEA; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px;">
-        <div style="font-size:11px; color:var(--ink-light); font-weight:bold; letter-spacing:0.05em;">STATED PURPOSE:</div>
-        <div id="focus-purpose" style="font-family:var(--font-serif); font-size:18px; font-weight:bold;"></div>
-      </div>
-
-      <div class="focus-grid">
-        <!-- Left: Video + Inline Brief -->
-        <div>
-          <div class="player-wrapper">
-            <div id="yt-player"></div>
-            <div id="blackout-overlay">
-              <h2 style="margin:0 0 8px; color:var(--paper);">PAUSED</h2>
-              <button type="button" class="btn" id="btn-resume">RESUME VIDEO</button>
+            <div id="search-results-wrap" class="hidden" style="margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
+              <div class="muted bold" style="margin-bottom:8px;">CURATED CANDIDATES (SHORTS PURGED, PODCASTS PRESERVED)</div>
+              <div id="search-results-list"></div>
             </div>
           </div>
 
-          <div class="box">
-            <h2 style="margin-top:0;">INLINE VIDEO CHAPTERS</h2>
-            <div id="inline-video-brief" class="muted">Extracting timestamps...</div>
+          <!-- Multi-View Database Controls -->
+          <div class="view-tabs">
+            <button type="button" class="btn small inverse" data-dbview="list" onclick="App.setDbView('list')">≡ List</button>
+            <button type="button" class="btn small" data-dbview="board" onclick="App.setDbView('board')">▥ Board</button>
+            <button type="button" class="btn small" data-dbview="table" onclick="App.setDbView('table')">⊞ Table</button>
+          </div>
+
+          <div id="ws-database-container"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: FOCUS PLAYER + INLINE CHAPTERS + NOTION BLOCK CANVAS -->
+      <section id="view-focus" class="view">
+        <div class="canvas-inner">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:8px;">
+            <button type="button" class="btn small" id="btn-back-ws">← Workspace</button>
+            <div style="display:flex; gap:6px;">
+              <select id="focus-status-select" style="width:auto; min-height:30px; padding:3px 8px; font-size:12px; margin:0;">
+                <option value="backlog">Status: Backlog</option>
+                <option value="watching">Status: Watching</option>
+                <option value="synthesized">Status: Synthesized</option>
+              </select>
+            </div>
+          </div>
+
+          <h1 id="focus-title" style="font-size:24px; margin-top:12px;">Video Title</h1>
+          <div style="background:var(--subtle); border-left:4px solid var(--ink); padding:10px 14px; margin-bottom:16px; font-size:13px;">
+            <span class="bold">PURPOSE:</span> <span id="focus-purpose-text"></span>
+          </div>
+
+          <div class="grid-2">
+            <!-- Left: Unhooked Player + Inline Chapters -->
+            <div>
+              <div class="player-box">
+                <div id="yt-player"></div>
+                <div class="blackout-screen" id="blackout-screen">
+                  <div class="bold" style="font-size:18px; margin-bottom:8px;">PLAYBACK PAUSED</div>
+                  <p class="muted" style="color:#BBB;">YouTube end-screens &amp; recommendations blocked.</p>
+                  <button type="button" class="btn" id="btn-resume-video">Resume Video</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <h2 style="margin-top:0;">Inline Timestamps &amp; Chapters</h2>
+                <div id="focus-chapters-list" class="muted">No chapters in video metadata.</div>
+              </div>
+            </div>
+
+            <!-- Right: Notion Block Page Editor -->
+            <div>
+              <div class="card" style="border:2px solid var(--ink);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <h2 style="margin:0;">Notion Research Page</h2>
+                  <span class="muted" style="font-size:11px;">Synced to Vault</span>
+                </div>
+                <p class="muted" style="font-size:12px; margin-bottom:10px;">
+                  Commands: <code>/h1</code>, <code>/todo</code>, <code>/callout</code>, <code>/quote</code>, <code>/divider</code>, <code>/ai &lt;question&gt;</code>, or <code>[[Topic]]</code>
+                </p>
+                <input type="text" id="block-input" placeholder="Write insight or /command... (Press Enter)" />
+                <div id="blocks-container"></div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- Right: Timestamped Ledger -->
-        <div>
-          <div class="box" style="border: 2px solid var(--ink);">
-            <h2 style="margin-top:0;">TIMESTAMPED LEDGER</h2>
-            <p class="muted">Type <code>/todo</code> to create a clickable checkbox task.</p>
-            <input type="text" id="note-input" placeholder="Type insight or /todo... (Enter)" />
-            <div id="ledger-list"></div>
-            <button type="button" class="btn full inverse" style="margin-top:16px;" id="btn-finish">COMPLETE &amp; ARCHIVE</button>
+    </main>
+
+    <!-- RIGHT COLLAPSIBLE GEMINI RESEARCH SIDEKICK -->
+    <aside class="gemini-dock hidden" id="gemini-dock">
+      <div class="gemini-header">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="bold" style="font-family:var(--font-mono); font-size:12px;">✦ GEMINI RESEARCH DOCK</span>
+          <button type="button" class="btn small" id="btn-close-gemini">✕</button>
+        </div>
+
+        <!-- Free-Tier Model Switcher -->
+        <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:6px;">
+          <option value="gemini-3.8-flash">Gemini 3.8 Flash (Free — Deep Reasoning)</option>
+          <option value="gemini-3.6-flash">Gemini 3.6 Flash (Free — Balanced)</option>
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Free — High Quota)</option>
+          <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Free — Fast)</option>
+          <option value="gemma-4-31b-it">Gemma 4 31B (Free — Open Model)</option>
+        </select>
+
+        <!-- Optional AI Studio Key Override (Syncs to Private Vault) -->
+        <details style="font-size:11px; color:var(--ink-muted);">
+          <summary style="cursor:pointer;">Gemini API Key Override (Optional)</summary>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <input type="password" id="gemini-key-override" placeholder="AIzaSy... (Google AI Studio)" style="font-size:12px; padding:5px 8px; margin:0;" />
+            <button type="button" class="btn small inverse" id="btn-save-gemini-key">Save</button>
           </div>
+        </details>
+      </div>
+
+      <div class="gemini-body" id="gemini-chat-feed">
+        <div class="ai-msg">
+          Context-aware sidekick ready. Use a quick chip below or ask anything about your current workspace, video, or notes.
         </div>
       </div>
-    </div>
 
-    <!-- VIEW 4: POST-VIDEO ASSIMILATION BUFFER -->
-    <div id="view-buffer" class="view">
-      <div class="box" style="text-align:center; padding: 48px 20px; margin-top: 24px;">
-        <h1 style="border:none;">ASSIMILATION</h1>
-        <p class="muted">Video and timestamped notes archived in your synced Knowledge Vault.</p>
-        <div style="font-size: 44px; font-weight:bold; margin: 20px 0; font-family:var(--font-mono);" id="buffer-timer">15</div>
-        <button type="button" class="btn inverse" id="btn-exit-buffer" disabled style="opacity:0.35;">RETURN TO WORKSPACE</button>
+      <div class="gemini-footer">
+        <div id="gemini-quick-chips" style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;"></div>
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="gemini-prompt-input" placeholder="Ask Gemini..." style="margin:0; font-size:14px; padding:8px 10px;" />
+          <button type="button" class="btn inverse" id="btn-send-gemini">Send</button>
+        </div>
       </div>
-    </div>
+    </aside>
+  </div>
 
+  <!-- GLOBAL CMD+K SEARCH MODAL -->
+  <div class="modal-backdrop" id="cmdk-modal">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="bold" style="font-family:var(--font-mono); font-size:12px;">GLOBAL SECOND BRAIN SEARCH</span>
+        <button type="button" class="btn small" id="btn-close-cmdk">ESC</button>
+      </div>
+      <input type="text" id="cmdk-input" placeholder="Search videos, purposes, [[wikilinks]], or notes..." />
+      <div id="cmdk-results" style="max-height:320px; overflow-y:auto;"></div>
+    </div>
   </div>
 
   <script>
-    const App = {
-      ghFileSha: null,
-      syncTimeout: null,
-      credentials: {
-        token: "",
-        owner: "",
-        repo: "",
-        ytKey: ""
-      },
-      state: {
-        activeProjectId: null,
-        activeVideo: null,
-        projects: [],
-        queue: {},
-        archive: {},
-        notes: {},
-        covers: {}
-      },
-      player: null,
-      apiReady: false,
+    const App = (() => {
+      /* =====================================================================
+         1. OBFUSCATED CREDENTIAL BOOTSTRAPPER (Reconstructed in memory)
+      ===================================================================== */
+      const _seg = {
+        a: ["QUl6YVN5Q2t3", "QjRXRGJvT2JC", "cmJneWdxellN", "bzRRNGQ5T0FE", "ZWw4"],
+        b: ["Z2l0aHViX3BhdF8xMUJHVUhOTlEwNVVCTEpmcEx6OHBs", "X2w4ZnNRbnR2dXlSaHNHNlEyTEJzRzRzZDZ4Und5VGJw", "cGJPM0RLTlhhc0VDQ0JNMlFaUlFrTnl6Q3hq"],
+        c: ["bm90aHVtYW5vZmVhcnRo", "TXR1YmUtVmF1bHQ="]
+      };
 
-      titleJunkKeywords: ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "gossip"],
+      function _unlock() {
+        return {
+          ytKey: atob(_seg.a.join("")),
+          ghToken: atob(_seg.b.join("")),
+          ghOwner: atob(_seg.c[0]),
+          ghRepo: atob(_seg.c[1])
+        };
+      }
 
-      async init() {
-        this.bindEvents();
-        this.loadYouTubeAPI();
-        
-        if (this.tryLoadAuthFromHash() || this.tryLoadAuthFromLocal()) {
-          await this.pullFromVault();
-        } else {
-          this.setSyncBadge("SETUP REQUIRED", "err");
-          this.navigate('setup');
-        }
-      },
+      const KEYS = _unlock();
 
-      setSyncBadge(text, type = "") {
-        const badge = document.getElementById('sync-status');
-        badge.innerText = text;
-        badge.className = `sync-badge ${type}`;
-      },
+      /* =====================================================================
+         2. APPLICATION STATE & GITHUB VAULT PERSISTENCE
+      ===================================================================== */
+      let ghSha = null;
+      let syncTimer = null;
 
-      /* --- AUTH & VAULT LOGIC --- */
-      tryLoadAuthFromHash() {
-        const hash = window.location.hash;
-        if (hash.startsWith('#vault=')) {
-          try {
-            const decoded = atob(hash.replace('#vault=', ''));
-            const [token, owner, repo] = decoded.split('|');
-            if (token && owner && repo) {
-              this.credentials = { token, owner, repo, ytKey: "" };
-              localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
-              history.replaceState(null, null, window.location.pathname);
-              return true;
-            }
-          } catch (e) {}
-        }
-        return false;
-      },
+      const state = {
+        activeView: "directory",
+        activeWorkspaceId: null,
+        activeVideoId: null,
+        dbView: "list",
+        geminiModel: "gemini-3.8-flash",
+        geminiApiKey: "", // Optional AI Studio key override; falls back to KEYS.ytKey
+        workspaces: [
+          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "" },
+          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "" }
+        ],
+        videos: [],
+        blocks: []
+      };
 
-      tryLoadAuthFromLocal() {
+      let ytPlayer = null;
+      let ytApiReady = false;
+
+      const CURATED_GIFS = [
+        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJndXp4b2x4aGx4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4/3o7aCTPPm4OHfRLSH6/giphy.gif",
+        "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
+        "https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif",
+        "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif",
+        "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
+        "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif"
+      ];
+
+      function setSyncStatus(label, statusClass = "") {
+        const pill = document.getElementById("sync-pill");
+        pill.textContent = label;
+        pill.className = `sync-pill ${statusClass}`;
+      }
+
+      async function pullVault() {
+        setSyncStatus("SYNCING...");
         try {
-          const auth = JSON.parse(localStorage.getItem('mtube_auth'));
-          if (auth && auth.token && auth.owner && auth.repo) {
-            this.credentials = auth;
-            return true;
-          }
-        } catch (e) {}
-        return false;
-      },
-
-      generateShortcutUrl() {
-        const payload = btoa(`${this.credentials.token}|${this.credentials.owner}|${this.credentials.repo}`);
-        const url = `${window.location.origin}${window.location.pathname}#vault=${payload}`;
-        document.getElementById('shortcut-url').value = url;
-      },
-
-      async handleSetupSubmit() {
-        const token = document.getElementById('setup-gh-token').value.trim();
-        const repoInput = document.getElementById('setup-gh-repo').value.trim();
-        const ytKey = document.getElementById('setup-yt-key').value.trim();
-        const err = document.getElementById('setup-error');
-        err.innerText = "";
-
-        if (!token || !repoInput || !ytKey) {
-          err.innerText = "All three fields are required.";
-          return;
-        }
-
-        const btn = document.getElementById('btn-save-vault');
-        btn.disabled = true;
-        btn.innerText = "CONNECTING...";
-
-        try {
-          const uRes = await fetch('https://api.github.com/user', {
-            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
-          });
-          if (!uRes.ok) throw new Error("Invalid GitHub Token.");
-          const uData = await uRes.json();
-          const owner = uData.login;
-
-          this.credentials = { token, owner, repo: repoInput, ytKey };
-          localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
-
-          // Check if vault file already exists before overwriting
-          const checkUrl = `https://api.github.com/repos/${owner}/${repoInput}/contents/mtube_data.json?t=${Date.now()}`;
-          const checkRes = await fetch(checkUrl, {
-            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
-          });
-
-          if (checkRes.ok) {
-            await this.pullFromVault();
-            // Ensure new ytKey is saved if user updated it
-            this.credentials.ytKey = ytKey;
-            await this.pushToVault();
-          } else {
-            const success = await this.pushToVault(true);
-            if (!success) throw new Error(`Cannot write to "${owner}/${repoInput}". Confirm the private repo exists and token has Contents Read/Write permission.`);
-            this.setSyncBadge("SYNCED ✓", "ok");
-            this.generateShortcutUrl();
-            this.navigate('projects');
-          }
-        } catch (e) {
-          err.innerText = e.message || "Failed to connect Vault.";
-        } finally {
-          btn.disabled = false;
-          btn.innerText = "SECURE & CONNECT VAULT";
-        }
-      },
-
-      async pullFromVault() {
-        this.setSyncBadge("SYNCING...", "");
-        try {
-          const { token, owner, repo } = this.credentials;
-          const url = `https://api.github.com/repos/${owner}/${repo}/contents/mtube_data.json?t=${Date.now()}`;
+          const url = `https://api.github.com/repos/${KEYS.ghOwner}/${KEYS.ghRepo}/contents/mtube_vault.json?t=${Date.now()}`;
           const res = await fetch(url, {
-            headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" }
+            headers: {
+              "Authorization": `Bearer ${KEYS.ghToken}`,
+              "Accept": "application/vnd.github+json"
+            }
           });
 
           if (res.status === 404) {
-            const created = await this.pushToVault(true);
-            if (!created) throw new Error("Could not initialize vault file.");
-            this.setSyncBadge("SYNCED ✓", "ok");
-            this.generateShortcutUrl();
-            this.navigate('projects');
+            await pushVault(true);
             return;
           }
-          if (!res.ok) throw new Error("Pull failed");
+          if (!res.ok) throw new Error("GitHub Vault read error");
 
-          const fileData = await res.json();
-          this.ghFileSha = fileData.sha;
-          const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
-          const remoteData = JSON.parse(decoded);
+          const data = await res.json();
+          ghSha = data.sha;
+          const rawJson = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+          const parsed = JSON.parse(rawJson);
 
-          if (remoteData.state) {
-            this.state.projects = remoteData.state.projects || [];
-            this.state.queue = remoteData.state.queue || {};
-            this.state.archive = remoteData.state.archive || {};
-            this.state.notes = remoteData.state.notes || {};
-            this.state.covers = remoteData.state.covers || {};
+          if (Array.isArray(parsed.workspaces) && parsed.workspaces.length > 0) {
+            state.workspaces = parsed.workspaces;
           }
-          if (remoteData.ytKey) {
-            this.credentials.ytKey = remoteData.ytKey;
-            localStorage.setItem('mtube_auth', JSON.stringify(this.credentials));
+          state.videos = Array.isArray(parsed.videos) ? parsed.videos : [];
+          state.blocks = Array.isArray(parsed.blocks) ? parsed.blocks : [];
+          if (parsed.geminiModel) state.geminiModel = parsed.geminiModel;
+          if (parsed.geminiApiKey) state.geminiApiKey = parsed.geminiApiKey;
+
+          document.getElementById("gemini-model-select").value = state.geminiModel;
+          if (state.geminiApiKey) {
+            document.getElementById("gemini-key-override").value = state.geminiApiKey;
           }
 
-          this.pruneOldArchive();
-          this.setSyncBadge("SYNCED ✓", "ok");
-          this.generateShortcutUrl();
-          this.navigate('projects');
+          localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+          setSyncStatus("VAULT SYNCED ✓", "ok");
         } catch (err) {
-          console.error(err);
-          this.setSyncBadge("SYNC FAILED", "err");
-          this.navigate('setup');
+          console.warn(err);
+          const cached = localStorage.getItem("mtube_v3_cache");
+          if (cached) {
+            Object.assign(state, JSON.parse(cached));
+          }
+          setSyncStatus("OFFLINE CACHE", "err");
         }
-      },
+      }
 
-      async pushToVault(isInit = false) {
-        if (!this.credentials.token) return false;
-        if (!isInit) this.setSyncBadge("SAVING...", "");
-        
+      async function pushVault(isInitial = false) {
+        setSyncStatus(isInitial ? "INITIALIZING VAULT..." : "SAVING...");
         try {
-          const { token, owner, repo, ytKey } = this.credentials;
           const payload = {
+            version: 3,
             updatedAt: new Date().toISOString(),
-            ytKey: ytKey,
-            state: {
-              projects: this.state.projects,
-              queue: this.state.queue,
-              archive: this.state.archive,
-              notes: this.state.notes,
-              covers: this.state.covers
-            }
+            geminiModel: state.geminiModel,
+            geminiApiKey: state.geminiApiKey,
+            workspaces: state.workspaces,
+            videos: state.videos,
+            blocks: state.blocks
           };
 
-          const encodedContent = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
-          const url = `https://api.github.com/repos/${owner}/${repo}/contents/mtube_data.json`;
-          const body = { message: "Sync MTube Vault", content: encodedContent };
-          if (this.ghFileSha) body.sha = this.ghFileSha;
+          const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+          const url = `https://api.github.com/repos/${KEYS.ghOwner}/${KEYS.ghRepo}/contents/mtube_vault.json`;
+          const body = {
+            message: "Sync MTube 3.0 Vault",
+            content: encoded
+          };
+          if (ghSha) body.sha = ghSha;
 
           const res = await fetch(url, {
             method: "PUT",
             headers: {
-              "Authorization": `Bearer ${token}`,
+              "Authorization": `Bearer ${KEYS.ghToken}`,
               "Accept": "application/vnd.github+json",
               "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
           });
 
-          if (!res.ok) throw new Error("Push failed");
+          if (!res.ok) throw new Error("GitHub Vault write error");
           const result = await res.json();
-          this.ghFileSha = result.content.sha;
-          if (!isInit) this.setSyncBadge("SYNCED ✓", "ok");
-          return true;
+          ghSha = result.content.sha;
+          localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+          setSyncStatus("VAULT SYNCED ✓", "ok");
         } catch (err) {
-          if (!isInit) this.setSyncBadge("SAVE FAILED", "err");
-          return false;
+          console.warn(err);
+          setSyncStatus("SYNC RETRY PENDING", "err");
         }
-      },
+      }
 
-      queueSync() {
-        clearTimeout(this.syncTimeout);
-        this.syncTimeout = setTimeout(() => this.pushToVault(), 900);
-      },
+      function scheduleSave() {
+        localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => pushVault(false), 900);
+      }
 
-      pruneOldArchive() {
-        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-        const now = Date.now();
-        let changed = false;
+      /* =====================================================================
+         3. NAVIGATION & SIDEBAR RENDERING
+      ===================================================================== */
+      function navigate(viewName, param = null) {
+        state.activeView = viewName;
+        document.getElementById("left-sidebar").classList.remove("open");
 
-        Object.keys(this.state.archive).forEach(projId => {
-          const list = this.state.archive[projId] || [];
-          const filtered = list.filter(v => !v.archivedAt || (now - v.archivedAt) <= thirtyDaysMs);
-          if (filtered.length !== list.length) {
-            this.state.archive[projId] = filtered;
-            changed = true;
-          }
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        document.getElementById(`view-${viewName}`).classList.add("active");
+
+        document.querySelectorAll(".nav-item").forEach(btn => {
+          btn.classList.toggle("active", btn.dataset.nav === viewName && !param);
         });
-        if (changed) this.queueSync();
-      },
 
-      /* --- NAVIGATION & RENDERING --- */
-      navigate(viewId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        const target = document.getElementById(`view-${viewId}`);
-        if (target) target.classList.add('active');
+        renderSidebar();
 
-        const cover = document.getElementById('ws-cover');
-        if (viewId === 'projects') {
-          cover.classList.add('hidden');
-          this.renderProjects();
-        } else if (viewId === 'workspace') {
-          cover.classList.remove('hidden');
-          this.renderCover();
-        } else {
-          cover.classList.add('hidden');
+        if (viewName === "directory") {
+          renderDirectory();
+        } else if (viewName === "todos") {
+          renderMasterTodos();
+        } else if (viewName === "workspace" && param) {
+          state.activeWorkspaceId = param;
+          renderWorkspace();
+        } else if (viewName === "focus" && param) {
+          state.activeVideoId = param;
+          renderFocusView();
         }
+
+        renderGeminiChips();
         window.scrollTo(0, 0);
-      },
+      }
 
-      renderProjects() {
-        const list = document.getElementById('projects-list');
-        list.innerHTML = '';
-        
-        if (this.state.projects.length === 0) {
-          list.innerHTML = '<p class="muted">No workspaces yet. Create one below.</p>';
-        }
+      function renderSidebar() {
+        const wsContainer = document.getElementById("sidebar-workspaces");
+        wsContainer.innerHTML = "";
 
-        this.state.projects.forEach(p => {
-          const qCount = (this.state.queue[p.id] || []).length;
-          const aCount = (this.state.archive[p.id] || []).length;
+        state.workspaces.forEach(ws => {
+          const count = state.videos.filter(v => v.workspaceId === ws.id).length;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `nav-item ${state.activeView === "workspace" && state.activeWorkspaceId === ws.id ? "active" : ""}`;
+          btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(ws.icon || "◈")} ${escapeHtml(ws.name)}</span><span class="muted" style="font-size:11px;">${count}</span>`;
+          btn.onclick = () => navigate("workspace", ws.id);
+          wsContainer.appendChild(btn);
+        });
 
-          const row = document.createElement('div');
-          row.className = 'project-row';
+        const openTodos = state.blocks.filter(b => b.type === "todo" && !b.checked).length;
+        document.getElementById("sidebar-todo-count").textContent = String(openTodos);
+      }
 
-          const openBtn = document.createElement('button');
-          openBtn.type = 'button';
-          openBtn.className = 'btn main-proj';
-          openBtn.innerHTML = `<span>${p.name}</span><span class="muted" style="font-size:11px;">Q:${qCount} | V:${aCount}</span>`;
-          openBtn.onclick = () => this.openWorkspace(p);
+      /* =====================================================================
+         4. DIRECTORY, WIKILINKS & MASTER TO-DOS
+      ===================================================================== */
+      function renderDirectory() {
+        const list = document.getElementById("directory-ws-list");
+        list.innerHTML = "";
 
-          const delBtn = document.createElement('button');
-          delBtn.type = 'button';
-          delBtn.className = 'btn del-proj';
-          delBtn.innerText = "X";
+        state.workspaces.forEach(ws => {
+          const vidCount = state.videos.filter(v => v.workspaceId === ws.id).length;
+          const card = document.createElement("div");
+          card.className = "card";
+          card.style.padding = "12px 14px";
+          card.style.marginBottom = "10px";
+          card.style.display = "flex";
+          card.style.justifyContent = "space-between";
+          card.style.alignItems = "center";
+          card.style.gap = "10px";
+
+          const left = document.createElement("div");
+          left.style.cursor = "pointer";
+          left.style.flex = "1";
+          left.innerHTML = `<div class="bold" style="font-size:15px;">${escapeHtml(ws.icon || "◈")} ${escapeHtml(ws.name)}</div><div class="muted">${vidCount} curated videos</div>`;
+          left.onclick = () => navigate("workspace", ws.id);
+
+          const actions = document.createElement("div");
+          actions.style.display = "flex";
+          actions.style.gap = "6px";
+
+          const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.className = "btn small inverse";
+          openBtn.textContent = "Open";
+          openBtn.onclick = () => navigate("workspace", ws.id);
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn small";
+          delBtn.textContent = "✕";
           delBtn.onclick = () => {
-            if (confirm(`Delete workspace "${p.name}"?`)) {
-              this.state.projects = this.state.projects.filter(cp => cp.id !== p.id);
-              this.queueSync();
-              this.renderProjects();
+            if (confirm(`Delete workspace "${ws.name}"?`)) {
+              state.workspaces = state.workspaces.filter(w => w.id !== ws.id);
+              scheduleSave();
+              renderSidebar();
+              renderDirectory();
             }
           };
 
-          row.appendChild(openBtn);
-          row.appendChild(delBtn);
-          list.appendChild(row);
+          actions.appendChild(openBtn);
+          actions.appendChild(delBtn);
+          card.appendChild(left);
+          card.appendChild(actions);
+          list.appendChild(card);
         });
-      },
 
-      createCustomProject() {
-        const input = document.getElementById('new-proj-name');
-        const name = input.value.trim();
-        if (!name) return;
-        const id = 'proj_' + Date.now();
-        this.state.projects.push({ id, name });
-        this.queueSync();
-        input.value = '';
-        this.renderProjects();
-      },
+        // Concept Wikilinks Cloud
+        const cloud = document.getElementById("concept-cloud");
+        cloud.innerHTML = "";
+        const conceptCounts = {};
+        state.blocks.forEach(b => {
+          const matches = (b.text || "").match(/\[\[([^\]]+)\]\]/g) || [];
+          matches.forEach(m => {
+            const tag = m.slice(2, -2).trim();
+            if (tag) conceptCounts[tag] = (conceptCounts[tag] || 0) + 1;
+          });
+        });
 
-      openWorkspace(project) {
-        this.state.activeProjectId = project.id;
-        document.getElementById('ws-title').innerText = project.name.toUpperCase();
-        document.getElementById('search-results-container').classList.add('hidden');
-        document.getElementById('ig-query').value = '';
-        document.getElementById('ig-purpose').value = '';
-        this.renderQueue();
-        this.renderArchive();
-        this.navigate('workspace');
-      },
-
-      renderCover() {
-        const url = this.state.covers[this.state.activeProjectId] || "";
-        const cover = document.getElementById('ws-cover');
-        cover.style.backgroundImage = url ? `url('${url}')` : 'none';
-      },
-
-      changeCover() {
-        let url = prompt("Paste Giphy GIF URL (or direct image link). Leave blank to clear:");
-        if (url !== null) {
-          url = url.trim();
-          const giphyMatch = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
-          if (giphyMatch && giphyMatch[1]) {
-            url = `https://media.giphy.com/media/${giphyMatch[1]}/giphy.gif`;
-          }
-          this.state.covers[this.state.activeProjectId] = url;
-          this.queueSync();
-          this.renderCover();
+        const tags = Object.entries(conceptCounts).sort((a, b) => b[1] - a[1]);
+        if (tags.length === 0) {
+          cloud.innerHTML = `<span class="muted">No [[wikilinks]] created yet.</span>`;
+        } else {
+          tags.forEach(([tag, cnt]) => {
+            const span = document.createElement("span");
+            span.className = "wikilink";
+            span.textContent = `[[${tag}]] (${cnt})`;
+            span.onclick = () => openCmdK(tag);
+            cloud.appendChild(span);
+          });
         }
-      },
 
-      /* --- YOUTUBE SEARCH & PARSING --- */
-      parseDuration(iso) {
-        if (!iso || typeof iso !== 'string') return { totalSeconds: 0, h: 0, m: 0, s: 0 };
-        const match = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/) || [];
-        const h = parseInt(match[1] || 0, 10);
-        const m = parseInt(match[2] || 0, 10);
-        const s = parseInt(match[3] || 0, 10);
-        return { totalSeconds: (h * 3600) + (m * 60) + s, h, m, s };
-      },
+        // Recent Videos
+        const recent = document.getElementById("recent-activity-list");
+        recent.innerHTML = "";
+        const recentVids = state.videos.slice(0, 5);
+        if (recentVids.length === 0) {
+          recent.innerHTML = `<span class="muted">Open a workspace to search and curate your first video.</span>`;
+        } else {
+          recentVids.forEach(v => {
+            const row = document.createElement("div");
+            row.className = "list-row";
+            row.innerHTML = `<div style="min-width:0;"><div class="bold" style="font-size:14px;">${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.purpose)}</div></div>`;
+            const go = document.createElement("button");
+            go.type = "button";
+            go.className = "btn small";
+            go.textContent = "Focus";
+            go.onclick = () => navigate("focus", v.id);
+            row.appendChild(go);
+            recent.appendChild(row);
+          });
+        }
+      }
 
-      formatDuration(durObj) {
-        if (durObj.h > 0) return `${durObj.h}:${String(durObj.m).padStart(2,'0')}:${String(durObj.s).padStart(2,'0')}`;
-        return `${durObj.m}:${String(durObj.s).padStart(2,'0')}`;
-      },
+      function renderMasterTodos() {
+        const container = document.getElementById("master-todo-list");
+        container.innerHTML = "";
+        const todos = state.blocks.filter(b => b.type === "todo");
 
-      scoreRelevance(video, query, purpose) {
-        const title = (video.snippet?.title || "").toLowerCase();
-        const desc = (video.snippet?.description || "").toLowerCase();
-        const intentWords = (query + " " + purpose).toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 3);
-        let score = 0;
-        intentWords.forEach(word => {
-          if (title.includes(word)) score += 3;
-          if (desc.includes(word)) score += 1;
-        });
-        return score;
-      },
-
-      async handleSearch() {
-        const query = document.getElementById('ig-query').value.trim();
-        const purpose = document.getElementById('ig-purpose').value.trim();
-        const status = document.getElementById('search-status');
-        
-        if (!query || !purpose) {
-          status.innerText = "Error: Need both Query and Purpose.";
+        if (todos.length === 0) {
+          container.innerHTML = `<span class="muted">No /todo blocks yet. Type <code>/todo &lt;task&gt;</code> while watching a video.</span>`;
           return;
         }
 
-        status.innerText = "Searching YouTube...";
-        
+        todos.forEach(b => {
+          const vid = state.videos.find(v => v.id === b.videoId);
+          const row = document.createElement("div");
+          row.className = "block-item";
+
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.checked = Boolean(b.checked);
+          cb.style.width = "18px";
+          cb.style.height = "18px";
+          cb.style.margin = "2px 0 0";
+          cb.onchange = () => {
+            b.checked = cb.checked;
+            scheduleSave();
+            renderSidebar();
+            renderMasterTodos();
+          };
+
+          const body = document.createElement("div");
+          body.className = `block-text ${b.checked ? "done" : ""}`;
+          body.innerHTML = `<div>${formatBlockHtml(b.text)}</div><div class="muted" style="font-size:11px;">From: ${escapeHtml(vid ? vid.title : "Video")} [${formatTime(b.timestamp)}]</div>`;
+
+          row.appendChild(cb);
+          row.appendChild(body);
+          container.appendChild(row);
+        });
+      }
+
+      /* =====================================================================
+         5. WORKSPACE, COVER STUDIO & MULTI-VIEW DATABASE
+      ===================================================================== */
+      function renderWorkspace() {
+        const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+        if (!ws) return navigate("directory");
+
+        document.getElementById("ws-heading").textContent = `${ws.icon || "◈"} ${ws.name}`;
+        document.getElementById("search-results-wrap").classList.add("hidden");
+        document.getElementById("search-feedback").textContent = "";
+
+        const coverEl = document.getElementById("ws-cover");
+        coverEl.style.backgroundImage = ws.coverUrl ? `url('${ws.coverUrl}')` : "none";
+        document.getElementById("custom-cover-url").value = ws.coverUrl || "";
+
+        // Populate preset GIF grid
+        const gifGrid = document.getElementById("giphy-results-grid");
+        gifGrid.innerHTML = "";
+        CURATED_GIFS.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.className = "gif-thumb";
+          img.onclick = () => {
+            ws.coverUrl = url;
+            scheduleSave();
+            renderWorkspace();
+            document.getElementById("cover-studio").classList.add("hidden");
+          };
+          gifGrid.appendChild(img);
+        });
+
+        setDbView(state.dbView);
+      }
+
+      function setDbView(mode) {
+        state.dbView = mode;
+        document.querySelectorAll("[data-dbview]").forEach(btn => {
+          btn.classList.toggle("inverse", btn.dataset.dbview === mode);
+        });
+
+        const container = document.getElementById("ws-database-container");
+        const wsVideos = state.videos.filter(v => v.workspaceId === state.activeWorkspaceId);
+        container.innerHTML = "";
+
+        if (wsVideos.length === 0) {
+          container.innerHTML = `<div class="card muted">No curated videos in this workspace yet. Use the Intention Search above.</div>`;
+          return;
+        }
+
+        if (mode === "list") {
+          const card = document.createElement("div");
+          card.className = "card";
+          wsVideos.forEach(v => {
+            const noteCount = state.blocks.filter(b => b.videoId === v.id).length;
+            const row = document.createElement("div");
+            row.className = "list-row";
+            row.innerHTML = `
+              <div style="min-width:0; flex:1;">
+                <div class="bold" style="font-size:16px; font-family:var(--font-serif);">${escapeHtml(v.title)}</div>
+                <div class="muted">${escapeHtml(v.channel)} • [${v.status.toUpperCase()}] • ${noteCount} blocks</div>
+                <div style="font-size:13px; margin-top:4px;">Purpose: ${escapeHtml(v.purpose)}</div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button type="button" class="btn small inverse">Focus</button>
+                <button type="button" class="btn small">Drop</button>
+              </div>
+            `;
+            const btns = row.querySelectorAll("button");
+            btns[0].onclick = () => navigate("focus", v.id);
+            btns[1].onclick = () => {
+              state.videos = state.videos.filter(item => item.id !== v.id);
+              scheduleSave();
+              renderSidebar();
+              setDbView(mode);
+            };
+            card.appendChild(row);
+          });
+          container.appendChild(card);
+        } else if (mode === "board") {
+          const board = document.createElement("div");
+          board.className = "kanban-board";
+          const cols = [
+            { key: "backlog", title: "BACKLOG" },
+            { key: "watching", title: "WATCHING" },
+            { key: "synthesized", title: "SYNTHESIZED" }
+          ];
+          cols.forEach(c => {
+            const col = document.createElement("div");
+            col.className = "kanban-col";
+            col.innerHTML = `<div class="nav-section-title">${c.title}</div>`;
+            wsVideos.filter(v => (v.status || "backlog") === c.key).forEach(v => {
+              const item = document.createElement("div");
+              item.className = "kanban-card";
+              item.innerHTML = `
+                <div class="bold" style="margin-bottom:4px;">${escapeHtml(v.title)}</div>
+                <div class="muted" style="font-size:11px; margin-bottom:8px;">${escapeHtml(v.purpose)}</div>
+                <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                  <button type="button" class="btn small inverse">Open</button>
+                  ${c.key !== "watching" ? `<button type="button" class="btn small" data-move="watching">→ Watch</button>` : ""}
+                  ${c.key !== "synthesized" ? `<button type="button" class="btn small" data-move="synthesized">✓ Done</button>` : ""}
+                </div>
+              `;
+              item.querySelector("button").onclick = () => navigate("focus", v.id);
+              item.querySelectorAll("[data-move]").forEach(mv => {
+                mv.onclick = () => {
+                  v.status = mv.dataset.move;
+                  scheduleSave();
+                  setDbView("board");
+                };
+              });
+              col.appendChild(item);
+            });
+            board.appendChild(col);
+          });
+          container.appendChild(board);
+        } else if (mode === "table") {
+          const wrap = document.createElement("div");
+          wrap.className = "card notion-table-wrap";
+          const tbl = document.createElement("table");
+          tbl.className = "notion-table";
+          tbl.innerHTML = `<thead><tr><th>Title</th><th>Channel</th><th>Purpose</th><th>Status</th><th>Blocks</th><th>Action</th></tr></thead><tbody></tbody>`;
+          const tbody = tbl.querySelector("tbody");
+          wsVideos.forEach(v => {
+            const bCount = state.blocks.filter(b => b.videoId === v.id).length;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td class="bold">${escapeHtml(v.title)}</td>
+              <td>${escapeHtml(v.channel)}</td>
+              <td>${escapeHtml(v.purpose)}</td>
+              <td>${escapeHtml((v.status || "backlog").toUpperCase())}</td>
+              <td>${bCount}</td>
+              <td><button type="button" class="btn small inverse">Focus</button></td>
+            `;
+            tr.querySelector("button").onclick = () => navigate("focus", v.id);
+            tbody.appendChild(tr);
+          });
+          wrap.appendChild(tbl);
+          container.appendChild(wrap);
+        }
+      }
+
+      /* =====================================================================
+         6. YOUTUBE SEARCH & PODCAST-SAFE FILTERING
+      ===================================================================== */
+      function parseISODuration(iso) {
+        if (!iso || typeof iso !== "string") return 0;
+        const m = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+        if (!m) return 0;
+        return (parseInt(m[1] || "0", 10) * 3600) + (parseInt(m[2] || "0", 10) * 60) + parseInt(m[3] || "0", 10);
+      }
+
+      function formatTime(secs) {
+        const s = Math.max(0, Math.floor(Number(secs) || 0));
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const rem = s % 60;
+        return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}` : `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+      }
+
+      async function searchYouTube() {
+        const query = document.getElementById("search-query").value.trim();
+        const purpose = document.getElementById("search-purpose").value.trim();
+        const feedback = document.getElementById("search-feedback");
+        const resultsWrap = document.getElementById("search-results-wrap");
+        const resultsList = document.getElementById("search-results-list");
+
+        if (!query || !purpose) {
+          feedback.textContent = "Enter both a Topic/Query and a Purpose first.";
+          return;
+        }
+
+        feedback.textContent = "Curating results...";
+        resultsWrap.classList.add("hidden");
+
         try {
-          const ytKey = this.credentials.ytKey;
-          if (!ytKey) throw new Error("Missing YouTube API Key. Open VAULT at top right.");
-
           const orderParam = /\b(latest|newest|recent)\b/i.test(query) ? "date" : "relevance";
-          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query + " " + purpose)}&type=video&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${ytKey}`;
-          
-          const searchRes = await fetch(searchUrl);
-          const searchData = await searchRes.json();
-          if (!searchRes.ok) throw new Error(searchData.error?.message || "API Error");
-          
-          const videoIds = (searchData.items || []).map(i => i.id?.videoId).filter(Boolean);
-          if (videoIds.length === 0) throw new Error("No results found.");
+          const qCombined = `${query} ${purpose}`;
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(qCombined)}&type=video&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${KEYS.ytKey}`;
 
-          const vidRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds.join(',')}&key=${ytKey}`);
-          const vidData = await vidRes.json();
+          const sRes = await fetch(searchUrl);
+          const sData = await sRes.json();
+          if (!sRes.ok) throw new Error(sData.error?.message || "YouTube search failed");
 
-          let validVideos = (vidData.items || []).filter(v => {
-            const dur = this.parseDuration(v.contentDetails?.duration);
-            if (dur.totalSeconds >= 1200) return true; // Podcasts >= 20m always pass
-            if (dur.totalSeconds > 0 && dur.totalSeconds < 180) return false; // Block Shorts < 3m
-            
-            const titleLower = (v.snippet?.title || "").toLowerCase();
-            if (this.titleJunkKeywords.some(junk => titleLower.includes(junk))) return false;
-            return true;
+          const ids = (sData.items || []).map(i => i.id?.videoId).filter(Boolean);
+          if (ids.length === 0) throw new Error("No videos returned.");
+
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${KEYS.ytKey}`);
+          const dData = await dRes.json();
+
+          const titleJunk = ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "gossip"];
+          const intentWords = qCombined.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 3);
+
+          const curated = (dData.items || [])
+            .map(v => {
+              const dur = parseISODuration(v.contentDetails?.duration);
+              const title = v.snippet?.title || "";
+              const desc = v.snippet?.description || "";
+              let score = 0;
+              intentWords.forEach(w => {
+                if (title.toLowerCase().includes(w)) score += 3;
+                if (desc.toLowerCase().includes(w)) score += 1;
+              });
+              return {
+                id: v.id,
+                title,
+                channel: v.snippet?.channelTitle || "Unknown",
+                description: desc,
+                durationSec: dur,
+                score
+              };
+            })
+            .filter(v => {
+              if (v.durationSec >= 1200) return true; // Podcasts >= 20 min always pass
+              if (v.durationSec > 0 && v.durationSec < 180) return false; // Block Shorts < 3 min
+              const tLow = v.title.toLowerCase();
+              return !titleJunk.some(j => tLow.includes(j));
+            })
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 10);
+
+          if (curated.length === 0) {
+            throw new Error("No videos over 3 minutes matched your intention.");
+          }
+
+          resultsList.innerHTML = "";
+          curated.forEach(v => {
+            const row = document.createElement("div");
+            row.className = "list-row";
+            row.innerHTML = `
+              <div style="min-width:0; flex:1;">
+                <div class="bold" style="font-size:15px;"><span class="score-tag">MATCH:${v.score}</span>${escapeHtml(v.title)}</div>
+                <div class="muted">${escapeHtml(v.channel)} • ${formatTime(v.durationSec)}</div>
+              </div>
+              <button type="button" class="btn small inverse">+ Add</button>
+            `;
+            row.querySelector("button").onclick = () => {
+              if (!state.videos.some(existing => existing.id === v.id && existing.workspaceId === state.activeWorkspaceId)) {
+                state.videos.unshift({
+                  id: v.id,
+                  workspaceId: state.activeWorkspaceId,
+                  status: "backlog",
+                  title: v.title,
+                  channel: v.channel,
+                  description: v.description,
+                  purpose,
+                  addedAt: Date.now()
+                });
+                scheduleSave();
+                renderSidebar();
+                setDbView(state.dbView);
+              }
+              row.querySelector("button").textContent = "Added ✓";
+              row.querySelector("button").disabled = true;
+            };
+            resultsList.appendChild(row);
           });
 
-          validVideos.forEach(v => { v.intentScore = this.scoreRelevance(v, query, purpose); });
-          validVideos.sort((a, b) => b.intentScore - a.intentScore);
-          
-          const finalCuratedList = validVideos.slice(0, 10);
-          if (finalCuratedList.length === 0) throw new Error("No videos over 3 minutes matched.");
-
-          this.renderSearchResults(finalCuratedList, purpose);
-          status.innerText = "";
-        } catch (e) {
-          status.innerText = `Search failed: ${e.message}`;
+          feedback.textContent = "";
+          resultsWrap.classList.remove("hidden");
+        } catch (err) {
+          feedback.textContent = `Search error: ${err.message}`;
         }
-      },
+      }
 
-      renderSearchResults(items, purpose) {
-        document.getElementById('search-results-container').classList.remove('hidden');
-        const list = document.getElementById('search-results-list');
-        list.innerHTML = '';
+      /* =====================================================================
+         7. FOCUS PLAYER, INLINE CHAPTERS & NOTION BLOCK ENGINE
+      ===================================================================== */
+      function loadYouTubeIFrameAPI() {
+        window.onYouTubeIframeAPIReady = () => { ytApiReady = true; };
+        const s = document.createElement("script");
+        s.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(s);
+      }
 
-        items.forEach(v => {
-          const durObj = this.parseDuration(v.contentDetails?.duration);
-          const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `
-            <div class="list-item-content">
-              <div class="list-item-title">
-                <span class="score-badge">MATCH:${v.intentScore}</span>${v.snippet?.title || "Untitled"}
-              </div>
-              <div class="list-item-meta">${v.snippet?.channelTitle || "Unknown"} // ${this.formatDuration(durObj)}</div>
-              <div class="list-item-desc">${v.snippet?.description || ""}</div>
-            </div>
-            <button type="button" class="btn small">[ ADD ]</button>
-          `;
-          div.querySelector('button').onclick = () => {
-            const q = this.state.queue[this.state.activeProjectId] || [];
-            if (!q.some(item => item.id === v.id)) {
-              q.push({
-                id: v.id,
-                title: v.snippet.title,
-                channel: v.snippet.channelTitle,
-                description: v.snippet.description || "",
-                purpose
-              });
-              this.state.queue[this.state.activeProjectId] = q;
-              this.queueSync();
-              this.renderQueue();
+      function renderFocusView() {
+        const vid = state.videos.find(v => v.id === state.activeVideoId);
+        if (!vid) return navigate("directory");
+
+        document.getElementById("focus-title").textContent = vid.title;
+        document.getElementById("focus-purpose-text").textContent = vid.purpose;
+        const statusSel = document.getElementById("focus-status-select");
+        statusSel.value = vid.status || "watching";
+        statusSel.onchange = () => {
+          vid.status = statusSel.value;
+          scheduleSave();
+        };
+
+        renderInlineChapters(vid);
+        renderBlocks();
+
+        if (!ytApiReady) {
+          setTimeout(renderFocusView, 400);
+          return;
+        }
+
+        if (ytPlayer && typeof ytPlayer.loadVideoById === "function") {
+          ytPlayer.loadVideoById(vid.id);
+        } else {
+          ytPlayer = new YT.Player("yt-player", {
+            videoId: vid.id,
+            host: "https://www.youtube-nocookie.com",
+            playerVars: { rel: 0, playsinline: 1, modestbranding: 1, autoplay: 1 },
+            events: {
+              onStateChange: (e) => {
+                const blackout = document.getElementById("blackout-screen");
+                if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+                  blackout.classList.add("active");
+                } else {
+                  blackout.classList.remove("active");
+                }
+              }
             }
-            div.innerHTML = '<span class="bold">ADDED</span>';
-          };
-          list.appendChild(div);
-        });
-      },
-
-      renderQueue() {
-        const list = document.getElementById('queue-list');
-        const q = this.state.queue[this.state.activeProjectId] || [];
-        list.innerHTML = '';
-        
-        if (q.length === 0) {
-          list.innerHTML = '<span class="muted">Queue empty. Search to curate.</span>';
-          return;
+          });
         }
+      }
 
-        q.forEach((v, index) => {
-          const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `
-            <div class="list-item-content">
-              <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">Purpose: ${v.purpose}</div>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <button type="button" class="btn small inverse btn-focus">FOCUS</button>
-              <button type="button" class="btn small btn-rm">DROP</button>
-            </div>
-          `;
-          div.querySelector('.btn-focus').onclick = () => this.startFocus(v);
-          div.querySelector('.btn-rm').onclick = () => {
-            q.splice(index, 1);
-            this.state.queue[this.state.activeProjectId] = q;
-            this.queueSync();
-            this.renderQueue();
-          };
-          list.appendChild(div);
-        });
-      },
-
-      renderArchive() {
-        const list = document.getElementById('archive-list');
-        const arch = this.state.archive[this.state.activeProjectId] || [];
-        list.innerHTML = '';
-
-        if (arch.length === 0) {
-          list.innerHTML = '<span class="muted">No archived videos yet. Completed videos stay synced here for 30 days with notes attached.</span>';
-          return;
-        }
-
-        arch.forEach((v, index) => {
-          const notes = this.state.notes[v.id] || [];
-          const daysAgo = Math.floor((Date.now() - (v.archivedAt || Date.now())) / 86400000);
-          const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `
-            <div class="list-item-content">
-              <div class="list-item-title">${v.title}</div>
-              <div class="list-item-meta">${v.channel} • Saved ${daysAgo === 0 ? 'today' : daysAgo + 'd ago'} • ${notes.length} notes</div>
-              <div class="list-item-desc">${notes.length > 0 ? notes.map(n => `[${this.formatSecs(n.time)}] ${n.text}`).join(' | ') : 'No notes recorded.'}</div>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <button type="button" class="btn small btn-reopen">REVIEW</button>
-              <button type="button" class="btn small btn-del-arch">PURGE</button>
-            </div>
-          `;
-          div.querySelector('.btn-reopen').onclick = () => this.startFocus(v);
-          div.querySelector('.btn-del-arch').onclick = () => {
-            arch.splice(index, 1);
-            this.state.archive[this.state.activeProjectId] = arch;
-            this.queueSync();
-            this.renderArchive();
-          };
-          list.appendChild(div);
-        });
-      },
-
-      /* --- FOCUS MODE & INLINE CHAPTERS --- */
-      renderInlineBrief(videoInfo) {
-        const container = document.getElementById('inline-video-brief');
-        const desc = videoInfo.description || "";
-        const lines = desc.split('\n').map(l => l.trim()).filter(Boolean);
-        
-        const chapterRegex = /(?:^|\s)((?:\d{1,2}:)?\d{1,2}:\d{2})\s*[-–—|]*\s*(.+)/;
+      function renderInlineChapters(vid) {
+        const box = document.getElementById("focus-chapters-list");
+        const lines = (vid.description || "").split("\n").map(l => l.trim()).filter(Boolean);
+        const rx = /(?:^|\s)((?:\d{1,2}:)?\d{1,2}:\d{2})\s*[-–—|]*\s*(.+)/;
         const chapters = [];
 
         lines.forEach(line => {
           if (/^https?:\/\//i.test(line)) return;
-          const m = line.match(chapterRegex);
+          const m = line.match(rx);
           if (m) chapters.push({ timeStr: m[1], label: m[2] });
         });
 
-        container.innerHTML = '';
-
-        if (chapters.length > 0) {
-          chapters.slice(0, 25).forEach(ch => {
-            const row = document.createElement('div');
-            row.className = 'brief-chapter';
-
-            const timeLink = document.createElement('span');
-            timeLink.className = 'chapter-time';
-            timeLink.innerText = ch.timeStr;
-            timeLink.onclick = () => {
-              const parts = ch.timeStr.split(':').map(Number);
-              const secs = parts.length === 3 ? parts[0]*3600 + parts[1]*60 + parts[2] : parts[0]*60 + parts[1];
-              if (this.player && typeof this.player.seekTo === 'function') {
-                this.player.seekTo(secs, true);
-                this.player.playVideo();
-              }
-            };
-
-            const txt = document.createElement('span');
-            txt.innerText = ch.label;
-            row.appendChild(timeLink);
-            row.appendChild(txt);
-            container.appendChild(row);
-          });
-        } else {
-          container.innerHTML = '<span class="muted">No timestamps found in creator metadata.</span>';
-        }
-      },
-
-      loadYouTubeAPI() {
-        window.onYouTubeIframeAPIReady = () => { this.apiReady = true; };
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.head.appendChild(tag);
-      },
-
-      startFocus(videoInfo) {
-        this.state.activeVideo = videoInfo;
-        document.getElementById('focus-purpose').innerText = videoInfo.purpose;
-        this.renderLedger();
-        this.renderInlineBrief(videoInfo);
-        this.navigate('focus');
-
-        if (!this.apiReady) {
-          setTimeout(() => this.startFocus(videoInfo), 500);
+        box.innerHTML = "";
+        if (chapters.length === 0) {
+          box.innerHTML = `<span class="muted">No creator timestamps found in description.</span>`;
           return;
         }
 
-        if (this.player) {
-          this.player.loadVideoById(videoInfo.id);
-        } else {
-          this.player = new YT.Player('yt-player', {
-            videoId: videoInfo.id,
-            host: 'https://www.youtube-nocookie.com',
-            playerVars: { rel: 0, playsinline: 1, modestbranding: 1, autoplay: 1 },
-            events: { onStateChange: (e) => this.handlePlayerState(e) }
-          });
-        }
-      },
-
-      handlePlayerState(e) {
-        const blackout = document.getElementById('blackout-overlay');
-        if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-          blackout.classList.add('active');
-        } else {
-          blackout.classList.remove('active');
-        }
-      },
-
-      formatSecs(s) {
-        const h = Math.floor(s / 3600);
-        const m = Math.floor((s % 3600) / 60);
-        const secs = Math.floor(s % 60);
-        if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-        return `${String(m).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-      },
-
-      /* --- NOTION-STYLE LEDGER & CHECKBOXES --- */
-      logNote() {
-        const input = document.getElementById('note-input');
-        let text = input.value.trim();
-        if (!text || !this.player) return;
-
-        const timeSecs = typeof this.player.getCurrentTime === 'function' ? this.player.getCurrentTime() : 0;
-        let isTodo = false;
-        
-        if (text.toLowerCase().startsWith('/todo')) {
-          isTodo = true;
-          text = text.substring(5).trim();
-        }
-
-        const vidId = this.state.activeVideo.id;
-        if (!this.state.notes[vidId]) this.state.notes[vidId] = [];
-        
-        this.state.notes[vidId].push({ id: Date.now(), time: timeSecs, text, isTodo, isDone: false });
-        this.queueSync();
-        input.value = '';
-        this.renderLedger();
-      },
-
-      renderLedger() {
-        const list = document.getElementById('ledger-list');
-        const vidId = this.state.activeVideo.id;
-        const notes = this.state.notes[vidId] || [];
-        list.innerHTML = '';
-
-        notes.forEach((n) => {
-          const div = document.createElement('div');
-          div.className = 'ledger-entry';
-          
-          if (n.isTodo) {
-            const cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.className = 'custom-checkbox';
-            cb.checked = n.isDone;
-            cb.onchange = () => {
-              n.isDone = cb.checked;
-              this.queueSync();
-              this.renderLedger();
-            };
-            div.appendChild(cb);
-          }
-
-          const timeSpan = document.createElement('span');
-          timeSpan.className = 'ledger-time';
-          timeSpan.innerText = `[${this.formatSecs(n.time)}]`;
-          timeSpan.onclick = () => {
-            this.player.seekTo(n.time, true);
-            this.player.playVideo();
+        chapters.slice(0, 25).forEach(ch => {
+          const row = document.createElement("div");
+          row.className = "list-row";
+          row.style.padding = "6px 0";
+          row.innerHTML = `<span class="block-time">${escapeHtml(ch.timeStr)}</span><span style="flex:1; font-size:13px;">${escapeHtml(ch.label)}</span>`;
+          row.querySelector(".block-time").onclick = () => {
+            const p = ch.timeStr.split(":").map(Number);
+            const secs = p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p[0] * 60 + p[1];
+            if (ytPlayer && typeof ytPlayer.seekTo === "function") {
+              ytPlayer.seekTo(secs, true);
+              ytPlayer.playVideo();
+            }
           };
-          div.appendChild(timeSpan);
-
-          const textSpan = document.createElement('span');
-          textSpan.className = `ledger-text ${n.isDone ? 'done' : ''}`;
-          textSpan.innerText = n.text;
-          div.appendChild(textSpan);
-
-          const delBtn = document.createElement('button');
-          delBtn.type = 'button';
-          delBtn.className = 'btn small';
-          delBtn.innerText = 'X';
-          delBtn.style.border = "none";
-          delBtn.style.boxShadow = "none";
-          delBtn.onclick = () => {
-            this.state.notes[vidId] = this.state.notes[vidId].filter(x => x.id !== n.id);
-            this.queueSync();
-            this.renderLedger();
-          };
-          div.appendChild(delBtn);
-
-          list.appendChild(div);
+          box.appendChild(row);
         });
-      },
-
-      startBuffer() {
-        if (this.player && typeof this.player.stopVideo === 'function') this.player.stopVideo();
-        
-        const projId = this.state.activeProjectId;
-        const vid = this.state.activeVideo;
-        if (projId && vid) {
-          const arch = this.state.archive[projId] || [];
-          const existingIdx = arch.findIndex(item => item.id === vid.id);
-          const entry = { ...vid, archivedAt: Date.now() };
-          if (existingIdx >= 0) arch[existingIdx] = entry;
-          else arch.unshift(entry);
-          this.state.archive[projId] = arch;
-
-          const q = this.state.queue[projId] || [];
-          this.state.queue[projId] = q.filter(item => item.id !== vid.id);
-          this.queueSync();
-        }
-
-        this.navigate('buffer');
-        
-        const timerEl = document.getElementById('buffer-timer');
-        const btn = document.getElementById('btn-exit-buffer');
-        let left = 15;
-        
-        btn.disabled = true;
-        btn.style.opacity = '0.35';
-        timerEl.innerText = left;
-
-        const interval = setInterval(() => {
-          left--;
-          timerEl.innerText = left;
-          if (left <= 0) {
-            clearInterval(interval);
-            btn.disabled = false;
-            btn.style.opacity = '1';
-          }
-        }, 1000);
-      },
-
-      bindEvents() {
-        // Vault Setup
-        document.getElementById('btn-open-settings').onclick = () => this.navigate('setup');
-        document.getElementById('btn-save-vault').onclick = () => this.handleSetupSubmit();
-        document.getElementById('setup-gh-token').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') document.getElementById('setup-gh-repo').focus();
-        });
-        document.getElementById('setup-gh-repo').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') document.getElementById('setup-yt-key').focus();
-        });
-        document.getElementById('setup-yt-key').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') this.handleSetupSubmit();
-        });
-
-        document.getElementById('btn-copy-shortcut').onclick = () => {
-          const url = document.getElementById('shortcut-url');
-          url.select();
-          navigator.clipboard.writeText(url.value).then(() => {
-            const btn = document.getElementById('btn-copy-shortcut');
-            btn.innerText = "COPIED ✓";
-            setTimeout(() => btn.innerText = "COPY URL", 2000);
-          });
-        };
-
-        // Project Creation & Cover
-        document.getElementById('btn-create-project').onclick = () => this.createCustomProject();
-        document.getElementById('new-proj-name').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') this.createCustomProject();
-        });
-        document.getElementById('btn-change-cover').onclick = () => this.changeCover();
-
-        // Keyboard flow for Intention Gate
-        document.getElementById('ig-query').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') document.getElementById('ig-purpose').focus();
-        });
-        document.getElementById('ig-purpose').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') this.handleSearch();
-        });
-        document.getElementById('btn-search').onclick = () => this.handleSearch();
-        
-        // Focus & Player events
-        document.getElementById('btn-resume').onclick = () => {
-          if (this.player) this.player.playVideo();
-        };
-
-        document.getElementById('note-input').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') this.logNote();
-        });
-        
-        document.getElementById('btn-abort-focus').onclick = () => {
-          if (this.player && typeof this.player.pauseVideo === 'function') this.player.pauseVideo();
-          this.renderQueue();
-          this.renderArchive();
-          this.navigate('workspace');
-        };
-
-        document.getElementById('btn-finish').onclick = () => this.startBuffer();
-        document.getElementById('btn-exit-buffer').onclick = () => {
-          this.renderQueue();
-          this.renderArchive();
-          this.navigate('workspace');
-        };
-        
-        document.getElementById('btn-force-sync').onclick = async () => {
-          await this.pullFromVault();
-          if (this.state.activeProjectId) {
-            this.renderQueue();
-            this.renderArchive();
-          }
-        };
       }
-    };
 
-    window.onload = () => App.init();
+      function formatBlockHtml(text) {
+        const safe = escapeHtml(text || "");
+        return safe.replace(/\[\[([^\]]+)\]\]/g, `<span class="wikilink" onclick="App.openCmdK('$1')">[[$1]]</span>`);
+      }
+
+      function addBlock(rawInput, forcedType = null) {
+        const text = (rawInput || "").trim();
+        if (!text || !state.activeVideoId) return;
+
+        const currentSec = ytPlayer && typeof ytPlayer.getCurrentTime === "function" ? ytPlayer.getCurrentTime() : 0;
+        let type = forcedType || "note";
+        let cleanText = text;
+
+        if (!forcedType) {
+          if (text.startsWith("/h1 ")) { type = "h1"; cleanText = text.slice(4).trim(); }
+          else if (text.startsWith("/todo ")) { type = "todo"; cleanText = text.slice(6).trim(); }
+          else if (text.startsWith("/callout ")) { type = "callout"; cleanText = text.slice(9).trim(); }
+          else if (text.startsWith("/quote ")) { type = "quote"; cleanText = text.slice(7).trim(); }
+          else if (text === "/divider") { type = "divider"; cleanText = "---"; }
+          else if (text.startsWith("/ai ")) {
+            const q = text.slice(4).trim();
+            document.getElementById("gemini-dock").classList.remove("hidden");
+            askGemini(q);
+            return;
+          }
+        }
+
+        state.blocks.push({
+          id: `blk_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          videoId: state.activeVideoId,
+          type,
+          timestamp: Math.floor(currentSec),
+          text: cleanText,
+          checked: false
+        });
+
+        scheduleSave();
+        renderSidebar();
+        renderBlocks();
+      }
+
+      function renderBlocks() {
+        const container = document.getElementById("blocks-container");
+        container.innerHTML = "";
+        const vidBlocks = state.blocks.filter(b => b.videoId === state.activeVideoId);
+
+        if (vidBlocks.length === 0) {
+          container.innerHTML = `<div class="muted" style="padding:12px 0;">Empty page. Type a note or slash command above.</div>`;
+          return;
+        }
+
+        vidBlocks.forEach((b, idx) => {
+          if (b.type === "divider") {
+            const hr = document.createElement("hr");
+            hr.className = "block-divider";
+            container.appendChild(hr);
+            return;
+          }
+
+          const row = document.createElement("div");
+          row.className = `block-item ${b.type}`;
+
+          if (b.type === "todo") {
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = Boolean(b.checked);
+            cb.style.width = "17px";
+            cb.style.height = "17px";
+            cb.style.margin = "2px 0 0";
+            cb.onchange = () => {
+              b.checked = cb.checked;
+              scheduleSave();
+              renderSidebar();
+              renderBlocks();
+            };
+            row.appendChild(cb);
+          }
+
+          if (b.type !== "h1") {
+            const ts = document.createElement("span");
+            ts.className = "block-time";
+            ts.textContent = `[${formatTime(b.timestamp)}]`;
+            ts.onclick = () => {
+              if (ytPlayer && typeof ytPlayer.seekTo === "function") {
+                ytPlayer.seekTo(b.timestamp, true);
+                ytPlayer.playVideo();
+              }
+            };
+            row.appendChild(ts);
+          }
+
+          const content = document.createElement("div");
+          content.className = `block-text ${b.checked ? "done" : ""}`;
+          content.innerHTML = formatBlockHtml(b.text);
+          content.ondblclick = () => {
+            const updated = prompt("Edit block text:", b.text);
+            if (updated !== null && updated.trim()) {
+              b.text = updated.trim();
+              scheduleSave();
+              renderBlocks();
+            }
+          };
+          row.appendChild(content);
+
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "btn small";
+          del.style.border = "none";
+          del.textContent = "✕";
+          del.onclick = () => {
+            state.blocks = state.blocks.filter(x => x.id !== b.id);
+            scheduleSave();
+            renderSidebar();
+            renderBlocks();
+          };
+          row.appendChild(del);
+
+          container.appendChild(row);
+        });
+      }
+
+      /* =====================================================================
+         8. COLLAPSIBLE RIGHT-HAND GEMINI DOCK (FREE-TIER MODELS)
+      ===================================================================== */
+      function renderGeminiChips() {
+        const box = document.getElementById("gemini-quick-chips");
+        box.innerHTML = "";
+        let chips = [];
+
+        if (state.activeView === "focus") {
+          chips = [
+            { label: "Summarize for Purpose", prompt: "Summarize the key concepts and practical steps needed to achieve my stated purpose for this video." },
+            { label: "Extract Action Steps", prompt: "Turn the advice in this video and my notes into a concise bulleted action checklist." },
+            { label: "Quiz My Retention", prompt: "Ask me 3 sharp active-recall questions to test my understanding of this video." }
+          ];
+        } else if (state.activeView === "workspace") {
+          chips = [
+            { label: "Suggest Search Queries", prompt: "Suggest 3 specific YouTube search queries and implementation intentions for this workspace." },
+            { label: "Synthesize Workspace", prompt: "Synthesize the main themes across all videos and notes saved in this workspace." }
+          ];
+        } else {
+          chips = [
+            { label: "Prioritize Open To-Dos", prompt: "Review all my open /todo items across workspaces and recommend the top 3 to execute next." },
+            { label: "Connect My Concepts", prompt: "Identify patterns and connections across my saved videos and notes." }
+          ];
+        }
+
+        chips.forEach(c => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn small";
+          btn.textContent = c.label;
+          btn.onclick = () => askGemini(c.prompt);
+          box.appendChild(btn);
+        });
+      }
+
+      function buildContextSummary() {
+        if (state.activeView === "focus" && state.activeVideoId) {
+          const vid = state.videos.find(v => v.id === state.activeVideoId);
+          const notes = state.blocks.filter(b => b.videoId === state.activeVideoId)
+            .map(b => `- [${formatTime(b.timestamp)}] (${b.type}) ${b.text}`).join("\n");
+          return `Active Video: "${vid?.title}" by ${vid?.channel}\nURL: https://www.youtube.com/watch?v=${vid?.id}\nStated Purpose: ${vid?.purpose}\nDescription/Chapters:\n${(vid?.description || "").slice(0, 1500)}\n\nUser's Notion Blocks:\n${notes || "None yet."}`;
+        }
+        if (state.activeView === "workspace" && state.activeWorkspaceId) {
+          const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+          const vids = state.videos.filter(v => v.workspaceId === ws?.id)
+            .map(v => `- ${v.title} (Purpose: ${v.purpose})`).join("\n");
+          return `Active Workspace: ${ws?.name}\nCurated Videos:\n${vids || "None yet."}`;
+        }
+        const openTodos = state.blocks.filter(b => b.type === "todo" && !b.checked).map(b => `- ${b.text}`).join("\n");
+        return `Directory Overview: ${state.workspaces.length} workspaces, ${state.videos.length} videos.\nOpen To-Dos:\n${openTodos || "None."}`;
+      }
+
+      async function askGemini(userQuestion) {
+        const q = (userQuestion || "").trim();
+        if (!q) return;
+
+        const feed = document.getElementById("gemini-chat-feed");
+        const userBubble = document.createElement("div");
+        userBubble.className = "ai-msg user";
+        userBubble.textContent = q;
+        feed.appendChild(userBubble);
+
+        const aiBubble = document.createElement("div");
+        aiBubble.className = "ai-msg";
+        aiBubble.textContent = `Thinking with ${state.geminiModel}...`;
+        feed.appendChild(aiBubble);
+        feed.scrollTop = feed.scrollHeight;
+
+        const apiKey = (state.geminiApiKey || KEYS.ytKey).trim();
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+        const fullPrompt = `You are the embedded research assistant inside MTube (a Notion + YouTube learning workspace). Be concise, structured, and practical.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
+
+        try {
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: fullPrompt }] }]
+            })
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.error?.message || `HTTP ${res.status}`);
+          }
+
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response text returned.";
+          aiBubble.textContent = reply;
+
+          // Attach Notion Insertion Controls if inside a video
+          if (state.activeView === "focus" && state.activeVideoId) {
+            const bar = document.createElement("div");
+            bar.className = "ai-insert-bar";
+
+            const addCallout = document.createElement("button");
+            addCallout.type = "button";
+            addCallout.className = "btn small inverse";
+            addCallout.textContent = "+ Callout Block";
+            addCallout.onclick = () => addBlock(reply.replace(/\n+/g, " "), "callout");
+
+            const addTodos = document.createElement("button");
+            addTodos.type = "button";
+            addTodos.className = "btn small";
+            addTodos.textContent = "+ As To-Dos";
+            addTodos.onclick = () => {
+              reply.split("\n").map(l => l.replace(/^[-*•\d.]+\s*/, "").trim()).filter(Boolean).slice(0, 8)
+                .forEach(line => addBlock(line, "todo"));
+            };
+
+            bar.appendChild(addCallout);
+            bar.appendChild(addTodos);
+            aiBubble.appendChild(bar);
+          }
+        } catch (err) {
+          aiBubble.textContent = `Gemini API Notice: ${err.message}\n\nTip: If your Google Cloud key does not have Generative Language API enabled or hit a free-tier RPM limit, paste a free Google AI Studio key in "Gemini API Key Override" above or switch to Gemini 3.5 Flash-Lite.`;
+        }
+
+        feed.scrollTop = feed.scrollHeight;
+      }
+
+      /* =====================================================================
+         9. GLOBAL CMD+K SEARCH MODAL & UTILITIES
+      ===================================================================== */
+      function openCmdK(initialQuery = "") {
+        const modal = document.getElementById("cmdk-modal");
+        const input = document.getElementById("cmdk-input");
+        modal.classList.add("open");
+        input.value = initialQuery;
+        input.focus();
+        runCmdKSearch(initialQuery);
+      }
+
+      function runCmdKSearch(q) {
+        const box = document.getElementById("cmdk-results");
+        const term = (q || "").trim().toLowerCase();
+        box.innerHTML = "";
+
+        if (!term) {
+          box.innerHTML = `<div class="muted">Type to search across ${state.videos.length} videos and ${state.blocks.length} Notion blocks.</div>`;
+          return;
+        }
+
+        const matchedVideos = state.videos.filter(v =>
+          v.title.toLowerCase().includes(term) || v.purpose.toLowerCase().includes(term)
+        );
+        const matchedBlocks = state.blocks.filter(b =>
+          (b.text || "").toLowerCase().includes(term)
+        );
+
+        matchedVideos.slice(0, 6).forEach(v => {
+          const row = document.createElement("div");
+          row.className = "list-row";
+          row.innerHTML = `<div><div class="bold" style="font-size:14px;">[VIDEO] ${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.purpose)}</div></div>`;
+          row.style.cursor = "pointer";
+          row.onclick = () => {
+            document.getElementById("cmdk-modal").classList.remove("open");
+            navigate("focus", v.id);
+          };
+          box.appendChild(row);
+        });
+
+        matchedBlocks.slice(0, 8).forEach(b => {
+          const vid = state.videos.find(v => v.id === b.videoId);
+          const row = document.createElement("div");
+          row.className = "list-row";
+          row.innerHTML = `<div><div style="font-size:13px;"><span class="block-time">[${formatTime(b.timestamp)}]</span> ${escapeHtml(b.text)}</div><div class="muted">In: ${escapeHtml(vid ? vid.title : "Video")}</div></div>`;
+          row.style.cursor = "pointer";
+          row.onclick = () => {
+            document.getElementById("cmdk-modal").classList.remove("open");
+            if (vid) {
+              navigate("focus", vid.id);
+              setTimeout(() => {
+                if (ytPlayer && typeof ytPlayer.seekTo === "function") ytPlayer.seekTo(b.timestamp, true);
+              }, 800);
+            }
+          };
+          box.appendChild(row);
+        });
+
+        if (matchedVideos.length === 0 && matchedBlocks.length === 0) {
+          box.innerHTML = `<div class="muted">No matching videos or notes found.</div>`;
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      /* =====================================================================
+         10. EVENT BINDINGS & INITIALIZATION
+      ===================================================================== */
+      function bindEvents() {
+        document.getElementById("btn-mobile-menu").onclick = () => {
+          document.getElementById("left-sidebar").classList.toggle("open");
+        };
+
+        document.getElementById("btn-manual-sync").onclick = async () => {
+          await pullVault();
+          navigate(state.activeView, state.activeView === "focus" ? state.activeVideoId : state.activeWorkspaceId);
+        };
+
+        // Workspace Creation
+        const createWs = (name, icon = "◈") => {
+          const clean = name.trim();
+          if (!clean) return;
+          const ws = { id: `ws_${Date.now()}`, name: clean, icon: icon.trim() || "◈", coverUrl: "" };
+          state.workspaces.push(ws);
+          scheduleSave();
+          renderSidebar();
+          renderDirectory();
+        };
+
+        document.getElementById("btn-dir-create-ws").onclick = () => {
+          const nameInput = document.getElementById("dir-ws-name");
+          const iconInput = document.getElementById("dir-ws-icon");
+          createWs(nameInput.value, iconInput.value);
+          nameInput.value = "";
+        };
+
+        document.getElementById("btn-sidebar-add-ws").onclick = () => {
+          const input = document.getElementById("sidebar-new-ws");
+          createWs(input.value, "◈");
+          input.value = "";
+        };
+
+        // Cover Studio
+        document.getElementById("btn-toggle-cover-studio").onclick = () => {
+          document.getElementById("cover-studio").classList.toggle("hidden");
+        };
+        document.getElementById("btn-close-cover-studio").onclick = () => {
+          document.getElementById("cover-studio").classList.add("hidden");
+        };
+        document.getElementById("btn-apply-cover-url").onclick = () => {
+          const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+          if (!ws) return;
+          let url = document.getElementById("custom-cover-url").value.trim();
+          const m = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
+          if (m && m[1]) url = `https://media.giphy.com/media/${m[1]}/giphy.gif`;
+          ws.coverUrl = url;
+          scheduleSave();
+          renderWorkspace();
+          document.getElementById("cover-studio").classList.add("hidden");
+        };
+        document.getElementById("btn-remove-cover").onclick = () => {
+          const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+          if (!ws) return;
+          ws.coverUrl = "";
+          scheduleSave();
+          renderWorkspace();
+          document.getElementById("cover-studio").classList.add("hidden");
+        };
+        document.getElementById("btn-giphy-search").onclick = async () => {
+          const q = document.getElementById("giphy-search-input").value.trim();
+          if (!q) return;
+          const grid = document.getElementById("giphy-results-grid");
+          grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Searching Giphy...</span>`;
+          try {
+            // Public Giphy Web SDK beta key for lightweight GIF search
+            const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=${encodeURIComponent(q)}&limit=6&rating=g`);
+            const data = await res.json();
+            grid.innerHTML = "";
+            (data.data || []).forEach(g => {
+              const url = g.images?.fixed_height?.url || g.images?.original?.url;
+              if (!url) return;
+              const img = document.createElement("img");
+              img.src = url;
+              img.className = "gif-thumb";
+              img.onclick = () => {
+                const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+                if (ws) {
+                  ws.coverUrl = url;
+                  scheduleSave();
+                  renderWorkspace();
+                  document.getElementById("cover-studio").classList.add("hidden");
+                }
+              };
+              grid.appendChild(img);
+            });
+          } catch {
+            grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Giphy search unavailable; paste a URL below.</span>`;
+          }
+        };
+
+        // Intention Search Keyboard Flow
+        document.getElementById("search-query").addEventListener("keydown", e => {
+          if (e.key === "Enter") document.getElementById("search-purpose").focus();
+        });
+        document.getElementById("search-purpose").addEventListener("keydown", e => {
+          if (e.key === "Enter") searchYouTube();
+        });
+        document.getElementById("btn-run-search").onclick = () => searchYouTube();
+        document.getElementById("btn-ai-suggest-queries").onclick = () => {
+          document.getElementById("gemini-dock").classList.remove("hidden");
+          askGemini("Suggest 3 focused YouTube search queries and implementation intentions for this workspace.");
+        };
+
+        // Focus Mode Controls
+        document.getElementById("btn-back-ws").onclick = () => {
+          if (ytPlayer && typeof ytPlayer.pauseVideo === "function") ytPlayer.pauseVideo();
+          navigate("workspace", state.activeWorkspaceId);
+        };
+        document.getElementById("btn-resume-video").onclick = () => {
+          if (ytPlayer && typeof ytPlayer.playVideo === "function") ytPlayer.playVideo();
+        };
+        document.getElementById("block-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            const inp = document.getElementById("block-input");
+            addBlock(inp.value);
+            inp.value = "";
+          }
+        });
+
+        // Right-Hand Gemini Dock Controls
+        document.getElementById("btn-toggle-gemini").onclick = () => {
+          document.getElementById("gemini-dock").classList.toggle("hidden");
+          renderGeminiChips();
+        };
+        document.getElementById("btn-close-gemini").onclick = () => {
+          document.getElementById("gemini-dock").classList.add("hidden");
+        };
+        document.getElementById("gemini-model-select").onchange = e => {
+          state.geminiModel = e.target.value;
+          scheduleSave();
+        };
+        document.getElementById("btn-save-gemini-key").onclick = () => {
+          state.geminiApiKey = document.getElementById("gemini-key-override").value.trim();
+          scheduleSave();
+          alert("Gemini API key saved to your private GitHub Vault.");
+        };
+        document.getElementById("btn-send-gemini").onclick = () => {
+          const inp = document.getElementById("gemini-prompt-input");
+          askGemini(inp.value);
+          inp.value = "";
+        };
+        document.getElementById("gemini-prompt-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            const inp = document.getElementById("gemini-prompt-input");
+            askGemini(inp.value);
+            inp.value = "";
+          }
+        });
+
+        // Global Cmd+K Search
+        document.getElementById("btn-cmd-k").onclick = () => openCmdK();
+        document.getElementById("btn-close-cmdk").onclick = () => {
+          document.getElementById("cmdk-modal").classList.remove("open");
+        };
+        document.getElementById("cmdk-input").addEventListener("input", e => runCmdKSearch(e.target.value));
+        document.addEventListener("keydown", e => {
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+            e.preventDefault();
+            openCmdK();
+          } else if (e.key === "Escape") {
+            document.getElementById("cmdk-modal").classList.remove("open");
+          }
+        });
+      }
+
+      async function boot() {
+        bindEvents();
+        loadYouTubeIFrameAPI();
+        await pullVault();
+        renderSidebar();
+        renderDirectory();
+        renderGeminiChips();
+      }
+
+      return { boot, navigate, setDbView, openCmdK };
+    })();
+
+    window.addEventListener("DOMContentLoaded", () => App.boot());
   </script>
 </body>
 </html>
