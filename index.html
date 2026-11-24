@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube 3.2 // Research OS</title>
+  <title>MTube 3.3 // Research OS</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text y='74' x='22' fill='%23FFFFFF' font-family='monospace' font-size='68'>M</text></svg>">
 </head>
 <body>
   <!-- =====================================================================
-       DEDICATED CREDENTIALS & API KEYS (EDIT LINES 15–20 MANUALLY)
+       DEDICATED CREDENTIALS & API KEYS (EDIT LINES 14–19 MANUALLY)
   ====================================================================== -->
   <script id="mtube-credentials">
     window.MTUBE_KEYS = {
       youtubeApiKey: "AIzaSyCkwB4WDboObBrbgygqzYmo4Q4d9OADel8",
-      geminiApiKey:  "AQ.Ab8RN6KEEFRIvNjdIxPJErYuP-1idgDLlz76a7WePESKbVACKw", // Free key from aistudio.google.com/apikey
+      geminiApiKey:  "PASTE_YOUR_AQ_OR_AIZA_GEMINI_KEY_HERE", // Paste your AQ.... key from aistudio.google.com
       githubToken:   "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",
       githubOwner:   "nothumanofearth",
       githubRepo:    "Mtube-Vault",
@@ -696,7 +696,6 @@
                 <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
               </div>
 
-              <!-- Built-in Ambient Presets (Zero API key required) -->
               <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px;">
                 <button type="button" class="btn small" data-gifcat="all">All</button>
                 <button type="button" class="btn small" data-gifcat="tech">Tech</button>
@@ -705,13 +704,11 @@
               </div>
               <div class="gif-grid" id="giphy-results-grid"></div>
 
-              <!-- Optional Live GIPHY API Search (if key added on Line 20) -->
               <div style="display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:8px;">
-                <input type="text" id="giphy-search-input" placeholder="GIPHY keyword (needs key on Line 20)" style="font-size:12px; padding:6px 8px; margin:0;" />
+                <input type="text" id="giphy-search-input" placeholder="GIPHY keyword (needs key on Line 19)" style="font-size:12px; padding:6px 8px; margin:0;" />
                 <button type="button" class="btn small inverse" id="btn-giphy-search">Go</button>
               </div>
 
-              <!-- Direct GIPHY Page Link or .gif URL Paste (Works with zero API key) -->
               <div style="margin-top:8px;">
                 <input type="text" id="custom-cover-url" placeholder="Paste any giphy.com link or .gif URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
                 <div style="display:flex; gap:6px;">
@@ -844,14 +841,13 @@
 
         <!-- Free-Tier Model Switcher -->
         <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:6px;">
-          <option value="gemini-3.8-flash">Gemini 3.8 Flash (Free — Deep Reasoning)</option>
-          <option value="gemini-3.6-flash">Gemini 3.6 Flash (Free — Balanced)</option>
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Free — High Quota)</option>
-          <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Free — Fast)</option>
-          <option value="gemma-4-31b-it">Gemma 4 31B (Free — Open Model)</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash (Free Tier — Recommended)</option>
+          <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite (Free Tier — High Quota)</option>
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash (Free Tier — Fast)</option>
+          <option value="gemma-3-27b-it">Gemma 3 27B (Free Tier — Open Model)</option>
         </select>
 
-        <!-- Google Books Lookup Tool (Uses Google Books API) -->
+        <!-- Google Books Lookup Tool -->
         <div style="display:flex; gap:6px; margin-top:4px;">
           <input type="text" id="google-book-input" placeholder="📚 Lookup book mentioned in video..." style="font-size:12px; padding:5px 8px; margin:0;" />
           <button type="button" class="btn small" id="btn-lookup-book">Book</button>
@@ -860,7 +856,7 @@
 
       <div class="gemini-body" id="gemini-chat-feed">
         <div class="ai-msg">
-          Context-aware sidekick ready. Paste your Gemini API key on Line 16 of index.html, then tap a quick chip below or ask any question.
+          Context-aware sidekick ready (using x-goog-api-key header auth). Paste your AQ.... key on Line 15 of index.html, then tap a quick chip below.
         </div>
       </div>
 
@@ -898,7 +894,7 @@
         activeWorkspaceId: null,
         activeVideoId: null,
         dbView: "list",
-        geminiModel: "gemini-3.8-flash",
+        geminiModel: "gemini-2.5-flash",
         workspaces: [
           { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPos: "center center" },
           { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPos: "center center" }
@@ -910,7 +906,6 @@
       let ytPlayer = null;
       let ytApiReady = false;
 
-      // Built-in ambient Notion-style cover GIFs (Zero API key required)
       const PRESET_GIFS = [
         { cat: "tech", url: "https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" },
         { cat: "tech", url: "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif" },
@@ -931,7 +926,7 @@
       }
 
       /* =====================================================================
-         1. CROSS-DEVICE GITHUB VAULT SYNC (With 409 SHA Recovery)
+         1. CROSS-DEVICE GITHUB VAULT SYNC
       ===================================================================== */
       async function pullVault(rerenderAfter = false) {
         if (isSyncing) return;
@@ -964,9 +959,14 @@
           }
           state.videos = Array.isArray(parsed.videos) ? parsed.videos : [];
           state.blocks = Array.isArray(parsed.blocks) ? parsed.blocks : [];
-          if (parsed.geminiModel) state.geminiModel = parsed.geminiModel;
+          if (parsed.geminiModel) {
+            const sel = document.getElementById("gemini-model-select");
+            if ([...sel.options].some(o => o.value === parsed.geminiModel)) {
+              state.geminiModel = parsed.geminiModel;
+              sel.value = parsed.geminiModel;
+            }
+          }
 
-          document.getElementById("gemini-model-select").value = state.geminiModel;
           localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
           setSyncStatus(`SYNCED ${nowStamp()} ✓`, "ok");
 
@@ -991,7 +991,7 @@
         setSyncStatus(isInitial ? "CREATING VAULT..." : "SAVING...");
         try {
           const payload = {
-            version: 3.2,
+            version: 3.3,
             updatedAt: new Date().toISOString(),
             geminiModel: state.geminiModel,
             workspaces: state.workspaces,
@@ -1017,7 +1017,6 @@
             body: JSON.stringify(body)
           });
 
-          // Handle 409 SHA Conflict automatically when another device updated the file
           if (res.status === 409 && retryCount < 2) {
             const headRes = await fetch(`${url}?t=${Date.now()}`, {
               cache: "no-store",
@@ -1241,7 +1240,6 @@
       function normalizeGifUrl(rawUrl) {
         const u = (rawUrl || "").trim();
         if (!u) return "";
-        // Convert giphy.com/gifs/slug-ID or giphy.com/embed/ID into direct media.giphy.com GIF
         const gifMatch = u.match(/giphy\.com\/(?:gifs|embed)\/(?:[a-zA-Z0-9-]+-)?([a-zA-Z0-9]+)/);
         if (gifMatch && gifMatch[1]) {
           return `https://media.giphy.com/media/${gifMatch[1]}/giphy.gif`;
@@ -1414,7 +1412,6 @@
       }
 
       function distillTopicQuery(raw) {
-        // Strip conversational filler so YouTube API searches core subject keywords accurately
         return raw
           .replace(/\b(latest|newest|recent|english language|videos? (about|on)|i want to learn|how to learn|best)\b/gi, " ")
           .replace(/\s+/g, " ")
@@ -1485,8 +1482,6 @@
         try {
           const orderParam = /\b(latest|newest|recent)\b/i.test(rawQuery) ? "date" : "relevance";
           const cleanQuery = distillTopicQuery(rawQuery);
-
-          // Query YouTube strictly with distilled topic keywords (never polluted by long purpose sentences)
           const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${KEYS.youtubeApiKey}`;
 
           const sRes = await fetch(searchUrl);
@@ -1516,7 +1511,6 @@
               const chanLow = channel.toLowerCase();
               const descLow = desc.toLowerCase();
 
-              // Hard relevance check: at least one core topic word must match title, channel, or tags
               let topicHits = 0;
               topicTokens.forEach(t => {
                 if (titleLow.includes(t) || chanLow.includes(t) || tags.includes(t)) topicHits += 1;
@@ -1540,9 +1534,9 @@
               };
             })
             .filter(v => {
-              if (v.durationSec > 0 && v.durationSec < 180) return false; // Block Shorts < 3 min
-              if (topicTokens.length > 0 && v.topicHits === 0) return false; // Reject off-topic noise
-              if (v.durationSec >= 1200) return true; // Podcasts >= 20 min bypass title filter
+              if (v.durationSec > 0 && v.durationSec < 180) return false;
+              if (topicTokens.length > 0 && v.topicHits === 0) return false;
+              if (v.durationSec >= 1200) return true;
               const tLow = v.title.toLowerCase();
               return !titleJunk.some(j => tLow.includes(j));
             })
@@ -1598,7 +1592,6 @@
           let channelId = "";
           let handle = "";
 
-          // Extract UC... ID or @handle from full YouTube URLs or direct text
           const ucMatch = rawInput.match(/(UC[a-zA-Z0-9_-]{22})/);
           const handleMatch = rawInput.match(/@([a-zA-Z0-9._-]+)/);
 
@@ -1607,7 +1600,6 @@
           } else if (handleMatch) {
             handle = `@${handleMatch[1]}`;
           } else {
-            // Fallback search for channel by name
             const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${KEYS.youtubeApiKey}`);
             const chData = await chSearch.json();
             channelId = chData.items?.[0]?.id?.channelId || "";
@@ -1630,7 +1622,6 @@
           const channelTitle = channelObj.snippet?.title || rawInput;
           const resolvedChannelId = channelObj.id;
 
-          // Fetch up to 35 recent uploads from the channel's uploads playlist (1 quota unit)
           const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${KEYS.youtubeApiKey}`);
           const plData = await plRes.json();
           const vidIds = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
@@ -1640,7 +1631,6 @@
           const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${KEYS.youtubeApiKey}`);
           const dData = await dRes.json();
 
-          // Block ONLY Shorts (<= 180s or #shorts in title); zero topic restrictions
           const regularVideos = (dData.items || [])
             .map(v => ({
               id: v.id,
@@ -1876,7 +1866,7 @@
       }
 
       /* =====================================================================
-         7. COLLAPSIBLE GEMINI SIDEKICK + GOOGLE BOOKS LOOKUP
+         7. COLLAPSIBLE GEMINI SIDEKICK (x-goog-api-key HEADER AUTH)
       ===================================================================== */
       function renderGeminiChips() {
         const box = document.getElementById("gemini-quick-chips");
@@ -1945,15 +1935,18 @@
         feed.scrollTop = feed.scrollHeight;
 
         const rawGemKey = (KEYS.geminiApiKey || "").trim();
-        const activeKey = rawGemKey && rawGemKey !== "PASTE_YOUR_GEMINI_API_KEY_HERE" ? rawGemKey : KEYS.youtubeApiKey;
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent?key=${encodeURIComponent(activeKey)}`;
+        const activeKey = rawGemKey && rawGemKey !== "PASTE_YOUR_AQ_OR_AIZA_GEMINI_KEY_HERE" ? rawGemKey : KEYS.youtubeApiKey;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent`;
 
         const fullPrompt = `You are the embedded research assistant inside MTube (a Notion + YouTube learning workspace). Be concise, structured, and practical.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
 
         try {
           const res = await fetch(endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": activeKey
+            },
             body: JSON.stringify({
               contents: [{ parts: [{ text: fullPrompt }] }]
             })
@@ -1989,7 +1982,7 @@
             aiBubble.appendChild(bar);
           }
         } catch (err) {
-          aiBubble.textContent = `Gemini API Error: ${err.message}\n\nFix: Paste your free Google AI Studio key into Line 16 (geminiApiKey) of index.html, or switch to Gemini 3.5 Flash-Lite above.`;
+          aiBubble.textContent = `Gemini API Error: ${err.message}\n\nCheck: Confirm your AQ.... key from aistudio.google.com is pasted on Line 15 of index.html, or switch to Gemini 2.5 Flash-Lite above.`;
         }
 
         feed.scrollTop = feed.scrollHeight;
@@ -2116,13 +2109,11 @@
 
         document.getElementById("btn-manual-sync").onclick = () => pullVault(true);
 
-        // Auto-sync across devices when returning to tab or unlocking phone
         document.addEventListener("visibilitychange", () => {
           if (!document.hidden) pullVault(true);
         });
         window.addEventListener("focus", () => pullVault(true));
 
-        // Workspace Creation
         const createWs = (name, icon = "◈") => {
           const clean = name.trim();
           if (!clean) return;
@@ -2146,7 +2137,6 @@
           input.value = "";
         };
 
-        // Cover Studio & Reposition
         document.getElementById("btn-toggle-cover-studio").onclick = () => {
           document.getElementById("cover-studio").classList.toggle("hidden");
         };
@@ -2188,7 +2178,7 @@
           const grid = document.getElementById("giphy-results-grid");
           if (!q) return;
           if (!gKey) {
-            grid.innerHTML = `<span class="muted" style="grid-column:1/-1; font-size:11px;">Add a free GIPHY key on Line 20 of index.html, or pick a preset GIF above / paste any giphy.com link below.</span>`;
+            grid.innerHTML = `<span class="muted" style="grid-column:1/-1; font-size:11px;">Add a free GIPHY key on Line 19 of index.html, or pick a preset GIF above / paste any giphy.com link below.</span>`;
             return;
           }
           grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Searching GIPHY...</span>`;
@@ -2218,7 +2208,6 @@
           }
         };
 
-        // Discovery Mode Switch & Keyboard Flow
         document.getElementById("mode-topic-btn").onclick = () => switchDiscoveryMode("topic");
         document.getElementById("mode-channel-btn").onclick = () => switchDiscoveryMode("channel");
 
@@ -2243,7 +2232,6 @@
           askGemini("Suggest 3 clean YouTube search keywords and implementation intentions for this workspace.");
         };
 
-        // Focus Mode Controls
         document.getElementById("btn-back-ws").onclick = () => {
           if (ytPlayer && typeof ytPlayer.pauseVideo === "function") ytPlayer.pauseVideo();
           navigate("workspace", state.activeWorkspaceId);
@@ -2259,7 +2247,6 @@
           }
         });
 
-        // Right-Hand Gemini Dock & Google Books Controls
         document.getElementById("btn-toggle-gemini").onclick = () => {
           document.getElementById("gemini-dock").classList.toggle("hidden");
           renderGeminiChips();
@@ -2296,7 +2283,6 @@
           }
         });
 
-        // Global Cmd+K Search
         document.getElementById("btn-cmd-k").onclick = () => openCmdK();
         document.getElementById("btn-close-cmdk").onclick = () => {
           document.getElementById("cmdk-modal").classList.remove("open");
