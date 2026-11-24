@@ -3,32 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube 3.3 // Research OS</title>
+  <title>MTube // Research OS</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text y='74' x='22' fill='%23FFFFFF' font-family='monospace' font-size='68'>M</text></svg>">
 </head>
 <body>
   <!-- =====================================================================
-       DEDICATED CREDENTIALS & API KEYS (EDIT LINES 14–19 MANUALLY)
+       DEDICATED CREDENTIALS & API KEYS (EDIT LINE 15 MANUALLY)
   ====================================================================== -->
   <script id="mtube-credentials">
     window.MTUBE_KEYS = {
       youtubeApiKey: "AIzaSyCkwB4WDboObBrbgygqzYmo4Q4d9OADel8",
-      geminiApiKey:  "AIzaSyD0Nrrko2lU-UJdNVSo2uPQriGoeJdfOSs", // Paste your AQ.... key from aistudio.google.com
+      geminiApiKey:  "PASTE_YOUR_WORKING_AIZA_GEMINI_KEY_HERE", // Paste your AIza... key here
       githubToken:   "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",
       githubOwner:   "nothumanofearth",
-      githubRepo:    "Mtube-Vault",
-      giphyApiKey:   "" // Optional: Free beta key from developers.giphy.com
+      githubRepo:    "Mtube-Vault"
     };
   </script>
 
   <style>
-    /* =====================================================================
-       BRUTALIST NOTION + YOUTUBE DESIGN SYSTEM (RESPONSIVE & SAFARI-SAFE)
-    ===================================================================== */
     :root {
       --bg: #F8F8F6;
       --paper: #FFFFFF;
-      --subtle: #F1F1EE;
+      --subtle: #F0F0EC;
       --ink: #111111;
       --ink-muted: #666662;
       --border: #DFDFDA;
@@ -58,7 +54,7 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    /* Global Topbar */
+    /* Sticky Topbar */
     .topbar {
       position: sticky;
       top: 0;
@@ -106,21 +102,21 @@
     .sync-pill.ok { color: var(--ok); background: #EBF7EE; }
     .sync-pill.err { color: var(--err); background: #FFF0F0; }
 
-    /* Shell Layout */
+    /* Main App Shell */
     .app-shell {
       display: flex;
       width: 100%;
-      min-height: calc(100vh - 48px);
+      min-height: calc(100dvh - 48px);
       position: relative;
     }
 
-    /* Left Sidebar */
+    /* Left Notion Sidebar */
     .left-sidebar {
-      width: 240px;
+      width: 236px;
       flex-shrink: 0;
       background: var(--subtle);
       border-right: 1px solid var(--border);
-      padding: 16px 12px calc(32px + env(safe-area-inset-bottom));
+      padding: 16px 12px calc(28px + env(safe-area-inset-bottom));
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -172,10 +168,11 @@
       font-weight: 600;
     }
 
-    /* Main Canvas */
+    /* Container-Aware Main Canvas (Prevents 3-Column Laptop Squeeze) */
     .main-canvas {
       flex: 1;
       min-width: 0;
+      container-type: inline-size;
       padding-bottom: calc(64px + env(safe-area-inset-bottom));
     }
 
@@ -185,7 +182,16 @@
       padding: 0 18px;
     }
 
-    /* Right Collapsible Gemini Dock */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    @container (min-width: 740px) {
+      .grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
+    }
+
+    /* Right Collapsible Gemini Dock (Safari 100dvh Safe) */
     .gemini-dock {
       width: 360px;
       flex-shrink: 0;
@@ -193,7 +199,7 @@
       border-left: 2px solid var(--border-strong);
       display: flex;
       flex-direction: column;
-      height: calc(100vh - 48px - env(safe-area-inset-top));
+      height: calc(100dvh - 48px - env(safe-area-inset-top));
       position: sticky;
       top: calc(48px + env(safe-area-inset-top));
       z-index: 52;
@@ -307,7 +313,7 @@
     .btn.small { min-height: 28px; padding: 4px 8px; font-size: 11px; }
     .btn.full { width: 100%; }
 
-    input[type="text"], input[type="password"], textarea, select {
+    input[type="text"], select {
       width: 100%;
       max-width: 100%;
       background: var(--paper);
@@ -320,9 +326,8 @@
       margin-bottom: 10px;
       outline: none;
     }
-    input:focus, textarea:focus, select:focus { border-color: var(--ink); }
+    input:focus, select:focus { border-color: var(--ink); }
 
-    /* Cards & Grids */
     .card {
       background: var(--paper);
       border: 1px solid var(--border);
@@ -332,16 +337,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 18px;
-    }
-    @media (min-width: 820px) {
-      .grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
-    }
-
-    /* Responsive Notion Cover Banner (Fixed for Laptop & Monitor) */
+    /* Notion Cover Banner (Desktop & Mobile Safe) */
     .cover-shell {
       max-width: 960px;
       margin: 14px auto 0;
@@ -349,14 +345,18 @@
     }
     .notion-cover {
       width: 100%;
-      height: clamp(140px, 22vh, 230px);
+      height: 175px;
       background-color: #EAEAE5;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
+      background-image: radial-gradient(#CFCFC8 1px, transparent 1px);
+      background-size: 16px 16px;
       position: relative;
       border: 1px solid var(--border);
       border-radius: 8px;
+    }
+    .notion-cover.has-media {
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
     }
     .cover-controls {
       position: absolute;
@@ -369,7 +369,7 @@
       position: absolute;
       top: calc(100% + 6px);
       right: 0;
-      width: min(360px, 100%);
+      width: min(350px, 100%);
       background: var(--paper);
       border: 2px solid var(--ink);
       border-radius: 8px;
@@ -377,19 +377,20 @@
       z-index: 45;
       box-shadow: 0 12px 30px rgba(0,0,0,0.16);
     }
-    .gif-grid {
+    .theme-swatches {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 6px;
-      margin-top: 8px;
+      margin-bottom: 10px;
     }
-    .gif-thumb {
-      width: 100%;
-      height: 58px;
-      object-fit: cover;
-      border-radius: 4px;
+    .swatch-btn {
+      height: 36px;
       border: 1px solid var(--border);
+      border-radius: 4px;
       cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
     }
 
     /* Multi-View Database */
@@ -403,7 +404,7 @@
     }
     .kanban-board {
       display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, minmax(210px, 1fr));
       gap: 12px;
       overflow-x: auto;
       padding-bottom: 8px;
@@ -413,7 +414,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 10px;
-      min-height: 180px;
+      min-height: 170px;
     }
     .kanban-card {
       background: var(--paper);
@@ -622,10 +623,6 @@
       <div style="flex:1; overflow-y:auto;">
         <div class="nav-section-title">Workspaces</div>
         <div id="sidebar-workspaces"></div>
-        <div style="margin-top:10px; padding:0 4px;">
-          <input type="text" id="sidebar-new-ws" placeholder="+ New workspace..." style="font-size:13px; padding:7px 9px; margin-bottom:6px;" />
-          <button type="button" class="btn small full" id="btn-sidebar-add-ws">Add Workspace</button>
-        </div>
       </div>
 
       <div>
@@ -680,41 +677,31 @@
         </div>
       </section>
 
-      <!-- VIEW 3: WORKSPACE (Cover + Search / Channel Explorer + List/Board/Table) -->
+      <!-- VIEW 3: WORKSPACE -->
       <section id="view-workspace" class="view">
-        <!-- Responsive Notion Cover Banner -->
         <div class="cover-shell">
           <div class="notion-cover" id="ws-cover">
             <div class="cover-controls">
               <button type="button" class="btn small" id="btn-reposition-cover" style="background:rgba(255,255,255,0.92);">↕ Position</button>
               <button type="button" class="btn small" id="btn-toggle-cover-studio" style="background:rgba(255,255,255,0.92);">Change Cover</button>
             </div>
-            <!-- Cover Studio Popover -->
             <div class="cover-popover hidden" id="cover-studio">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span class="bold" style="font-size:12px;">WORKSPACE COVER STUDIO</span>
+                <span class="bold" style="font-size:12px;">COVER BANNER STUDIO</span>
                 <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
               </div>
-
-              <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px;">
-                <button type="button" class="btn small" data-gifcat="all">All</button>
-                <button type="button" class="btn small" data-gifcat="tech">Tech</button>
-                <button type="button" class="btn small" data-gifcat="calm">Calm</button>
-                <button type="button" class="btn small" data-gifcat="retro">Retro</button>
+              <div class="muted" style="font-size:11px; margin-bottom:6px;">Minimalist Brutalist Patterns:</div>
+              <div class="theme-swatches">
+                <button type="button" class="swatch-btn" style="background:#EAEAE5;" data-pattern="dots">DOTS</button>
+                <button type="button" class="swatch-btn" style="background:#181818; color:#FFF;" data-pattern="noir">NOIR</button>
+                <button type="button" class="swatch-btn" style="background:repeating-linear-gradient(45deg,#F2F2EE,#F2F2EE 8px,#E2E2DC 8px,#E2E2DC 16px);" data-pattern="hatch">HATCH</button>
+                <button type="button" class="swatch-btn" style="background:linear-gradient(90deg,#111 1px,transparent 1px),linear-gradient(#111 1px,transparent 1px); background-size:18px 18px; background-color:#F5F5F0;" data-pattern="grid">GRID</button>
               </div>
-              <div class="gif-grid" id="giphy-results-grid"></div>
-
-              <div style="display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:8px;">
-                <input type="text" id="giphy-search-input" placeholder="GIPHY keyword (needs key on Line 19)" style="font-size:12px; padding:6px 8px; margin:0;" />
-                <button type="button" class="btn small inverse" id="btn-giphy-search">Go</button>
-              </div>
-
-              <div style="margin-top:8px;">
-                <input type="text" id="custom-cover-url" placeholder="Paste any giphy.com link or .gif URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
-                <div style="display:flex; gap:6px;">
-                  <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply &amp; Sync</button>
-                  <button type="button" class="btn small" id="btn-remove-cover">Clear</button>
-                </div>
+              <div class="muted" style="font-size:11px; margin-bottom:4px;">Or paste any Giphy link / .gif URL (syncs across devices):</div>
+              <input type="text" id="custom-cover-url" placeholder="https://giphy.com/gifs/... or .gif URL" style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply &amp; Sync</button>
+                <button type="button" class="btn small" id="btn-remove-cover">Reset</button>
               </div>
             </div>
           </div>
@@ -723,14 +710,12 @@
         <div class="canvas-inner">
           <h1 id="ws-heading">Workspace</h1>
 
-          <!-- Discovery Box: Topic Search OR Unrestricted Channel Explorer -->
           <div class="card">
-            <div style="display:flex; gap:6px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+            <div style="display:flex; gap:6px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:10px; flex-wrap:wrap;">
               <button type="button" class="btn small inverse" id="mode-topic-btn">⌕ Topic Search</button>
               <button type="button" class="btn small" id="mode-channel-btn">📺 Explore Any Channel (No Restrictions)</button>
             </div>
 
-            <!-- Mode A: Accurate Topic Search -->
             <div id="panel-topic-search">
               <div class="grid-2" style="gap:10px;">
                 <input type="text" id="search-query" placeholder="Core Topic (e.g., 'Figuring Out Raj Shamani' or 'Proxmox ZFS')" style="margin-bottom:0;" />
@@ -742,10 +727,9 @@
               </div>
             </div>
 
-            <!-- Mode B: Unrestricted Channel Explorer -->
             <div id="panel-channel-explore" class="hidden">
               <p class="muted" style="margin-bottom:8px;">
-                Browse <strong>all</strong> videos on any YouTube channel without topic filters (Shorts under 3 min are automatically removed).
+                Browse <strong>all</strong> videos on any YouTube channel without topic restrictions (Shorts under 3 min are automatically removed).
               </p>
               <div class="grid-2" style="gap:10px;">
                 <input type="text" id="channel-query-input" placeholder="Channel @handle, URL, or UC... ID (e.g., '@rajshamani')" style="margin-bottom:0;" />
@@ -762,7 +746,6 @@
             </div>
           </div>
 
-          <!-- Multi-View Database Controls -->
           <div class="view-tabs">
             <button type="button" class="btn small inverse" data-dbview="list" onclick="App.setDbView('list')">≡ List</button>
             <button type="button" class="btn small" data-dbview="board" onclick="App.setDbView('board')">▥ Board</button>
@@ -794,7 +777,6 @@
           </div>
 
           <div class="grid-2">
-            <!-- Left: Unhooked Player + Inline Chapters -->
             <div>
               <div class="player-box">
                 <div id="yt-player"></div>
@@ -811,7 +793,6 @@
               </div>
             </div>
 
-            <!-- Right: Notion Block Page Editor -->
             <div>
               <div class="card" style="border:2px solid var(--ink);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -836,27 +817,25 @@
       <div class="gemini-header">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span class="bold" style="font-family:var(--font-mono); font-size:12px;">✦ GEMINI RESEARCH DOCK</span>
-          <button type="button" class="btn small" id="btn-close-gemini">✕</button>
+          <div style="display:flex; gap:4px;">
+            <button type="button" class="btn small" id="btn-test-gemini-key">Test Key</button>
+            <button type="button" class="btn small" id="btn-close-gemini">✕</button>
+          </div>
         </div>
 
-        <!-- Free-Tier Model Switcher -->
-        <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:6px;">
-          <option value="gemini-2.5-flash">Gemini 2.5 Flash (Free Tier — Recommended)</option>
-          <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite (Free Tier — High Quota)</option>
-          <option value="gemini-2.0-flash">Gemini 2.0 Flash (Free Tier — Fast)</option>
-          <option value="gemma-3-27b-it">Gemma 3 27B (Free Tier — Open Model)</option>
+        <!-- Verified 2026 Free-Tier Models -->
+        <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:0;">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Free — 500/day)</option>
+          <option value="gemini-3.8-flash">Gemini 3.8 Flash (Free — Deep Reasoning)</option>
+          <option value="gemini-3.6-flash">Gemini 3.6 Flash (Free — Balanced)</option>
+          <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Free — Fast)</option>
+          <option value="gemma-4-31b-it">Gemma 4 31B (Free — Open Model)</option>
         </select>
-
-        <!-- Google Books Lookup Tool -->
-        <div style="display:flex; gap:6px; margin-top:4px;">
-          <input type="text" id="google-book-input" placeholder="📚 Lookup book mentioned in video..." style="font-size:12px; padding:5px 8px; margin:0;" />
-          <button type="button" class="btn small" id="btn-lookup-book">Book</button>
-        </div>
       </div>
 
       <div class="gemini-body" id="gemini-chat-feed">
         <div class="ai-msg">
-          Context-aware sidekick ready (using x-goog-api-key header auth). Paste your AQ.... key on Line 15 of index.html, then tap a quick chip below.
+          Paste your working AIza... Gemini API key on Line 15 of index.html, then tap "Test Key" above or select a quick chip below.
         </div>
       </div>
 
@@ -894,10 +873,10 @@
         activeWorkspaceId: null,
         activeVideoId: null,
         dbView: "list",
-        geminiModel: "gemini-2.5-flash",
+        geminiModel: "gemini-3.5-flash-lite",
         workspaces: [
-          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPos: "center center" },
-          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPos: "center center" }
+          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPattern: "dots", coverPos: "center center" },
+          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPattern: "grid", coverPos: "center center" }
         ],
         videos: [],
         blocks: []
@@ -905,15 +884,6 @@
 
       let ytPlayer = null;
       let ytApiReady = false;
-
-      const PRESET_GIFS = [
-        { cat: "tech", url: "https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" },
-        { cat: "tech", url: "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif" },
-        { cat: "calm", url: "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" },
-        { cat: "calm", url: "https://media.giphy.com/media/3o7aCTPPm4OHfRLSH6/giphy.gif" },
-        { cat: "retro", url: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
-        { cat: "retro", url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" }
-      ];
 
       function setSyncStatus(label, statusClass = "") {
         const pill = document.getElementById("sync-pill");
@@ -926,10 +896,10 @@
       }
 
       /* =====================================================================
-         1. CROSS-DEVICE GITHUB VAULT SYNC
+         1. CROSS-DEVICE GITHUB VAULT SYNC (Race-Condition Safe)
       ===================================================================== */
       async function pullVault(rerenderAfter = false) {
-        if (isSyncing) return;
+        if (isSyncing || syncTimer) return;
         isSyncing = true;
         setSyncStatus("SYNCING...");
         try {
@@ -959,12 +929,11 @@
           }
           state.videos = Array.isArray(parsed.videos) ? parsed.videos : [];
           state.blocks = Array.isArray(parsed.blocks) ? parsed.blocks : [];
-          if (parsed.geminiModel) {
-            const sel = document.getElementById("gemini-model-select");
-            if ([...sel.options].some(o => o.value === parsed.geminiModel)) {
-              state.geminiModel = parsed.geminiModel;
-              sel.value = parsed.geminiModel;
-            }
+
+          const validModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemma-4-31b-it"];
+          if (parsed.geminiModel && validModels.includes(parsed.geminiModel)) {
+            state.geminiModel = parsed.geminiModel;
+            document.getElementById("gemini-model-select").value = parsed.geminiModel;
           }
 
           localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
@@ -991,7 +960,7 @@
         setSyncStatus(isInitial ? "CREATING VAULT..." : "SAVING...");
         try {
           const payload = {
-            version: 3.3,
+            version: 3.4,
             updatedAt: new Date().toISOString(),
             geminiModel: state.geminiModel,
             workspaces: state.workspaces,
@@ -1046,7 +1015,10 @@
       function scheduleSave() {
         localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
         clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => pushVault(false), 500);
+        syncTimer = setTimeout(() => {
+          syncTimer = null;
+          pushVault(false);
+        }, 450);
       }
 
       /* =====================================================================
@@ -1235,7 +1207,7 @@
       }
 
       /* =====================================================================
-         4. WORKSPACE, GIPHY COVER STUDIO & MULTI-VIEW DATABASE
+         4. WORKSPACE COVER STUDIO & MULTI-VIEW DATABASE
       ===================================================================== */
       function normalizeGifUrl(rawUrl) {
         const u = (rawUrl || "").trim();
@@ -1247,25 +1219,31 @@
         return u;
       }
 
-      function renderPresetGifs(category = "all") {
-        const gifGrid = document.getElementById("giphy-results-grid");
-        gifGrid.innerHTML = "";
-        const items = category === "all" ? PRESET_GIFS : PRESET_GIFS.filter(g => g.cat === category);
-        items.forEach(item => {
-          const img = document.createElement("img");
-          img.src = item.url;
-          img.className = "gif-thumb";
-          img.onclick = () => {
-            const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
-            if (!ws) return;
-            ws.coverUrl = item.url;
-            ws.coverPos = ws.coverPos || "center center";
-            scheduleSave();
-            renderWorkspace();
-            document.getElementById("cover-studio").classList.add("hidden");
-          };
-          gifGrid.appendChild(img);
-        });
+      function applyCoverStyle(coverEl, ws) {
+        coverEl.classList.remove("has-media");
+        coverEl.style.backgroundImage = "";
+        coverEl.style.backgroundSize = "";
+        coverEl.style.backgroundColor = "#EAEAE5";
+
+        if (ws.coverUrl) {
+          coverEl.classList.add("has-media");
+          coverEl.style.backgroundImage = `url('${ws.coverUrl}')`;
+          coverEl.style.backgroundPosition = ws.coverPos || "center center";
+          return;
+        }
+
+        const pat = ws.coverPattern || "dots";
+        if (pat === "noir") {
+          coverEl.style.backgroundColor = "#181818";
+        } else if (pat === "hatch") {
+          coverEl.style.backgroundImage = "repeating-linear-gradient(45deg,#F2F2EE,#F2F2EE 8px,#E2E2DC 8px,#E2E2DC 16px)";
+        } else if (pat === "grid") {
+          coverEl.style.backgroundImage = "linear-gradient(90deg,#D5D5CE 1px,transparent 1px),linear-gradient(#D5D5CE 1px,transparent 1px)";
+          coverEl.style.backgroundSize = "20px 20px";
+        } else {
+          coverEl.style.backgroundImage = "radial-gradient(#CFCFC8 1.2px, transparent 1.2px)";
+          coverEl.style.backgroundSize = "16px 16px";
+        }
       }
 
       function renderWorkspace() {
@@ -1277,11 +1255,9 @@
         document.getElementById("search-feedback").textContent = "";
 
         const coverEl = document.getElementById("ws-cover");
-        coverEl.style.backgroundImage = ws.coverUrl ? `url('${ws.coverUrl}')` : "none";
-        coverEl.style.backgroundPosition = ws.coverPos || "center center";
+        applyCoverStyle(coverEl, ws);
         document.getElementById("custom-cover-url").value = ws.coverUrl || "";
 
-        renderPresetGifs("all");
         setDbView(state.dbView);
       }
 
@@ -1482,7 +1458,7 @@
         try {
           const orderParam = /\b(latest|newest|recent)\b/i.test(rawQuery) ? "date" : "relevance";
           const cleanQuery = distillTopicQuery(rawQuery);
-          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${KEYS.youtubeApiKey}`;
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${encodeURIComponent(KEYS.youtubeApiKey)}`;
 
           const sRes = await fetch(searchUrl);
           const sData = await sRes.json();
@@ -1491,7 +1467,7 @@
           const ids = (sData.items || []).map(i => i.id?.videoId).filter(Boolean);
           if (ids.length === 0) throw new Error("No videos returned.");
 
-          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${KEYS.youtubeApiKey}`);
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
           const dData = await dRes.json();
 
           const stopWords = new Set(["the", "and", "for", "with", "from", "into", "about", "podcast", "video", "latest", "learn", "how"]);
@@ -1600,7 +1576,7 @@
           } else if (handleMatch) {
             handle = `@${handleMatch[1]}`;
           } else {
-            const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${KEYS.youtubeApiKey}`);
+            const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
             const chData = await chSearch.json();
             channelId = chData.items?.[0]?.id?.channelId || "";
           }
@@ -1622,13 +1598,13 @@
           const channelTitle = channelObj.snippet?.title || rawInput;
           const resolvedChannelId = channelObj.id;
 
-          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${KEYS.youtubeApiKey}`);
+          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
           const plData = await plRes.json();
           const vidIds = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
 
           if (vidIds.length === 0) throw new Error("No public uploads found on this channel.");
 
-          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${KEYS.youtubeApiKey}`);
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
           const dData = await dRes.json();
 
           const regularVideos = (dData.items || [])
@@ -1866,8 +1842,70 @@
       }
 
       /* =====================================================================
-         7. COLLAPSIBLE GEMINI SIDEKICK (x-goog-api-key HEADER AUTH)
+         7. COLLAPSIBLE GEMINI SIDEKICK (AIza & AQ Key Compatible)
       ===================================================================== */
+      function getValidGeminiKey() {
+        const k = (KEYS.geminiApiKey || "").trim();
+        if (!k || k === "PASTE_YOUR_WORKING_AIZA_GEMINI_KEY_HERE") return "";
+        return k;
+      }
+
+      function buildGeminiRequest(model, promptText) {
+        const key = getValidGeminiKey();
+        const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+
+        // AIza... keys work universally via ?key= query param (exact match to iOS Shortcuts)
+        // AQ... keys require x-goog-api-key header
+        if (key.startsWith("AIza")) {
+          return {
+            url: `${baseUrl}?key=${encodeURIComponent(key)}`,
+            headers: { "Content-Type": "application/json" }
+          };
+        }
+        return {
+          url: baseUrl,
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": key
+          }
+        };
+      }
+
+      async function testGeminiKey() {
+        const feed = document.getElementById("gemini-chat-feed");
+        const bubble = document.createElement("div");
+        bubble.className = "ai-msg";
+        feed.appendChild(bubble);
+
+        const key = getValidGeminiKey();
+        if (!key) {
+          bubble.textContent = "No Gemini API key set yet. Paste your AIza... key on Line 15 of index.html.";
+          feed.scrollTop = feed.scrollHeight;
+          return;
+        }
+
+        bubble.textContent = `Testing key (${key.slice(0, 6)}...) against ${state.geminiModel}...`;
+        feed.scrollTop = feed.scrollHeight;
+
+        try {
+          const req = buildGeminiRequest(state.geminiModel, "Reply with the single word: CONNECTED");
+          const res = await fetch(req.url, {
+            method: "POST",
+            headers: req.headers,
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: "Reply with the single word: CONNECTED" }] }]
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "OK";
+          bubble.textContent = `✓ Key Verified (${state.geminiModel}): ${text.trim()}`;
+        } catch (err) {
+          bubble.textContent = `✕ Key Test Failed: ${err.message}`;
+        }
+        feed.scrollTop = feed.scrollHeight;
+      }
+
       function renderGeminiChips() {
         const box = document.getElementById("gemini-quick-chips");
         box.innerHTML = "";
@@ -1930,23 +1968,25 @@
 
         const aiBubble = document.createElement("div");
         aiBubble.className = "ai-msg";
-        aiBubble.textContent = `Thinking with ${state.geminiModel}...`;
         feed.appendChild(aiBubble);
-        feed.scrollTop = feed.scrollHeight;
 
-        const rawGemKey = (KEYS.geminiApiKey || "").trim();
-        const activeKey = rawGemKey && rawGemKey !== "PASTE_YOUR_AQ_OR_AIZA_GEMINI_KEY_HERE" ? rawGemKey : KEYS.youtubeApiKey;
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent`;
+        const key = getValidGeminiKey();
+        if (!key) {
+          aiBubble.textContent = "Gemini API key missing. Paste your working AIza... key into Line 15 (geminiApiKey) of index.html.";
+          feed.scrollTop = feed.scrollHeight;
+          return;
+        }
+
+        aiBubble.textContent = `Thinking with ${state.geminiModel}...`;
+        feed.scrollTop = feed.scrollHeight;
 
         const fullPrompt = `You are the embedded research assistant inside MTube (a Notion + YouTube learning workspace). Be concise, structured, and practical.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
 
         try {
-          const res = await fetch(endpoint, {
+          const req = buildGeminiRequest(state.geminiModel, fullPrompt);
+          const res = await fetch(req.url, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-goog-api-key": activeKey
-            },
+            headers: req.headers,
             body: JSON.stringify({
               contents: [{ parts: [{ text: fullPrompt }] }]
             })
@@ -1982,48 +2022,9 @@
             aiBubble.appendChild(bar);
           }
         } catch (err) {
-          aiBubble.textContent = `Gemini API Error: ${err.message}\n\nCheck: Confirm your AQ.... key from aistudio.google.com is pasted on Line 15 of index.html, or switch to Gemini 2.5 Flash-Lite above.`;
+          aiBubble.textContent = `Gemini API Error (${state.geminiModel}): ${err.message}`;
         }
 
-        feed.scrollTop = feed.scrollHeight;
-      }
-
-      async function lookupGoogleBook(bookQuery) {
-        const q = (bookQuery || "").trim();
-        if (!q) return;
-
-        const feed = document.getElementById("gemini-chat-feed");
-        const bubble = document.createElement("div");
-        bubble.className = "ai-msg";
-        bubble.textContent = `Searching Google Books for "${q}"...`;
-        feed.appendChild(bubble);
-        feed.scrollTop = feed.scrollHeight;
-
-        try {
-          const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=2`);
-          const data = await res.json();
-          const book = data.items?.[0]?.volumeInfo;
-          if (!book) throw new Error("No matching book found.");
-
-          const authors = (book.authors || ["Unknown Author"]).join(", ");
-          const summary = (book.description || "No summary available.").slice(0, 260);
-          const formatted = `📚 ${book.title} — ${authors} (${book.publishedDate || ""})\n${summary}...`;
-          bubble.textContent = formatted;
-
-          if (state.activeView === "focus" && state.activeVideoId) {
-            const bar = document.createElement("div");
-            bar.className = "ai-insert-bar";
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "btn small inverse";
-            btn.textContent = "+ Save Book to Page";
-            btn.onclick = () => addBlock(`[[${book.title}]] by ${authors} — ${summary}`, "callout");
-            bar.appendChild(btn);
-            bubble.appendChild(bar);
-          }
-        } catch (err) {
-          bubble.textContent = `Book lookup failed: ${err.message}`;
-        }
         feed.scrollTop = feed.scrollHeight;
       }
 
@@ -2109,34 +2110,34 @@
 
         document.getElementById("btn-manual-sync").onclick = () => pullVault(true);
 
+        let visTimer = null;
         document.addEventListener("visibilitychange", () => {
-          if (!document.hidden) pullVault(true);
+          if (!document.hidden) {
+            clearTimeout(visTimer);
+            visTimer = setTimeout(() => pullVault(true), 300);
+          }
         });
-        window.addEventListener("focus", () => pullVault(true));
 
-        const createWs = (name, icon = "◈") => {
-          const clean = name.trim();
+        document.getElementById("btn-dir-create-ws").onclick = () => {
+          const nameInput = document.getElementById("dir-ws-name");
+          const iconInput = document.getElementById("dir-ws-icon");
+          const clean = nameInput.value.trim();
           if (!clean) return;
-          const ws = { id: `ws_${Date.now()}`, name: clean, icon: icon.trim() || "◈", coverUrl: "", coverPos: "center center" };
-          state.workspaces.push(ws);
+          state.workspaces.push({
+            id: `ws_${Date.now()}`,
+            name: clean,
+            icon: iconInput.value.trim() || "◈",
+            coverUrl: "",
+            coverPattern: "dots",
+            coverPos: "center center"
+          });
+          nameInput.value = "";
           scheduleSave();
           renderSidebar();
           renderDirectory();
         };
 
-        document.getElementById("btn-dir-create-ws").onclick = () => {
-          const nameInput = document.getElementById("dir-ws-name");
-          const iconInput = document.getElementById("dir-ws-icon");
-          createWs(nameInput.value, iconInput.value);
-          nameInput.value = "";
-        };
-
-        document.getElementById("btn-sidebar-add-ws").onclick = () => {
-          const input = document.getElementById("sidebar-new-ws");
-          createWs(input.value, "◈");
-          input.value = "";
-        };
-
+        // Cover Studio
         document.getElementById("btn-toggle-cover-studio").onclick = () => {
           document.getElementById("cover-studio").classList.toggle("hidden");
         };
@@ -2147,13 +2148,20 @@
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
           if (!ws) return;
           const positions = ["center center", "center top", "center bottom"];
-          const next = positions[(positions.indexOf(ws.coverPos || "center center") + 1) % positions.length];
-          ws.coverPos = next;
+          ws.coverPos = positions[(positions.indexOf(ws.coverPos || "center center") + 1) % positions.length];
           scheduleSave();
           renderWorkspace();
         };
-        document.querySelectorAll("[data-gifcat]").forEach(btn => {
-          btn.onclick = () => renderPresetGifs(btn.dataset.gifcat);
+        document.querySelectorAll("[data-pattern]").forEach(btn => {
+          btn.onclick = () => {
+            const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+            if (!ws) return;
+            ws.coverUrl = "";
+            ws.coverPattern = btn.dataset.pattern;
+            scheduleSave();
+            renderWorkspace();
+            document.getElementById("cover-studio").classList.add("hidden");
+          };
         });
         document.getElementById("btn-apply-cover-url").onclick = () => {
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
@@ -2168,46 +2176,13 @@
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
           if (!ws) return;
           ws.coverUrl = "";
+          ws.coverPattern = "dots";
           scheduleSave();
           renderWorkspace();
           document.getElementById("cover-studio").classList.add("hidden");
         };
-        document.getElementById("btn-giphy-search").onclick = async () => {
-          const q = document.getElementById("giphy-search-input").value.trim();
-          const gKey = (KEYS.giphyApiKey || "").trim();
-          const grid = document.getElementById("giphy-results-grid");
-          if (!q) return;
-          if (!gKey) {
-            grid.innerHTML = `<span class="muted" style="grid-column:1/-1; font-size:11px;">Add a free GIPHY key on Line 19 of index.html, or pick a preset GIF above / paste any giphy.com link below.</span>`;
-            return;
-          }
-          grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Searching GIPHY...</span>`;
-          try {
-            const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${encodeURIComponent(gKey)}&q=${encodeURIComponent(q)}&limit=6&rating=g`);
-            const data = await res.json();
-            grid.innerHTML = "";
-            (data.data || []).forEach(g => {
-              const url = g.images?.fixed_height?.url || g.images?.original?.url;
-              if (!url) return;
-              const img = document.createElement("img");
-              img.src = url;
-              img.className = "gif-thumb";
-              img.onclick = () => {
-                const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
-                if (ws) {
-                  ws.coverUrl = url;
-                  scheduleSave();
-                  renderWorkspace();
-                  document.getElementById("cover-studio").classList.add("hidden");
-                }
-              };
-              grid.appendChild(img);
-            });
-          } catch {
-            grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">GIPHY search error; paste a URL below.</span>`;
-          }
-        };
 
+        // Discovery & Search
         document.getElementById("mode-topic-btn").onclick = () => switchDiscoveryMode("topic");
         document.getElementById("mode-channel-btn").onclick = () => switchDiscoveryMode("channel");
 
@@ -2232,6 +2207,7 @@
           askGemini("Suggest 3 clean YouTube search keywords and implementation intentions for this workspace.");
         };
 
+        // Focus Mode Controls
         document.getElementById("btn-back-ws").onclick = () => {
           if (ytPlayer && typeof ytPlayer.pauseVideo === "function") ytPlayer.pauseVideo();
           navigate("workspace", state.activeWorkspaceId);
@@ -2247,6 +2223,7 @@
           }
         });
 
+        // Gemini Dock Controls
         document.getElementById("btn-toggle-gemini").onclick = () => {
           document.getElementById("gemini-dock").classList.toggle("hidden");
           renderGeminiChips();
@@ -2254,6 +2231,7 @@
         document.getElementById("btn-close-gemini").onclick = () => {
           document.getElementById("gemini-dock").classList.add("hidden");
         };
+        document.getElementById("btn-test-gemini-key").onclick = () => testGeminiKey();
         document.getElementById("gemini-model-select").onchange = e => {
           state.geminiModel = e.target.value;
           scheduleSave();
@@ -2270,19 +2248,8 @@
             inp.value = "";
           }
         });
-        document.getElementById("btn-lookup-book").onclick = () => {
-          const inp = document.getElementById("google-book-input");
-          lookupGoogleBook(inp.value);
-          inp.value = "";
-        };
-        document.getElementById("google-book-input").addEventListener("keydown", e => {
-          if (e.key === "Enter") {
-            const inp = document.getElementById("google-book-input");
-            lookupGoogleBook(inp.value);
-            inp.value = "";
-          }
-        });
 
+        // Global Cmd+K Search
         document.getElementById("btn-cmd-k").onclick = () => openCmdK();
         document.getElementById("btn-close-cmdk").onclick = () => {
           document.getElementById("cmdk-modal").classList.remove("open");
