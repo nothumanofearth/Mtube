@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube 3.0 // Research OS</title>
+  <title>MTube 3.2 // Research OS</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text y='74' x='22' fill='%23FFFFFF' font-family='monospace' font-size='68'>M</text></svg>">
+</head>
+<body>
+  <!-- =====================================================================
+       DEDICATED CREDENTIALS & API KEYS (EDIT LINES 15–20 MANUALLY)
+  ====================================================================== -->
+  <script id="mtube-credentials">
+    window.MTUBE_KEYS = {
+      youtubeApiKey: "AIzaSyCkwB4WDboObBrbgygqzYmo4Q4d9OADel8",
+      geminiApiKey:  "AIzaSyCYAlQMQw_M3DhSp2t1aKqCddNfsm-3-N0", // Free key from aistudio.google.com/apikey
+      githubToken:   "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",
+      githubOwner:   "nothumanofearth",
+      githubRepo:    "Mtube-Vault",
+      giphyApiKey:   "" // Optional: Free beta key from developers.giphy.com
+    };
+  </script>
 
   <style>
     /* =====================================================================
-       BRUTALIST NOTION + YOUTUBE DESIGN SYSTEM
+       BRUTALIST NOTION + YOUTUBE DESIGN SYSTEM (RESPONSIVE & SAFARI-SAFE)
     ===================================================================== */
     :root {
       --bg: #F8F8F6;
@@ -16,7 +31,7 @@
       --subtle: #F1F1EE;
       --ink: #111111;
       --ink-muted: #666662;
-      --border: #E0E0DC;
+      --border: #DFDFDA;
       --border-strong: #111111;
       --accent: #0055CC;
       --ok: #1E7E34;
@@ -43,7 +58,7 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    /* Top Global Header */
+    /* Global Topbar */
     .topbar {
       position: sticky;
       top: 0;
@@ -91,7 +106,7 @@
     .sync-pill.ok { color: var(--ok); background: #EBF7EE; }
     .sync-pill.err { color: var(--err); background: #FFF0F0; }
 
-    /* Shell Layout: Left Sidebar + Main Canvas + Right Gemini Dock */
+    /* Shell Layout */
     .app-shell {
       display: flex;
       width: 100%;
@@ -99,7 +114,7 @@
       position: relative;
     }
 
-    /* Left Notion Sidebar */
+    /* Left Sidebar */
     .left-sidebar {
       width: 240px;
       flex-shrink: 0;
@@ -122,9 +137,7 @@
         transition: transform 0.2s ease;
         box-shadow: 6px 0 24px rgba(0,0,0,0.12);
       }
-      .left-sidebar.open {
-        transform: translateX(0);
-      }
+      .left-sidebar.open { transform: translateX(0); }
     }
 
     .nav-section-title {
@@ -159,7 +172,7 @@
       font-weight: 600;
     }
 
-    /* Main Workspace Canvas */
+    /* Main Canvas */
     .main-canvas {
       flex: 1;
       min-width: 0;
@@ -174,7 +187,7 @@
 
     /* Right Collapsible Gemini Dock */
     .gemini-dock {
-      width: 350px;
+      width: 360px;
       flex-shrink: 0;
       background: var(--paper);
       border-left: 2px solid var(--border-strong);
@@ -186,9 +199,7 @@
       z-index: 52;
     }
 
-    .gemini-dock.hidden {
-      display: none;
-    }
+    .gemini-dock.hidden { display: none; }
 
     @media (max-width: 980px) {
       .gemini-dock {
@@ -196,7 +207,7 @@
         top: calc(48px + env(safe-area-inset-top));
         right: 0;
         bottom: 0;
-        width: min(100vw, 380px);
+        width: min(100vw, 390px);
         height: auto;
         box-shadow: -8px 0 28px rgba(0,0,0,0.16);
       }
@@ -253,7 +264,7 @@
       font-family: var(--font-serif);
       font-size: clamp(24px, 4.5vw, 34px);
       font-weight: 700;
-      margin: 20px 0 8px;
+      margin: 18px 0 8px;
       letter-spacing: -0.02em;
       word-wrap: break-word;
     }
@@ -304,7 +315,7 @@
       border-radius: 5px;
       color: var(--ink);
       font-family: var(--font-sans);
-      font-size: 16px; /* Prevents iOS Safari zoom */
+      font-size: 16px;
       padding: 9px 11px;
       margin-bottom: 10px;
       outline: none;
@@ -330,34 +341,41 @@
       .grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
     }
 
-    /* Notion Cover Banner & Giphy Studio */
+    /* Responsive Notion Cover Banner (Fixed for Laptop & Monitor) */
+    .cover-shell {
+      max-width: 960px;
+      margin: 14px auto 0;
+      padding: 0 18px;
+    }
     .notion-cover {
       width: 100%;
-      height: 170px;
-      background-color: #E7E7E2;
+      height: clamp(140px, 22vh, 230px);
+      background-color: #EAEAE5;
       background-size: cover;
-      background-position: center;
+      background-position: center center;
+      background-repeat: no-repeat;
       position: relative;
-      border-bottom: 1px solid var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
     }
     .cover-controls {
       position: absolute;
       bottom: 10px;
-      right: 14px;
+      right: 12px;
       display: flex;
       gap: 6px;
     }
     .cover-popover {
       position: absolute;
-      top: 100%;
-      right: 14px;
-      width: min(340px, calc(100vw - 28px));
+      top: calc(100% + 6px);
+      right: 0;
+      width: min(360px, 100%);
       background: var(--paper);
       border: 2px solid var(--ink);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 12px;
       z-index: 45;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
     }
     .gif-grid {
       display: grid;
@@ -367,20 +385,21 @@
     }
     .gif-thumb {
       width: 100%;
-      height: 54px;
+      height: 58px;
       object-fit: cover;
       border-radius: 4px;
       border: 1px solid var(--border);
       cursor: pointer;
     }
 
-    /* Multi-View Database (List, Kanban Board, Table) */
+    /* Multi-View Database */
     .view-tabs {
       display: flex;
       gap: 6px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 10px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
     }
     .kanban-board {
       display: grid;
@@ -405,15 +424,8 @@
       font-size: 13px;
     }
 
-    .notion-table-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-    table.notion-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
+    .notion-table-wrap { width: 100%; overflow-x: auto; }
+    table.notion-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .notion-table th, .notion-table td {
       border: 1px solid var(--border);
       padding: 8px 10px;
@@ -446,8 +458,14 @@
       border-radius: 3px;
       margin-right: 6px;
     }
+    .channel-link {
+      color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-    /* Responsive Video Player */
+    /* Video Player */
     .player-box {
       position: relative;
       width: 100%;
@@ -480,7 +498,7 @@
     }
     .blackout-screen.active { display: flex; }
 
-    /* Notion Block Canvas (Inside Video) */
+    /* Notion Block Canvas */
     .block-item {
       display: flex;
       align-items: flex-start;
@@ -571,12 +589,8 @@
     .view.active { display: block; }
     .hidden { display: none !important; }
     .mobile-only { display: none; }
-    @media (max-width: 860px) {
-      .mobile-only { display: inline-flex; }
-    }
+    @media (max-width: 860px) { .mobile-only { display: inline-flex; } }
   </style>
-</head>
-<body>
 
   <!-- TOP NAVIGATION BAR -->
   <header class="topbar">
@@ -615,7 +629,7 @@
       </div>
 
       <div>
-        <button type="button" class="btn small full" id="btn-manual-sync">↻ Sync Vault Now</button>
+        <button type="button" class="btn small full" id="btn-manual-sync">↻ Force Sync Now</button>
       </div>
     </aside>
 
@@ -626,7 +640,7 @@
       <section id="view-directory" class="view active">
         <div class="canvas-inner">
           <h1>Directory</h1>
-          <p class="muted">Cross-device video workspaces &amp; Zettelkasten knowledge graph synced privately to <code>Mtube-Vault</code>.</p>
+          <p class="muted">Cross-device video workspaces &amp; Zettelkasten knowledge graph synced to <code>Mtube-Vault</code>.</p>
 
           <div class="grid-2">
             <div>
@@ -666,29 +680,44 @@
         </div>
       </section>
 
-      <!-- VIEW 3: WORKSPACE (Cover + Intention Search + List/Board/Table) -->
+      <!-- VIEW 3: WORKSPACE (Cover + Search / Channel Explorer + List/Board/Table) -->
       <section id="view-workspace" class="view">
-        <!-- Notion Cover Banner -->
-        <div class="notion-cover" id="ws-cover">
-          <div class="cover-controls">
-            <button type="button" class="btn small" id="btn-toggle-cover-studio" style="background:rgba(255,255,255,0.92);">Change Cover</button>
-          </div>
-          <!-- Cover Studio Popover -->
-          <div class="cover-popover hidden" id="cover-studio">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span class="bold" style="font-size:12px;">WORKSPACE COVER (GIPHY)</span>
-              <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
+        <!-- Responsive Notion Cover Banner -->
+        <div class="cover-shell">
+          <div class="notion-cover" id="ws-cover">
+            <div class="cover-controls">
+              <button type="button" class="btn small" id="btn-reposition-cover" style="background:rgba(255,255,255,0.92);">↕ Position</button>
+              <button type="button" class="btn small" id="btn-toggle-cover-studio" style="background:rgba(255,255,255,0.92);">Change Cover</button>
             </div>
-            <div style="display:flex; gap:6px;">
-              <input type="text" id="giphy-search-input" placeholder="Search Giphy (e.g. 'matrix rain', 'coding')" style="font-size:13px; padding:6px 8px; margin-bottom:6px;" />
-              <button type="button" class="btn small inverse" id="btn-giphy-search">Go</button>
-            </div>
-            <div class="gif-grid" id="giphy-results-grid"></div>
-            <div style="margin-top:8px; border-top:1px solid var(--border); padding-top:8px;">
-              <input type="text" id="custom-cover-url" placeholder="Or paste direct .gif / image URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
-              <div style="display:flex; gap:6px;">
-                <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply URL</button>
-                <button type="button" class="btn small" id="btn-remove-cover">Remove</button>
+            <!-- Cover Studio Popover -->
+            <div class="cover-popover hidden" id="cover-studio">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span class="bold" style="font-size:12px;">WORKSPACE COVER STUDIO</span>
+                <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
+              </div>
+
+              <!-- Built-in Ambient Presets (Zero API key required) -->
+              <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px;">
+                <button type="button" class="btn small" data-gifcat="all">All</button>
+                <button type="button" class="btn small" data-gifcat="tech">Tech</button>
+                <button type="button" class="btn small" data-gifcat="calm">Calm</button>
+                <button type="button" class="btn small" data-gifcat="retro">Retro</button>
+              </div>
+              <div class="gif-grid" id="giphy-results-grid"></div>
+
+              <!-- Optional Live GIPHY API Search (if key added on Line 20) -->
+              <div style="display:flex; gap:6px; margin-top:10px; border-top:1px solid var(--border); padding-top:8px;">
+                <input type="text" id="giphy-search-input" placeholder="GIPHY keyword (needs key on Line 20)" style="font-size:12px; padding:6px 8px; margin:0;" />
+                <button type="button" class="btn small inverse" id="btn-giphy-search">Go</button>
+              </div>
+
+              <!-- Direct GIPHY Page Link or .gif URL Paste (Works with zero API key) -->
+              <div style="margin-top:8px;">
+                <input type="text" id="custom-cover-url" placeholder="Paste any giphy.com link or .gif URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply &amp; Sync</button>
+                  <button type="button" class="btn small" id="btn-remove-cover">Clear</button>
+                </div>
               </div>
             </div>
           </div>
@@ -697,21 +726,41 @@
         <div class="canvas-inner">
           <h1 id="ws-heading">Workspace</h1>
 
-          <!-- Implementation Intention Search -->
+          <!-- Discovery Box: Topic Search OR Unrestricted Channel Explorer -->
           <div class="card">
-            <h2 style="margin-top:0;">Implementation Intention Search</h2>
-            <div class="grid-2" style="gap:10px;">
-              <input type="text" id="search-query" placeholder="Topic / Query (e.g., 'Latest Podcast Figuring Out')" style="margin-bottom:0;" />
-              <input type="text" id="search-purpose" placeholder="Purpose (e.g., 'Learn from founder mistakes')" style="margin-bottom:0;" />
+            <div style="display:flex; gap:6px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+              <button type="button" class="btn small inverse" id="mode-topic-btn">⌕ Topic Search</button>
+              <button type="button" class="btn small" id="mode-channel-btn">📺 Explore Any Channel (No Restrictions)</button>
             </div>
-            <div style="display:flex; gap:8px; margin-top:10px;">
-              <button type="button" class="btn inverse" style="flex:1;" id="btn-run-search">Curate Videos</button>
-              <button type="button" class="btn" id="btn-ai-suggest-queries">✦ AI Query Ideas</button>
+
+            <!-- Mode A: Accurate Topic Search -->
+            <div id="panel-topic-search">
+              <div class="grid-2" style="gap:10px;">
+                <input type="text" id="search-query" placeholder="Core Topic (e.g., 'Figuring Out Raj Shamani' or 'Proxmox ZFS')" style="margin-bottom:0;" />
+                <input type="text" id="search-purpose" placeholder="Your Purpose (e.g., 'Learn from founder experiences')" style="margin-bottom:0;" />
+              </div>
+              <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                <button type="button" class="btn inverse" style="flex:1;" id="btn-run-search">Curate Accurate Videos</button>
+                <button type="button" class="btn" id="btn-ai-suggest-queries">✦ AI Query Ideas</button>
+              </div>
             </div>
+
+            <!-- Mode B: Unrestricted Channel Explorer -->
+            <div id="panel-channel-explore" class="hidden">
+              <p class="muted" style="margin-bottom:8px;">
+                Browse <strong>all</strong> videos on any YouTube channel without topic filters (Shorts under 3 min are automatically removed).
+              </p>
+              <div class="grid-2" style="gap:10px;">
+                <input type="text" id="channel-query-input" placeholder="Channel @handle, URL, or UC... ID (e.g., '@rajshamani')" style="margin-bottom:0;" />
+                <input type="text" id="channel-purpose-input" placeholder="Purpose for videos added (e.g., 'Deep dive episodes')" style="margin-bottom:0;" />
+              </div>
+              <button type="button" class="btn inverse full" style="margin-top:10px;" id="btn-run-channel-explore">Load Channel Videos</button>
+            </div>
+
             <div id="search-feedback" class="bold" style="font-size:13px; margin-top:8px;"></div>
 
             <div id="search-results-wrap" class="hidden" style="margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
-              <div class="muted bold" style="margin-bottom:8px;">CURATED CANDIDATES (SHORTS PURGED, PODCASTS PRESERVED)</div>
+              <div id="search-results-header" class="muted bold" style="margin-bottom:8px;">CURATED RESULTS</div>
               <div id="search-results-list"></div>
             </div>
           </div>
@@ -730,9 +779,10 @@
       <!-- VIEW 4: FOCUS PLAYER + INLINE CHAPTERS + NOTION BLOCK CANVAS -->
       <section id="view-focus" class="view">
         <div class="canvas-inner">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:8px; flex-wrap:wrap;">
             <button type="button" class="btn small" id="btn-back-ws">← Workspace</button>
-            <div style="display:flex; gap:6px;">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button type="button" class="btn small" id="btn-focus-explore-channel">📺 Browse Creator Channel</button>
               <select id="focus-status-select" style="width:auto; min-height:30px; padding:3px 8px; font-size:12px; margin:0;">
                 <option value="backlog">Status: Backlog</option>
                 <option value="watching">Status: Watching</option>
@@ -801,19 +851,16 @@
           <option value="gemma-4-31b-it">Gemma 4 31B (Free — Open Model)</option>
         </select>
 
-        <!-- Optional AI Studio Key Override (Syncs to Private Vault) -->
-        <details style="font-size:11px; color:var(--ink-muted);">
-          <summary style="cursor:pointer;">Gemini API Key Override (Optional)</summary>
-          <div style="display:flex; gap:6px; margin-top:6px;">
-            <input type="password" id="gemini-key-override" placeholder="AIzaSy... (Google AI Studio)" style="font-size:12px; padding:5px 8px; margin:0;" />
-            <button type="button" class="btn small inverse" id="btn-save-gemini-key">Save</button>
-          </div>
-        </details>
+        <!-- Google Books Lookup Tool (Uses Google Books API) -->
+        <div style="display:flex; gap:6px; margin-top:4px;">
+          <input type="text" id="google-book-input" placeholder="📚 Lookup book mentioned in video..." style="font-size:12px; padding:5px 8px; margin:0;" />
+          <button type="button" class="btn small" id="btn-lookup-book">Book</button>
+        </div>
       </div>
 
       <div class="gemini-body" id="gemini-chat-feed">
         <div class="ai-msg">
-          Context-aware sidekick ready. Use a quick chip below or ask anything about your current workspace, video, or notes.
+          Context-aware sidekick ready. Paste your Gemini API key on Line 16 of index.html, then tap a quick chip below or ask any question.
         </div>
       </div>
 
@@ -841,31 +888,10 @@
 
   <script>
     const App = (() => {
-      /* =====================================================================
-         1. OBFUSCATED CREDENTIAL BOOTSTRAPPER (Reconstructed in memory)
-      ===================================================================== */
-      const _seg = {
-        a: ["QUl6YVN5Q2t3", "QjRXRGJvT2JC", "cmJneWdxellN", "bzRRNGQ5T0FE", "ZWw4"],
-        b: ["Z2l0aHViX3BhdF8xMUJHVUhOTlEwNVVCTEpmcEx6OHBs", "X2w4ZnNRbnR2dXlSaHNHNlEyTEJzRzRzZDZ4Und5VGJw", "cGJPM0RLTlhhc0VDQ0JNMlFaUlFrTnl6Q3hq"],
-        c: ["bm90aHVtYW5vZmVhcnRo", "TXR1YmUtVmF1bHQ="]
-      };
-
-      function _unlock() {
-        return {
-          ytKey: atob(_seg.a.join("")),
-          ghToken: atob(_seg.b.join("")),
-          ghOwner: atob(_seg.c[0]),
-          ghRepo: atob(_seg.c[1])
-        };
-      }
-
-      const KEYS = _unlock();
-
-      /* =====================================================================
-         2. APPLICATION STATE & GITHUB VAULT PERSISTENCE
-      ===================================================================== */
+      const KEYS = window.MTUBE_KEYS || {};
       let ghSha = null;
       let syncTimer = null;
+      let isSyncing = false;
 
       const state = {
         activeView: "directory",
@@ -873,10 +899,9 @@
         activeVideoId: null,
         dbView: "list",
         geminiModel: "gemini-3.8-flash",
-        geminiApiKey: "", // Optional AI Studio key override; falls back to KEYS.ytKey
         workspaces: [
-          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "" },
-          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "" }
+          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPos: "center center" },
+          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPos: "center center" }
         ],
         videos: [],
         blocks: []
@@ -885,13 +910,14 @@
       let ytPlayer = null;
       let ytApiReady = false;
 
-      const CURATED_GIFS = [
-        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJndXp4b2x4aGx4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4/3o7aCTPPm4OHfRLSH6/giphy.gif",
-        "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif",
-        "https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif",
-        "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif",
-        "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif",
-        "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif"
+      // Built-in ambient Notion-style cover GIFs (Zero API key required)
+      const PRESET_GIFS = [
+        { cat: "tech", url: "https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" },
+        { cat: "tech", url: "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif" },
+        { cat: "calm", url: "https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" },
+        { cat: "calm", url: "https://media.giphy.com/media/3o7aCTPPm4OHfRLSH6/giphy.gif" },
+        { cat: "retro", url: "https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" },
+        { cat: "retro", url: "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" }
       ];
 
       function setSyncStatus(label, statusClass = "") {
@@ -900,22 +926,33 @@
         pill.className = `sync-pill ${statusClass}`;
       }
 
-      async function pullVault() {
+      function nowStamp() {
+        return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+      }
+
+      /* =====================================================================
+         1. CROSS-DEVICE GITHUB VAULT SYNC (With 409 SHA Recovery)
+      ===================================================================== */
+      async function pullVault(rerenderAfter = false) {
+        if (isSyncing) return;
+        isSyncing = true;
         setSyncStatus("SYNCING...");
         try {
-          const url = `https://api.github.com/repos/${KEYS.ghOwner}/${KEYS.ghRepo}/contents/mtube_vault.json?t=${Date.now()}`;
+          const url = `https://api.github.com/repos/${KEYS.githubOwner}/${KEYS.githubRepo}/contents/mtube_vault.json?t=${Date.now()}`;
           const res = await fetch(url, {
+            cache: "no-store",
             headers: {
-              "Authorization": `Bearer ${KEYS.ghToken}`,
+              "Authorization": `Bearer ${KEYS.githubToken}`,
               "Accept": "application/vnd.github+json"
             }
           });
 
           if (res.status === 404) {
+            isSyncing = false;
             await pushVault(true);
             return;
           }
-          if (!res.ok) throw new Error("GitHub Vault read error");
+          if (!res.ok) throw new Error(`GitHub HTTP ${res.status}`);
 
           const data = await res.json();
           ghSha = data.sha;
@@ -928,42 +965,44 @@
           state.videos = Array.isArray(parsed.videos) ? parsed.videos : [];
           state.blocks = Array.isArray(parsed.blocks) ? parsed.blocks : [];
           if (parsed.geminiModel) state.geminiModel = parsed.geminiModel;
-          if (parsed.geminiApiKey) state.geminiApiKey = parsed.geminiApiKey;
 
           document.getElementById("gemini-model-select").value = state.geminiModel;
-          if (state.geminiApiKey) {
-            document.getElementById("gemini-key-override").value = state.geminiApiKey;
-          }
-
           localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
-          setSyncStatus("VAULT SYNCED ✓", "ok");
+          setSyncStatus(`SYNCED ${nowStamp()} ✓`, "ok");
+
+          if (rerenderAfter) {
+            renderSidebar();
+            if (state.activeView === "directory") renderDirectory();
+            else if (state.activeView === "todos") renderMasterTodos();
+            else if (state.activeView === "workspace") renderWorkspace();
+            else if (state.activeView === "focus") renderBlocks();
+          }
         } catch (err) {
           console.warn(err);
           const cached = localStorage.getItem("mtube_v3_cache");
-          if (cached) {
-            Object.assign(state, JSON.parse(cached));
-          }
-          setSyncStatus("OFFLINE CACHE", "err");
+          if (cached) Object.assign(state, JSON.parse(cached));
+          setSyncStatus("SYNC ERROR", "err");
+        } finally {
+          isSyncing = false;
         }
       }
 
-      async function pushVault(isInitial = false) {
-        setSyncStatus(isInitial ? "INITIALIZING VAULT..." : "SAVING...");
+      async function pushVault(isInitial = false, retryCount = 0) {
+        setSyncStatus(isInitial ? "CREATING VAULT..." : "SAVING...");
         try {
           const payload = {
-            version: 3,
+            version: 3.2,
             updatedAt: new Date().toISOString(),
             geminiModel: state.geminiModel,
-            geminiApiKey: state.geminiApiKey,
             workspaces: state.workspaces,
             videos: state.videos,
             blocks: state.blocks
           };
 
           const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
-          const url = `https://api.github.com/repos/${KEYS.ghOwner}/${KEYS.ghRepo}/contents/mtube_vault.json`;
+          const url = `https://api.github.com/repos/${KEYS.githubOwner}/${KEYS.githubRepo}/contents/mtube_vault.json`;
           const body = {
-            message: "Sync MTube 3.0 Vault",
+            message: `Sync MTube (${nowStamp()})`,
             content: encoded
           };
           if (ghSha) body.sha = ghSha;
@@ -971,32 +1010,48 @@
           const res = await fetch(url, {
             method: "PUT",
             headers: {
-              "Authorization": `Bearer ${KEYS.ghToken}`,
+              "Authorization": `Bearer ${KEYS.githubToken}`,
               "Accept": "application/vnd.github+json",
               "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
           });
 
-          if (!res.ok) throw new Error("GitHub Vault write error");
+          // Handle 409 SHA Conflict automatically when another device updated the file
+          if (res.status === 409 && retryCount < 2) {
+            const headRes = await fetch(`${url}?t=${Date.now()}`, {
+              cache: "no-store",
+              headers: {
+                "Authorization": `Bearer ${KEYS.githubToken}`,
+                "Accept": "application/vnd.github+json"
+              }
+            });
+            if (headRes.ok) {
+              const headData = await headRes.json();
+              ghSha = headData.sha;
+              return pushVault(isInitial, retryCount + 1);
+            }
+          }
+
+          if (!res.ok) throw new Error(`GitHub Save HTTP ${res.status}`);
           const result = await res.json();
           ghSha = result.content.sha;
           localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
-          setSyncStatus("VAULT SYNCED ✓", "ok");
+          setSyncStatus(`SYNCED ${nowStamp()} ✓`, "ok");
         } catch (err) {
           console.warn(err);
-          setSyncStatus("SYNC RETRY PENDING", "err");
+          setSyncStatus("SAVE FAILED", "err");
         }
       }
 
       function scheduleSave() {
         localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
         clearTimeout(syncTimer);
-        syncTimer = setTimeout(() => pushVault(false), 900);
+        syncTimer = setTimeout(() => pushVault(false), 500);
       }
 
       /* =====================================================================
-         3. NAVIGATION & SIDEBAR RENDERING
+         2. NAVIGATION & SIDEBAR
       ===================================================================== */
       function navigate(viewName, param = null) {
         state.activeView = viewName;
@@ -1011,11 +1066,9 @@
 
         renderSidebar();
 
-        if (viewName === "directory") {
-          renderDirectory();
-        } else if (viewName === "todos") {
-          renderMasterTodos();
-        } else if (viewName === "workspace" && param) {
+        if (viewName === "directory") renderDirectory();
+        else if (viewName === "todos") renderMasterTodos();
+        else if (viewName === "workspace" && param) {
           state.activeWorkspaceId = param;
           renderWorkspace();
         } else if (viewName === "focus" && param) {
@@ -1046,7 +1099,7 @@
       }
 
       /* =====================================================================
-         4. DIRECTORY, WIKILINKS & MASTER TO-DOS
+         3. DIRECTORY, WIKILINKS & MASTER TO-DOS
       ===================================================================== */
       function renderDirectory() {
         const list = document.getElementById("directory-ws-list");
@@ -1099,7 +1152,6 @@
           list.appendChild(card);
         });
 
-        // Concept Wikilinks Cloud
         const cloud = document.getElementById("concept-cloud");
         cloud.innerHTML = "";
         const conceptCounts = {};
@@ -1124,12 +1176,11 @@
           });
         }
 
-        // Recent Videos
         const recent = document.getElementById("recent-activity-list");
         recent.innerHTML = "";
         const recentVids = state.videos.slice(0, 5);
         if (recentVids.length === 0) {
-          recent.innerHTML = `<span class="muted">Open a workspace to search and curate your first video.</span>`;
+          recent.innerHTML = `<span class="muted">Open a workspace to search videos or explore a YouTube channel.</span>`;
         } else {
           recentVids.forEach(v => {
             const row = document.createElement("div");
@@ -1185,8 +1236,40 @@
       }
 
       /* =====================================================================
-         5. WORKSPACE, COVER STUDIO & MULTI-VIEW DATABASE
+         4. WORKSPACE, GIPHY COVER STUDIO & MULTI-VIEW DATABASE
       ===================================================================== */
+      function normalizeGifUrl(rawUrl) {
+        const u = (rawUrl || "").trim();
+        if (!u) return "";
+        // Convert giphy.com/gifs/slug-ID or giphy.com/embed/ID into direct media.giphy.com GIF
+        const gifMatch = u.match(/giphy\.com\/(?:gifs|embed)\/(?:[a-zA-Z0-9-]+-)?([a-zA-Z0-9]+)/);
+        if (gifMatch && gifMatch[1]) {
+          return `https://media.giphy.com/media/${gifMatch[1]}/giphy.gif`;
+        }
+        return u;
+      }
+
+      function renderPresetGifs(category = "all") {
+        const gifGrid = document.getElementById("giphy-results-grid");
+        gifGrid.innerHTML = "";
+        const items = category === "all" ? PRESET_GIFS : PRESET_GIFS.filter(g => g.cat === category);
+        items.forEach(item => {
+          const img = document.createElement("img");
+          img.src = item.url;
+          img.className = "gif-thumb";
+          img.onclick = () => {
+            const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+            if (!ws) return;
+            ws.coverUrl = item.url;
+            ws.coverPos = ws.coverPos || "center center";
+            scheduleSave();
+            renderWorkspace();
+            document.getElementById("cover-studio").classList.add("hidden");
+          };
+          gifGrid.appendChild(img);
+        });
+      }
+
       function renderWorkspace() {
         const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
         if (!ws) return navigate("directory");
@@ -1197,24 +1280,10 @@
 
         const coverEl = document.getElementById("ws-cover");
         coverEl.style.backgroundImage = ws.coverUrl ? `url('${ws.coverUrl}')` : "none";
+        coverEl.style.backgroundPosition = ws.coverPos || "center center";
         document.getElementById("custom-cover-url").value = ws.coverUrl || "";
 
-        // Populate preset GIF grid
-        const gifGrid = document.getElementById("giphy-results-grid");
-        gifGrid.innerHTML = "";
-        CURATED_GIFS.forEach(url => {
-          const img = document.createElement("img");
-          img.src = url;
-          img.className = "gif-thumb";
-          img.onclick = () => {
-            ws.coverUrl = url;
-            scheduleSave();
-            renderWorkspace();
-            document.getElementById("cover-studio").classList.add("hidden");
-          };
-          gifGrid.appendChild(img);
-        });
-
+        renderPresetGifs("all");
         setDbView(state.dbView);
       }
 
@@ -1229,7 +1298,7 @@
         container.innerHTML = "";
 
         if (wsVideos.length === 0) {
-          container.innerHTML = `<div class="card muted">No curated videos in this workspace yet. Use the Intention Search above.</div>`;
+          container.innerHTML = `<div class="card muted">No curated videos in this workspace yet. Search by topic or explore any channel above.</div>`;
           return;
         }
 
@@ -1243,7 +1312,7 @@
             row.innerHTML = `
               <div style="min-width:0; flex:1;">
                 <div class="bold" style="font-size:16px; font-family:var(--font-serif);">${escapeHtml(v.title)}</div>
-                <div class="muted">${escapeHtml(v.channel)} • [${v.status.toUpperCase()}] • ${noteCount} blocks</div>
+                <div class="muted"><span class="channel-link">${escapeHtml(v.channel)}</span> • [${(v.status || "backlog").toUpperCase()}] • ${noteCount} blocks</div>
                 <div style="font-size:13px; margin-top:4px;">Purpose: ${escapeHtml(v.purpose)}</div>
               </div>
               <div style="display:flex; flex-direction:column; gap:6px;">
@@ -1251,6 +1320,7 @@
                 <button type="button" class="btn small">Drop</button>
               </div>
             `;
+            row.querySelector(".channel-link").onclick = () => jumpToChannelExplorer(v.channelId || v.channel);
             const btns = row.querySelectorAll("button");
             btns[0].onclick = () => navigate("focus", v.id);
             btns[1].onclick = () => {
@@ -1326,7 +1396,7 @@
       }
 
       /* =====================================================================
-         6. YOUTUBE SEARCH & PODCAST-SAFE FILTERING
+         5. ACCURATE YOUTUBE SEARCH + UNRESTRICTED CHANNEL EXPLORER
       ===================================================================== */
       function parseISODuration(iso) {
         if (!iso || typeof iso !== "string") return 0;
@@ -1343,25 +1413,81 @@
         return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}` : `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
       }
 
+      function distillTopicQuery(raw) {
+        // Strip conversational filler so YouTube API searches core subject keywords accurately
+        return raw
+          .replace(/\b(latest|newest|recent|english language|videos? (about|on)|i want to learn|how to learn|best)\b/gi, " ")
+          .replace(/\s+/g, " ")
+          .trim() || raw.trim();
+      }
+
+      function renderCandidateList(items, defaultPurpose, headerLabel) {
+        const resultsWrap = document.getElementById("search-results-wrap");
+        const resultsList = document.getElementById("search-results-list");
+        document.getElementById("search-results-header").textContent = headerLabel;
+        resultsList.innerHTML = "";
+
+        items.forEach(v => {
+          const row = document.createElement("div");
+          row.className = "list-row";
+          row.innerHTML = `
+            <div style="min-width:0; flex:1;">
+              <div class="bold" style="font-size:15px;">
+                ${typeof v.score === "number" ? `<span class="score-tag">MATCH:${v.score}</span>` : ""}${escapeHtml(v.title)}
+              </div>
+              <div class="muted">
+                <span class="channel-link">${escapeHtml(v.channel)}</span> • ${formatTime(v.durationSec)}
+              </div>
+            </div>
+            <button type="button" class="btn small inverse">+ Add</button>
+          `;
+          row.querySelector(".channel-link").onclick = () => jumpToChannelExplorer(v.channelId || v.channel);
+          row.querySelector("button").onclick = () => {
+            if (!state.videos.some(existing => existing.id === v.id && existing.workspaceId === state.activeWorkspaceId)) {
+              state.videos.unshift({
+                id: v.id,
+                workspaceId: state.activeWorkspaceId,
+                status: "backlog",
+                title: v.title,
+                channel: v.channel,
+                channelId: v.channelId || "",
+                description: v.description,
+                purpose: defaultPurpose,
+                addedAt: Date.now()
+              });
+              scheduleSave();
+              renderSidebar();
+              setDbView(state.dbView);
+            }
+            row.querySelector("button").textContent = "Added ✓";
+            row.querySelector("button").disabled = true;
+          };
+          resultsList.appendChild(row);
+        });
+
+        resultsWrap.classList.remove("hidden");
+      }
+
       async function searchYouTube() {
-        const query = document.getElementById("search-query").value.trim();
+        const rawQuery = document.getElementById("search-query").value.trim();
         const purpose = document.getElementById("search-purpose").value.trim();
         const feedback = document.getElementById("search-feedback");
         const resultsWrap = document.getElementById("search-results-wrap");
-        const resultsList = document.getElementById("search-results-list");
 
-        if (!query || !purpose) {
-          feedback.textContent = "Enter both a Topic/Query and a Purpose first.";
+        if (!rawQuery || !purpose) {
+          feedback.textContent = "Enter both a Core Topic and your Purpose first.";
           return;
         }
 
-        feedback.textContent = "Curating results...";
+        feedback.textContent = "Curating accurate results...";
         resultsWrap.classList.add("hidden");
 
         try {
-          const orderParam = /\b(latest|newest|recent)\b/i.test(query) ? "date" : "relevance";
-          const qCombined = `${query} ${purpose}`;
-          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(qCombined)}&type=video&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${KEYS.ytKey}`;
+          const orderParam = /\b(latest|newest|recent)\b/i.test(rawQuery) ? "date" : "relevance";
+          const cleanQuery = distillTopicQuery(rawQuery);
+
+          // Query YouTube strictly with distilled topic keywords (never polluted by long purpose sentences)
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${KEYS.youtubeApiKey}`;
 
           const sRes = await fetch(searchUrl);
           const sData = await sRes.json();
@@ -1370,86 +1496,175 @@
           const ids = (sData.items || []).map(i => i.id?.videoId).filter(Boolean);
           if (ids.length === 0) throw new Error("No videos returned.");
 
-          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${KEYS.ytKey}`);
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${KEYS.youtubeApiKey}`);
           const dData = await dRes.json();
 
+          const stopWords = new Set(["the", "and", "for", "with", "from", "into", "about", "podcast", "video", "latest", "learn", "how"]);
+          const topicTokens = cleanQuery.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 2 && !stopWords.has(w));
+          const purposeTokens = purpose.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
           const titleJunk = ["#shorts", "prank", "meme", "memes", "tiktok", "funny moments", "gossip"];
-          const intentWords = qCombined.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 3);
 
           const curated = (dData.items || [])
             .map(v => {
               const dur = parseISODuration(v.contentDetails?.duration);
               const title = v.snippet?.title || "";
+              const channel = v.snippet?.channelTitle || "Unknown";
               const desc = v.snippet?.description || "";
-              let score = 0;
-              intentWords.forEach(w => {
-                if (title.toLowerCase().includes(w)) score += 3;
-                if (desc.toLowerCase().includes(w)) score += 1;
+              const tags = (v.snippet?.tags || []).join(" ").toLowerCase();
+
+              const titleLow = title.toLowerCase();
+              const chanLow = channel.toLowerCase();
+              const descLow = desc.toLowerCase();
+
+              // Hard relevance check: at least one core topic word must match title, channel, or tags
+              let topicHits = 0;
+              topicTokens.forEach(t => {
+                if (titleLow.includes(t) || chanLow.includes(t) || tags.includes(t)) topicHits += 1;
               });
+
+              let score = topicHits * 4;
+              purposeTokens.forEach(p => {
+                if (titleLow.includes(p)) score += 2;
+                if (descLow.includes(p)) score += 1;
+              });
+
               return {
                 id: v.id,
                 title,
-                channel: v.snippet?.channelTitle || "Unknown",
+                channel,
+                channelId: v.snippet?.channelId || "",
                 description: desc,
                 durationSec: dur,
+                topicHits,
                 score
               };
             })
             .filter(v => {
-              if (v.durationSec >= 1200) return true; // Podcasts >= 20 min always pass
               if (v.durationSec > 0 && v.durationSec < 180) return false; // Block Shorts < 3 min
+              if (topicTokens.length > 0 && v.topicHits === 0) return false; // Reject off-topic noise
+              if (v.durationSec >= 1200) return true; // Podcasts >= 20 min bypass title filter
               const tLow = v.title.toLowerCase();
               return !titleJunk.some(j => tLow.includes(j));
             })
-            .sort((a, b) => b.score - a.score)
+            .sort((a, b) => (orderParam === "date" ? 0 : b.score - a.score))
             .slice(0, 10);
 
           if (curated.length === 0) {
-            throw new Error("No videos over 3 minutes matched your intention.");
+            throw new Error("No high-relevance videos over 3 minutes matched. Try simpler topic keywords or Explore Channel.");
           }
 
-          resultsList.innerHTML = "";
-          curated.forEach(v => {
-            const row = document.createElement("div");
-            row.className = "list-row";
-            row.innerHTML = `
-              <div style="min-width:0; flex:1;">
-                <div class="bold" style="font-size:15px;"><span class="score-tag">MATCH:${v.score}</span>${escapeHtml(v.title)}</div>
-                <div class="muted">${escapeHtml(v.channel)} • ${formatTime(v.durationSec)}</div>
-              </div>
-              <button type="button" class="btn small inverse">+ Add</button>
-            `;
-            row.querySelector("button").onclick = () => {
-              if (!state.videos.some(existing => existing.id === v.id && existing.workspaceId === state.activeWorkspaceId)) {
-                state.videos.unshift({
-                  id: v.id,
-                  workspaceId: state.activeWorkspaceId,
-                  status: "backlog",
-                  title: v.title,
-                  channel: v.channel,
-                  description: v.description,
-                  purpose,
-                  addedAt: Date.now()
-                });
-                scheduleSave();
-                renderSidebar();
-                setDbView(state.dbView);
-              }
-              row.querySelector("button").textContent = "Added ✓";
-              row.querySelector("button").disabled = true;
-            };
-            resultsList.appendChild(row);
-          });
-
           feedback.textContent = "";
-          resultsWrap.classList.remove("hidden");
+          renderCandidateList(curated, purpose, `CURATED TOPIC RESULTS (${curated.length} MATCHED)`);
         } catch (err) {
           feedback.textContent = `Search error: ${err.message}`;
         }
       }
 
+      function switchDiscoveryMode(mode) {
+        const isTopic = mode === "topic";
+        document.getElementById("mode-topic-btn").classList.toggle("inverse", isTopic);
+        document.getElementById("mode-channel-btn").classList.toggle("inverse", !isTopic);
+        document.getElementById("panel-topic-search").classList.toggle("hidden", !isTopic);
+        document.getElementById("panel-channel-explore").classList.toggle("hidden", isTopic);
+        document.getElementById("search-feedback").textContent = "";
+        document.getElementById("search-results-wrap").classList.add("hidden");
+      }
+
+      function jumpToChannelExplorer(channelIdentifier) {
+        if (!state.activeWorkspaceId && state.workspaces[0]) {
+          state.activeWorkspaceId = state.workspaces[0].id;
+        }
+        navigate("workspace", state.activeWorkspaceId);
+        switchDiscoveryMode("channel");
+        document.getElementById("channel-query-input").value = channelIdentifier;
+        exploreChannel();
+      }
+
+      async function exploreChannel() {
+        const rawInput = document.getElementById("channel-query-input").value.trim();
+        const purpose = document.getElementById("channel-purpose-input").value.trim() || "Channel deep dive";
+        const feedback = document.getElementById("search-feedback");
+        const resultsWrap = document.getElementById("search-results-wrap");
+
+        if (!rawInput) {
+          feedback.textContent = "Enter a YouTube channel @handle, URL, or UC... ID.";
+          return;
+        }
+
+        feedback.textContent = "Loading channel catalog (Shorts filtered out)...";
+        resultsWrap.classList.add("hidden");
+
+        try {
+          let channelId = "";
+          let handle = "";
+
+          // Extract UC... ID or @handle from full YouTube URLs or direct text
+          const ucMatch = rawInput.match(/(UC[a-zA-Z0-9_-]{22})/);
+          const handleMatch = rawInput.match(/@([a-zA-Z0-9._-]+)/);
+
+          if (ucMatch) {
+            channelId = ucMatch[1];
+          } else if (handleMatch) {
+            handle = `@${handleMatch[1]}`;
+          } else {
+            // Fallback search for channel by name
+            const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${KEYS.youtubeApiKey}`);
+            const chData = await chSearch.json();
+            channelId = chData.items?.[0]?.id?.channelId || "";
+          }
+
+          const chanParams = new URLSearchParams({
+            part: "snippet,contentDetails",
+            key: KEYS.youtubeApiKey
+          });
+          if (channelId) chanParams.set("id", channelId);
+          else if (handle) chanParams.set("forHandle", handle);
+          else throw new Error("Channel not found.");
+
+          const cRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?${chanParams.toString()}`);
+          const cData = await cRes.json();
+          const channelObj = cData.items?.[0];
+          if (!channelObj) throw new Error("Could not resolve channel details.");
+
+          const uploadsPlaylistId = channelObj.contentDetails?.relatedPlaylists?.uploads;
+          const channelTitle = channelObj.snippet?.title || rawInput;
+          const resolvedChannelId = channelObj.id;
+
+          // Fetch up to 35 recent uploads from the channel's uploads playlist (1 quota unit)
+          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${KEYS.youtubeApiKey}`);
+          const plData = await plRes.json();
+          const vidIds = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
+
+          if (vidIds.length === 0) throw new Error("No public uploads found on this channel.");
+
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${KEYS.youtubeApiKey}`);
+          const dData = await dRes.json();
+
+          // Block ONLY Shorts (<= 180s or #shorts in title); zero topic restrictions
+          const regularVideos = (dData.items || [])
+            .map(v => ({
+              id: v.id,
+              title: v.snippet?.title || "Untitled",
+              channel: channelTitle,
+              channelId: resolvedChannelId,
+              description: v.snippet?.description || "",
+              durationSec: parseISODuration(v.contentDetails?.duration)
+            }))
+            .filter(v => v.durationSec > 180 && !/#shorts/i.test(v.title));
+
+          if (regularVideos.length === 0) {
+            throw new Error("Only Shorts (< 3 min) were found in this channel's recent uploads.");
+          }
+
+          feedback.textContent = "";
+          renderCandidateList(regularVideos, purpose, `${channelTitle.toUpperCase()} — FULL CATALOG (${regularVideos.length} VIDEOS, SHORTS REMOVED)`);
+        } catch (err) {
+          feedback.textContent = `Channel error: ${err.message}`;
+        }
+      }
+
       /* =====================================================================
-         7. FOCUS PLAYER, INLINE CHAPTERS & NOTION BLOCK ENGINE
+         6. FOCUS PLAYER, INLINE CHAPTERS & NOTION BLOCK CANVAS
       ===================================================================== */
       function loadYouTubeIFrameAPI() {
         window.onYouTubeIframeAPIReady = () => { ytApiReady = true; };
@@ -1464,6 +1679,10 @@
 
         document.getElementById("focus-title").textContent = vid.title;
         document.getElementById("focus-purpose-text").textContent = vid.purpose;
+        document.getElementById("btn-focus-explore-channel").onclick = () => {
+          jumpToChannelExplorer(vid.channelId || vid.channel);
+        };
+
         const statusSel = document.getElementById("focus-status-select");
         statusSel.value = vid.status || "watching";
         statusSel.onchange = () => {
@@ -1586,7 +1805,7 @@
           return;
         }
 
-        vidBlocks.forEach((b, idx) => {
+        vidBlocks.forEach(b => {
           if (b.type === "divider") {
             const hr = document.createElement("hr");
             hr.className = "block-divider";
@@ -1657,7 +1876,7 @@
       }
 
       /* =====================================================================
-         8. COLLAPSIBLE RIGHT-HAND GEMINI DOCK (FREE-TIER MODELS)
+         7. COLLAPSIBLE GEMINI SIDEKICK + GOOGLE BOOKS LOOKUP
       ===================================================================== */
       function renderGeminiChips() {
         const box = document.getElementById("gemini-quick-chips");
@@ -1666,13 +1885,13 @@
 
         if (state.activeView === "focus") {
           chips = [
-            { label: "Summarize for Purpose", prompt: "Summarize the key concepts and practical steps needed to achieve my stated purpose for this video." },
+            { label: "Summarize for Purpose", prompt: "Summarize the core concepts and steps needed to achieve my stated purpose for this video." },
             { label: "Extract Action Steps", prompt: "Turn the advice in this video and my notes into a concise bulleted action checklist." },
             { label: "Quiz My Retention", prompt: "Ask me 3 sharp active-recall questions to test my understanding of this video." }
           ];
         } else if (state.activeView === "workspace") {
           chips = [
-            { label: "Suggest Search Queries", prompt: "Suggest 3 specific YouTube search queries and implementation intentions for this workspace." },
+            { label: "Suggest Topic Keywords", prompt: "Suggest 3 clean YouTube search keywords and purposes for this workspace." },
             { label: "Synthesize Workspace", prompt: "Synthesize the main themes across all videos and notes saved in this workspace." }
           ];
         } else {
@@ -1725,8 +1944,9 @@
         feed.appendChild(aiBubble);
         feed.scrollTop = feed.scrollHeight;
 
-        const apiKey = (state.geminiApiKey || KEYS.ytKey).trim();
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const rawGemKey = (KEYS.geminiApiKey || "").trim();
+        const activeKey = rawGemKey && rawGemKey !== "PASTE_YOUR_GEMINI_API_KEY_HERE" ? rawGemKey : KEYS.youtubeApiKey;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent?key=${encodeURIComponent(activeKey)}`;
 
         const fullPrompt = `You are the embedded research assistant inside MTube (a Notion + YouTube learning workspace). Be concise, structured, and practical.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
 
@@ -1740,14 +1960,11 @@
           });
 
           const data = await res.json();
-          if (!res.ok) {
-            throw new Error(data.error?.message || `HTTP ${res.status}`);
-          }
+          if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
 
           const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response text returned.";
           aiBubble.textContent = reply;
 
-          // Attach Notion Insertion Controls if inside a video
           if (state.activeView === "focus" && state.activeVideoId) {
             const bar = document.createElement("div");
             bar.className = "ai-insert-bar";
@@ -1772,14 +1989,53 @@
             aiBubble.appendChild(bar);
           }
         } catch (err) {
-          aiBubble.textContent = `Gemini API Notice: ${err.message}\n\nTip: If your Google Cloud key does not have Generative Language API enabled or hit a free-tier RPM limit, paste a free Google AI Studio key in "Gemini API Key Override" above or switch to Gemini 3.5 Flash-Lite.`;
+          aiBubble.textContent = `Gemini API Error: ${err.message}\n\nFix: Paste your free Google AI Studio key into Line 16 (geminiApiKey) of index.html, or switch to Gemini 3.5 Flash-Lite above.`;
         }
 
         feed.scrollTop = feed.scrollHeight;
       }
 
+      async function lookupGoogleBook(bookQuery) {
+        const q = (bookQuery || "").trim();
+        if (!q) return;
+
+        const feed = document.getElementById("gemini-chat-feed");
+        const bubble = document.createElement("div");
+        bubble.className = "ai-msg";
+        bubble.textContent = `Searching Google Books for "${q}"...`;
+        feed.appendChild(bubble);
+        feed.scrollTop = feed.scrollHeight;
+
+        try {
+          const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=2`);
+          const data = await res.json();
+          const book = data.items?.[0]?.volumeInfo;
+          if (!book) throw new Error("No matching book found.");
+
+          const authors = (book.authors || ["Unknown Author"]).join(", ");
+          const summary = (book.description || "No summary available.").slice(0, 260);
+          const formatted = `📚 ${book.title} — ${authors} (${book.publishedDate || ""})\n${summary}...`;
+          bubble.textContent = formatted;
+
+          if (state.activeView === "focus" && state.activeVideoId) {
+            const bar = document.createElement("div");
+            bar.className = "ai-insert-bar";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "btn small inverse";
+            btn.textContent = "+ Save Book to Page";
+            btn.onclick = () => addBlock(`[[${book.title}]] by ${authors} — ${summary}`, "callout");
+            bar.appendChild(btn);
+            bubble.appendChild(bar);
+          }
+        } catch (err) {
+          bubble.textContent = `Book lookup failed: ${err.message}`;
+        }
+        feed.scrollTop = feed.scrollHeight;
+      }
+
       /* =====================================================================
-         9. GLOBAL CMD+K SEARCH MODAL & UTILITIES
+         8. GLOBAL CMD+K SEARCH MODAL & UTILITIES
       ===================================================================== */
       function openCmdK(initialQuery = "") {
         const modal = document.getElementById("cmdk-modal");
@@ -1851,23 +2107,26 @@
       }
 
       /* =====================================================================
-         10. EVENT BINDINGS & INITIALIZATION
+         9. EVENT BINDINGS & CROSS-DEVICE VISIBILITY SYNC
       ===================================================================== */
       function bindEvents() {
         document.getElementById("btn-mobile-menu").onclick = () => {
           document.getElementById("left-sidebar").classList.toggle("open");
         };
 
-        document.getElementById("btn-manual-sync").onclick = async () => {
-          await pullVault();
-          navigate(state.activeView, state.activeView === "focus" ? state.activeVideoId : state.activeWorkspaceId);
-        };
+        document.getElementById("btn-manual-sync").onclick = () => pullVault(true);
+
+        // Auto-sync across devices when returning to tab or unlocking phone
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) pullVault(true);
+        });
+        window.addEventListener("focus", () => pullVault(true));
 
         // Workspace Creation
         const createWs = (name, icon = "◈") => {
           const clean = name.trim();
           if (!clean) return;
-          const ws = { id: `ws_${Date.now()}`, name: clean, icon: icon.trim() || "◈", coverUrl: "" };
+          const ws = { id: `ws_${Date.now()}`, name: clean, icon: icon.trim() || "◈", coverUrl: "", coverPos: "center center" };
           state.workspaces.push(ws);
           scheduleSave();
           renderSidebar();
@@ -1887,20 +2146,30 @@
           input.value = "";
         };
 
-        // Cover Studio
+        // Cover Studio & Reposition
         document.getElementById("btn-toggle-cover-studio").onclick = () => {
           document.getElementById("cover-studio").classList.toggle("hidden");
         };
         document.getElementById("btn-close-cover-studio").onclick = () => {
           document.getElementById("cover-studio").classList.add("hidden");
         };
+        document.getElementById("btn-reposition-cover").onclick = () => {
+          const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
+          if (!ws) return;
+          const positions = ["center center", "center top", "center bottom"];
+          const next = positions[(positions.indexOf(ws.coverPos || "center center") + 1) % positions.length];
+          ws.coverPos = next;
+          scheduleSave();
+          renderWorkspace();
+        };
+        document.querySelectorAll("[data-gifcat]").forEach(btn => {
+          btn.onclick = () => renderPresetGifs(btn.dataset.gifcat);
+        });
         document.getElementById("btn-apply-cover-url").onclick = () => {
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
           if (!ws) return;
-          let url = document.getElementById("custom-cover-url").value.trim();
-          const m = url.match(/giphy\.com\/gifs\/(?:.*-)?([a-zA-Z0-9]+)/);
-          if (m && m[1]) url = `https://media.giphy.com/media/${m[1]}/giphy.gif`;
-          ws.coverUrl = url;
+          ws.coverUrl = normalizeGifUrl(document.getElementById("custom-cover-url").value);
+          ws.coverPos = ws.coverPos || "center center";
           scheduleSave();
           renderWorkspace();
           document.getElementById("cover-studio").classList.add("hidden");
@@ -1915,12 +2184,16 @@
         };
         document.getElementById("btn-giphy-search").onclick = async () => {
           const q = document.getElementById("giphy-search-input").value.trim();
-          if (!q) return;
+          const gKey = (KEYS.giphyApiKey || "").trim();
           const grid = document.getElementById("giphy-results-grid");
-          grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Searching Giphy...</span>`;
+          if (!q) return;
+          if (!gKey) {
+            grid.innerHTML = `<span class="muted" style="grid-column:1/-1; font-size:11px;">Add a free GIPHY key on Line 20 of index.html, or pick a preset GIF above / paste any giphy.com link below.</span>`;
+            return;
+          }
+          grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Searching GIPHY...</span>`;
           try {
-            // Public Giphy Web SDK beta key for lightweight GIF search
-            const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=${encodeURIComponent(q)}&limit=6&rating=g`);
+            const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${encodeURIComponent(gKey)}&q=${encodeURIComponent(q)}&limit=6&rating=g`);
             const data = await res.json();
             grid.innerHTML = "";
             (data.data || []).forEach(g => {
@@ -1941,11 +2214,14 @@
               grid.appendChild(img);
             });
           } catch {
-            grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">Giphy search unavailable; paste a URL below.</span>`;
+            grid.innerHTML = `<span class="muted" style="grid-column:1/-1;">GIPHY search error; paste a URL below.</span>`;
           }
         };
 
-        // Intention Search Keyboard Flow
+        // Discovery Mode Switch & Keyboard Flow
+        document.getElementById("mode-topic-btn").onclick = () => switchDiscoveryMode("topic");
+        document.getElementById("mode-channel-btn").onclick = () => switchDiscoveryMode("channel");
+
         document.getElementById("search-query").addEventListener("keydown", e => {
           if (e.key === "Enter") document.getElementById("search-purpose").focus();
         });
@@ -1953,9 +2229,18 @@
           if (e.key === "Enter") searchYouTube();
         });
         document.getElementById("btn-run-search").onclick = () => searchYouTube();
+
+        document.getElementById("channel-query-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") document.getElementById("channel-purpose-input").focus();
+        });
+        document.getElementById("channel-purpose-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") exploreChannel();
+        });
+        document.getElementById("btn-run-channel-explore").onclick = () => exploreChannel();
+
         document.getElementById("btn-ai-suggest-queries").onclick = () => {
           document.getElementById("gemini-dock").classList.remove("hidden");
-          askGemini("Suggest 3 focused YouTube search queries and implementation intentions for this workspace.");
+          askGemini("Suggest 3 clean YouTube search keywords and implementation intentions for this workspace.");
         };
 
         // Focus Mode Controls
@@ -1974,7 +2259,7 @@
           }
         });
 
-        // Right-Hand Gemini Dock Controls
+        // Right-Hand Gemini Dock & Google Books Controls
         document.getElementById("btn-toggle-gemini").onclick = () => {
           document.getElementById("gemini-dock").classList.toggle("hidden");
           renderGeminiChips();
@@ -1986,11 +2271,6 @@
           state.geminiModel = e.target.value;
           scheduleSave();
         };
-        document.getElementById("btn-save-gemini-key").onclick = () => {
-          state.geminiApiKey = document.getElementById("gemini-key-override").value.trim();
-          scheduleSave();
-          alert("Gemini API key saved to your private GitHub Vault.");
-        };
         document.getElementById("btn-send-gemini").onclick = () => {
           const inp = document.getElementById("gemini-prompt-input");
           askGemini(inp.value);
@@ -2000,6 +2280,18 @@
           if (e.key === "Enter") {
             const inp = document.getElementById("gemini-prompt-input");
             askGemini(inp.value);
+            inp.value = "";
+          }
+        });
+        document.getElementById("btn-lookup-book").onclick = () => {
+          const inp = document.getElementById("google-book-input");
+          lookupGoogleBook(inp.value);
+          inp.value = "";
+        };
+        document.getElementById("google-book-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            const inp = document.getElementById("google-book-input");
+            lookupGoogleBook(inp.value);
             inp.value = "";
           }
         });
@@ -2023,7 +2315,7 @@
       async function boot() {
         bindEvents();
         loadYouTubeIFrameAPI();
-        await pullVault();
+        await pullVault(true);
         renderSidebar();
         renderDirectory();
         renderGeminiChips();
