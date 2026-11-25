@@ -3,22 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>MTube // Research OS</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MTube OS" />
+  <title>MTube 4.0 // Research OS</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23111111'/><text y='74' x='22' fill='%23FFFFFF' font-family='monospace' font-size='68'>M</text></svg>">
-</head>
-<body>
-  <!-- =====================================================================
-       DEDICATED CREDENTIALS & API KEYS (EDIT LINE 15 MANUALLY)
-  ====================================================================== -->
-  <script id="mtube-credentials">
-    window.MTUBE_KEYS = {
-      youtubeApiKey: "AIzaSyCkwB4WDboObBrbgygqzYmo4Q4d9OADel8",
-      geminiApiKey:  "AIzaSyD0Nrrko2lU-UJdNVSo2uPQriGoeJdfOSs", // Paste your AIza... key here
-      githubToken:   "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",
-      githubOwner:   "nothumanofearth",
-      githubRepo:    "Mtube-Vault"
-    };
-  </script>
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22MTube%20Research%20OS%22%2C%22short_name%22%3A%22MTube%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F8F8F6%22%2C%22theme_color%22%3A%22%23111111%22%7D">
 
   <style>
     :root {
@@ -26,7 +16,7 @@
       --paper: #FFFFFF;
       --subtle: #F0F0EC;
       --ink: #111111;
-      --ink-muted: #666662;
+      --ink-muted: #64645F;
       --border: #DFDFDA;
       --border-strong: #111111;
       --accent: #0055CC;
@@ -72,7 +62,7 @@
     .topbar-left, .topbar-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       min-width: 0;
     }
 
@@ -102,7 +92,7 @@
     .sync-pill.ok { color: var(--ok); background: #EBF7EE; }
     .sync-pill.err { color: var(--err); background: #FFF0F0; }
 
-    /* Main App Shell */
+    /* Shell Layout */
     .app-shell {
       display: flex;
       width: 100%;
@@ -112,7 +102,7 @@
 
     /* Left Notion Sidebar */
     .left-sidebar {
-      width: 236px;
+      width: 240px;
       flex-shrink: 0;
       background: var(--subtle);
       border-right: 1px solid var(--border);
@@ -131,7 +121,7 @@
         z-index: 55;
         transform: translateX(-100%);
         transition: transform 0.2s ease;
-        box-shadow: 6px 0 24px rgba(0,0,0,0.12);
+        box-shadow: 6px 0 24px rgba(0,0,0,0.14);
       }
       .left-sidebar.open { transform: translateX(0); }
     }
@@ -168,7 +158,7 @@
       font-weight: 600;
     }
 
-    /* Container-Aware Main Canvas (Prevents 3-Column Laptop Squeeze) */
+    /* Container-Query Main Canvas */
     .main-canvas {
       flex: 1;
       min-width: 0;
@@ -177,7 +167,7 @@
     }
 
     .canvas-inner {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 0 18px;
     }
@@ -187,11 +177,11 @@
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
     }
-    @container (min-width: 740px) {
+    @container (min-width: 720px) {
       .grid-2 { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
     }
 
-    /* Right Collapsible Gemini Dock (Safari 100dvh Safe) */
+    /* Right Collapsible Gemini Dock */
     .gemini-dock {
       width: 360px;
       flex-shrink: 0;
@@ -204,7 +194,6 @@
       top: calc(48px + env(safe-area-inset-top));
       z-index: 52;
     }
-
     .gemini-dock.hidden { display: none; }
 
     @media (max-width: 980px) {
@@ -249,13 +238,11 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
-
     .ai-msg.user {
       background: var(--ink);
       color: var(--paper);
       border-color: var(--ink);
     }
-
     .ai-insert-bar {
       display: flex;
       flex-wrap: wrap;
@@ -313,7 +300,7 @@
     .btn.small { min-height: 28px; padding: 4px 8px; font-size: 11px; }
     .btn.full { width: 100%; }
 
-    input[type="text"], select {
+    input[type="text"], input[type="password"], textarea, select {
       width: 100%;
       max-width: 100%;
       background: var(--paper);
@@ -326,7 +313,7 @@
       margin-bottom: 10px;
       outline: none;
     }
-    input:focus, select:focus { border-color: var(--ink); }
+    input:focus, textarea:focus, select:focus { border-color: var(--ink); }
 
     .card {
       background: var(--paper);
@@ -337,15 +324,15 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
 
-    /* Notion Cover Banner (Desktop & Mobile Safe) */
+    /* Notion Cover Banner */
     .cover-shell {
-      max-width: 960px;
+      max-width: 980px;
       margin: 14px auto 0;
       padding: 0 18px;
     }
     .notion-cover {
       width: 100%;
-      height: 175px;
+      height: 170px;
       background-color: #EAEAE5;
       background-image: radial-gradient(#CFCFC8 1px, transparent 1px);
       background-size: 16px 16px;
@@ -391,6 +378,63 @@
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
+    }
+
+    /* Pinned Mentors Shelf & Channel Mentor Notes */
+    .mentors-shelf {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .mentor-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--ink);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mentor-note-input {
+      width: 100%;
+      font-size: 13px !important;
+      padding: 6px 8px !important;
+      margin-bottom: 0 !important;
+      background: var(--bg) !important;
+      border: 1px dashed #C5C5BE !important;
+    }
+
+    /* Smart Channel Finder Result Card */
+    .finder-channel-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: var(--bg);
+    }
+
+    /* Course Progress Bar */
+    .course-progress-wrap {
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #DDD;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--ink);
+      transition: width 0.25s ease;
     }
 
     /* Multi-View Database */
@@ -499,7 +543,7 @@
     }
     .blackout-screen.active { display: flex; }
 
-    /* Notion Block Canvas */
+    /* Notion Block Canvas (Used in both Workspace Wiki & Video Focus) */
     .block-item {
       display: flex;
       align-items: flex-start;
@@ -564,25 +608,26 @@
       cursor: pointer;
     }
 
-    /* Command Palette Modal */
+    /* Modals (Settings & Cmd+K) */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.48);
       z-index: 90;
       display: none;
       align-items: flex-start;
       justify-content: center;
-      padding: 64px 16px 16px;
+      padding: 48px 16px 16px;
+      overflow-y: auto;
     }
     .modal-backdrop.open { display: flex; }
     .modal-box {
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       background: var(--paper);
       border: 2px solid var(--ink);
       border-radius: 8px;
-      padding: 16px;
+      padding: 18px;
       box-shadow: 0 16px 40px rgba(0,0,0,0.25);
     }
 
@@ -592,16 +637,19 @@
     .mobile-only { display: none; }
     @media (max-width: 860px) { .mobile-only { display: inline-flex; } }
   </style>
+</head>
+<body>
 
   <!-- TOP NAVIGATION BAR -->
   <header class="topbar">
     <div class="topbar-left">
       <button type="button" class="btn small mobile-only" id="btn-mobile-menu">☰</button>
-      <button type="button" class="brand-btn" onclick="App.navigate('directory')">MTUBE // OS</button>
+      <button type="button" class="brand-btn" onclick="App.navigate('directory')">MTUBE // 4.0</button>
       <span class="sync-pill" id="sync-pill">BOOTING...</span>
     </div>
     <div class="topbar-right">
       <button type="button" class="btn small" id="btn-cmd-k">⌕ SEARCH</button>
+      <button type="button" class="btn small" id="btn-open-settings">⚙ SETTINGS</button>
       <button type="button" class="btn small inverse" id="btn-toggle-gemini">✦ GEMINI</button>
     </div>
   </header>
@@ -626,7 +674,7 @@
       </div>
 
       <div>
-        <button type="button" class="btn small full" id="btn-manual-sync">↻ Force Sync Now</button>
+        <button type="button" class="btn small full" id="btn-manual-sync">↻ Sync Vault Now</button>
       </div>
     </aside>
 
@@ -637,7 +685,7 @@
       <section id="view-directory" class="view active">
         <div class="canvas-inner">
           <h1>Directory</h1>
-          <p class="muted">Cross-device video workspaces &amp; Zettelkasten knowledge graph synced to <code>Mtube-Vault</code>.</p>
+          <p class="muted">Real-time Private GitHub Repo sync (<code>Mtube-Vault</code>) with Smart Channel Discovery, Course Playlists, and Project Wikis.</p>
 
           <div class="grid-2">
             <div>
@@ -648,7 +696,7 @@
                 <h2 style="margin-top:0;">+ Create Workspace</h2>
                 <div style="display:flex; gap:8px;">
                   <input type="text" id="dir-ws-icon" value="◈" maxlength="3" style="width:54px; text-align:center;" />
-                  <input type="text" id="dir-ws-name" placeholder="Workspace name (e.g., 'Home Server', 'Podcasts')" />
+                  <input type="text" id="dir-ws-name" placeholder="Skill or Project (e.g., 'Cooking', '8-Ball Pool', 'Home Server')" />
                 </div>
                 <button type="button" class="btn inverse full" id="btn-dir-create-ws">Create Workspace</button>
               </div>
@@ -657,11 +705,11 @@
             <div>
               <h2>Concept Wikilinks ([[Topic]])</h2>
               <div class="card">
-                <p class="muted" style="margin-bottom:10px;">Type <code>[[Concept]]</code> inside any video note to auto-link ideas across workspaces.</p>
+                <p class="muted" style="margin-bottom:10px;">Type <code>[[Concept]]</code> inside any Project Wiki or Video Note to cross-link knowledge.</p>
                 <div id="concept-cloud" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
               </div>
 
-              <h2>Recent Vault Activity</h2>
+              <h2>Recent Vault Videos</h2>
               <div class="card" id="recent-activity-list"></div>
             </div>
           </div>
@@ -672,7 +720,7 @@
       <section id="view-todos" class="view">
         <div class="canvas-inner">
           <h1>Master Action List</h1>
-          <p class="muted">All <code>/todo</code> blocks extracted across every video and workspace.</p>
+          <p class="muted">Every <code>/todo</code> block from both your Project Wikis and Video Ledgers.</p>
           <div class="card" id="master-todo-list"></div>
         </div>
       </section>
@@ -690,15 +738,13 @@
                 <span class="bold" style="font-size:12px;">COVER BANNER STUDIO</span>
                 <button type="button" class="btn small" id="btn-close-cover-studio">✕</button>
               </div>
-              <div class="muted" style="font-size:11px; margin-bottom:6px;">Minimalist Brutalist Patterns:</div>
               <div class="theme-swatches">
                 <button type="button" class="swatch-btn" style="background:#EAEAE5;" data-pattern="dots">DOTS</button>
                 <button type="button" class="swatch-btn" style="background:#181818; color:#FFF;" data-pattern="noir">NOIR</button>
                 <button type="button" class="swatch-btn" style="background:repeating-linear-gradient(45deg,#F2F2EE,#F2F2EE 8px,#E2E2DC 8px,#E2E2DC 16px);" data-pattern="hatch">HATCH</button>
                 <button type="button" class="swatch-btn" style="background:linear-gradient(90deg,#111 1px,transparent 1px),linear-gradient(#111 1px,transparent 1px); background-size:18px 18px; background-color:#F5F5F0;" data-pattern="grid">GRID</button>
               </div>
-              <div class="muted" style="font-size:11px; margin-bottom:4px;">Or paste any Giphy link / .gif URL (syncs across devices):</div>
-              <input type="text" id="custom-cover-url" placeholder="https://giphy.com/gifs/... or .gif URL" style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
+              <input type="text" id="custom-cover-url" placeholder="Paste any giphy.com link or .gif URL..." style="font-size:12px; padding:6px 8px; margin-bottom:6px;" />
               <div style="display:flex; gap:6px;">
                 <button type="button" class="btn small inverse" style="flex:1;" id="btn-apply-cover-url">Apply &amp; Sync</button>
                 <button type="button" class="btn small" id="btn-remove-cover">Reset</button>
@@ -710,42 +756,99 @@
         <div class="canvas-inner">
           <h1 id="ws-heading">Workspace</h1>
 
+          <!-- 1. WORKSPACE OVERVIEW SCRATCHPAD ("THE PROJECT WIKI") -->
+          <details class="card" id="ws-wiki-details" style="border-left:4px solid var(--ink);">
+            <summary class="bold" style="cursor:pointer; font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em;">
+              📖 PROJECT WIKI &amp; OVERVIEW SCRATCHPAD <span class="muted" id="ws-wiki-count">(0 blocks)</span>
+            </summary>
+            <div style="margin-top:12px;">
+              <p class="muted" style="font-size:12px; margin-bottom:8px;">
+                Big-picture project notes, checklists, gear lists, or rules. Supports <code>/h1</code>, <code>/todo</code>, <code>/callout</code>, <code>/quote</code>, <code>/divider</code>, and <code>[[Wikilinks]]</code>.
+              </p>
+              <input type="text" id="ws-wiki-input" placeholder="Add project note or /todo... (Press Enter)" />
+              <div id="ws-wiki-blocks"></div>
+            </div>
+          </details>
+
+          <!-- 2. PINNED MENTORS SHELF & CHANNEL MENTOR NOTES -->
+          <div id="pinned-mentors-section" class="hidden">
+            <h2>📌 Pinned Workspace Mentors</h2>
+            <div class="mentors-shelf" id="pinned-mentors-list"></div>
+          </div>
+
+          <!-- 3. 4-MODE DISCOVERY & CURRICULUM ENGINE -->
           <div class="card">
             <div style="display:flex; gap:6px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:10px; flex-wrap:wrap;">
-              <button type="button" class="btn small inverse" id="mode-topic-btn">⌕ Topic Search</button>
-              <button type="button" class="btn small" id="mode-channel-btn">📺 Explore Any Channel (No Restrictions)</button>
+              <button type="button" class="btn small inverse" data-disc="finder">🧭 Smart Channel &amp; Skill Finder</button>
+              <button type="button" class="btn small" data-disc="topic">⌕ Topic Search</button>
+              <button type="button" class="btn small" data-disc="channel">📺 Explore Channel</button>
+              <button type="button" class="btn small" data-disc="playlist">📋 Import Playlist / Course</button>
             </div>
 
-            <div id="panel-topic-search">
-              <div class="grid-2" style="gap:10px;">
-                <input type="text" id="search-query" placeholder="Core Topic (e.g., 'Figuring Out Raj Shamani' or 'Proxmox ZFS')" style="margin-bottom:0;" />
-                <input type="text" id="search-purpose" placeholder="Your Purpose (e.g., 'Learn from founder experiences')" style="margin-bottom:0;" />
-              </div>
-              <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-                <button type="button" class="btn inverse" style="flex:1;" id="btn-run-search">Curate Accurate Videos</button>
-                <button type="button" class="btn" id="btn-ai-suggest-queries">✦ AI Query Ideas</button>
-              </div>
-            </div>
-
-            <div id="panel-channel-explore" class="hidden">
-              <p class="muted" style="margin-bottom:8px;">
-                Browse <strong>all</strong> videos on any YouTube channel without topic restrictions (Shorts under 3 min are automatically removed).
+            <!-- Mode 1: Smart Channel & Curriculum Finder -->
+            <div id="disc-panel-finder">
+              <p class="muted" style="margin-bottom:10px;">
+                Describe what you want to learn, your current level, and why. Gemini + YouTube will find the best mentor channels and starter videos (Shorts excluded).
               </p>
               <div class="grid-2" style="gap:10px;">
-                <input type="text" id="channel-query-input" placeholder="Channel @handle, URL, or UC... ID (e.g., '@rajshamani')" style="margin-bottom:0;" />
-                <input type="text" id="channel-purpose-input" placeholder="Purpose for videos added (e.g., 'Deep dive episodes')" style="margin-bottom:0;" />
+                <input type="text" id="finder-skill" placeholder="Skill / Topic (e.g., 'Home Indian & Continental Cooking' or '8-Ball Pool')" style="margin-bottom:0;" />
+                <select id="finder-level" style="margin-bottom:0;">
+                  <option value="Complete Beginner">Level: Complete Beginner</option>
+                  <option value="Intermediate">Level: Intermediate</option>
+                  <option value="Advanced / Specific Technique">Level: Advanced / Specific Technique</option>
+                </select>
               </div>
-              <button type="button" class="btn inverse full" style="margin-top:10px;" id="btn-run-channel-explore">Load Channel Videos</button>
+              <input type="text" id="finder-goal" placeholder="Why are you learning this &amp; constraints? (e.g., '30-min healthy weekday dinners with basic pans')" style="margin-top:10px; margin-bottom:10px;" />
+              <button type="button" class="btn inverse full" id="btn-run-finder">✦ Find Best Channels &amp; Starter Curriculum</button>
+            </div>
+
+            <!-- Mode 2: Accurate Topic Search -->
+            <div id="disc-panel-topic" class="hidden">
+              <div class="grid-2" style="gap:10px;">
+                <input type="text" id="search-query" placeholder="Core Topic (e.g., 'Proxmox ZFS' or 'Figuring Out Raj Shamani')" style="margin-bottom:0;" />
+                <input type="text" id="search-purpose" placeholder="Your Purpose (e.g., 'Understand pool redundancy')" style="margin-bottom:0;" />
+              </div>
+              <button type="button" class="btn inverse full" style="margin-top:10px;" id="btn-run-search">Curate Accurate Videos</button>
+            </div>
+
+            <!-- Mode 3: Unrestricted Channel Explorer -->
+            <div id="disc-panel-channel" class="hidden">
+              <p class="muted" style="margin-bottom:8px;">Browse up to 35 recent full-length uploads from any channel (Shorts under 3 min automatically blocked).</p>
+              <div class="grid-2" style="gap:10px;">
+                <input type="text" id="channel-query-input" placeholder="Channel @handle, URL, or UC... ID (e.g., '@rajshamani')" style="margin-bottom:0;" />
+                <input type="text" id="channel-purpose-input" placeholder="Purpose for videos added" style="margin-bottom:0;" />
+              </div>
+              <button type="button" class="btn inverse full" style="margin-top:10px;" id="btn-run-channel-explore">Load Channel Catalog</button>
+            </div>
+
+            <!-- Mode 4: Playlist / Course Mode Importer -->
+            <div id="disc-panel-playlist" class="hidden">
+              <p class="muted" style="margin-bottom:8px;">Import an entire YouTube Playlist or structured course in sequential order with completion tracking.</p>
+              <div class="grid-2" style="gap:10px;">
+                <input type="text" id="playlist-url-input" placeholder="Paste YouTube Playlist URL or PL... ID" style="margin-bottom:0;" />
+                <input type="text" id="playlist-purpose-input" placeholder="Course Goal (e.g., 'Complete SwiftUI bootcamp')" style="margin-bottom:0;" />
+              </div>
+              <button type="button" class="btn inverse full" style="margin-top:10px;" id="btn-import-playlist">Import Full Course Playlist</button>
             </div>
 
             <div id="search-feedback" class="bold" style="font-size:13px; margin-top:8px;"></div>
 
             <div id="search-results-wrap" class="hidden" style="margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
-              <div id="search-results-header" class="muted bold" style="margin-bottom:8px;">CURATED RESULTS</div>
+              <div id="search-results-header" class="muted bold" style="margin-bottom:10px;">RESULTS</div>
               <div id="search-results-list"></div>
             </div>
           </div>
 
+          <!-- Course Completion Progress Bar (Appears when workspace has playlist/course videos) -->
+          <div id="course-progress-banner" class="course-progress-wrap hidden">
+            <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--font-mono);">
+              <span class="bold" id="course-progress-label">COURSE PROGRESS</span>
+              <span id="course-progress-pct">0%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="course-progress-fill" style="width:0%;"></div></div>
+          </div>
+
+          <!-- Multi-View Database -->
           <div class="view-tabs">
             <button type="button" class="btn small inverse" data-dbview="list" onclick="App.setDbView('list')">≡ List</button>
             <button type="button" class="btn small" data-dbview="board" onclick="App.setDbView('board')">▥ Board</button>
@@ -761,12 +864,13 @@
         <div class="canvas-inner">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:8px; flex-wrap:wrap;">
             <button type="button" class="btn small" id="btn-back-ws">← Workspace</button>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button type="button" class="btn small" id="btn-focus-explore-channel">📺 Browse Creator Channel</button>
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="btn small" id="btn-focus-pin-channel">📌 Pin Channel</button>
+              <button type="button" class="btn small" id="btn-focus-explore-channel">📺 Channel Catalog</button>
               <select id="focus-status-select" style="width:auto; min-height:30px; padding:3px 8px; font-size:12px; margin:0;">
                 <option value="backlog">Status: Backlog</option>
                 <option value="watching">Status: Watching</option>
-                <option value="synthesized">Status: Synthesized</option>
+                <option value="synthesized">Status: Synthesized ✓</option>
               </select>
             </div>
           </div>
@@ -782,7 +886,7 @@
                 <div id="yt-player"></div>
                 <div class="blackout-screen" id="blackout-screen">
                   <div class="bold" style="font-size:18px; margin-bottom:8px;">PLAYBACK PAUSED</div>
-                  <p class="muted" style="color:#BBB;">YouTube end-screens &amp; recommendations blocked.</p>
+                  <p class="muted" style="color:#BBB;">YouTube end-screens &amp; algorithm distractions blocked.</p>
                   <button type="button" class="btn" id="btn-resume-video">Resume Video</button>
                 </div>
               </div>
@@ -796,13 +900,13 @@
             <div>
               <div class="card" style="border:2px solid var(--ink);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                  <h2 style="margin:0;">Notion Research Page</h2>
+                  <h2 style="margin:0;">Video Timestamped Notes</h2>
                   <span class="muted" style="font-size:11px;">Synced to Vault</span>
                 </div>
                 <p class="muted" style="font-size:12px; margin-bottom:10px;">
                   Commands: <code>/h1</code>, <code>/todo</code>, <code>/callout</code>, <code>/quote</code>, <code>/divider</code>, <code>/ai &lt;question&gt;</code>, or <code>[[Topic]]</code>
                 </p>
-                <input type="text" id="block-input" placeholder="Write insight or /command... (Press Enter)" />
+                <input type="text" id="block-input" placeholder="Write timestamped insight or /command... (Enter)" />
                 <div id="blocks-container"></div>
               </div>
             </div>
@@ -818,24 +922,28 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span class="bold" style="font-family:var(--font-mono); font-size:12px;">✦ GEMINI RESEARCH DOCK</span>
           <div style="display:flex; gap:4px;">
-            <button type="button" class="btn small" id="btn-test-gemini-key">Test Key</button>
+            <button type="button" class="btn small" id="btn-test-gemini-key">Test</button>
             <button type="button" class="btn small" id="btn-close-gemini">✕</button>
           </div>
         </div>
 
-        <!-- Verified 2026 Free-Tier Models -->
-        <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:0;">
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Free — 500/day)</option>
+        <select id="gemini-model-select" style="font-size:12px; padding:6px 8px; margin-bottom:6px;">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (Free — High Quota)</option>
           <option value="gemini-3.8-flash">Gemini 3.8 Flash (Free — Deep Reasoning)</option>
           <option value="gemini-3.6-flash">Gemini 3.6 Flash (Free — Balanced)</option>
           <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite (Free — Fast)</option>
           <option value="gemma-4-31b-it">Gemma 4 31B (Free — Open Model)</option>
         </select>
+
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="google-book-input" placeholder="📚 Lookup book mentioned..." style="font-size:12px; padding:5px 8px; margin:0;" />
+          <button type="button" class="btn small" id="btn-lookup-book">Book</button>
+        </div>
       </div>
 
       <div class="gemini-body" id="gemini-chat-feed">
         <div class="ai-msg">
-          Paste your working AIza... Gemini API key on Line 15 of index.html, then tap "Test Key" above or select a quick chip below.
+          Gemini sidekick ready. Your keys live privately in Settings &amp; your private Vault—never in public HTML.
         </div>
       </div>
 
@@ -849,6 +957,49 @@
     </aside>
   </div>
 
+  <!-- VAULT SETTINGS & ONE-TIME KEYCHAIN MODAL (ZERO PUBLIC LEAKS) -->
+  <div class="modal-backdrop" id="settings-modal">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="bold" style="font-family:var(--font-mono); font-size:13px;">⚙ VAULT KEYCHAIN &amp; PERMANENT SYNC</span>
+        <button type="button" class="btn small" id="btn-close-settings">✕</button>
+      </div>
+      <p class="muted" style="font-size:12px; margin-bottom:12px;">
+        Enter your keys <strong>once</strong>. Your GitHub token stays locally in browser + IndexedDB storage, while your YouTube &amp; Gemini keys sync inside your <strong>private</strong> <code>Mtube-Vault</code> repository so public scanners never touch them.
+      </p>
+
+      <label class="bold" style="font-size:11px;">GITHUB FINE-GRAINED TOKEN (Scoped to private Mtube-Vault)</label>
+      <input type="password" id="cfg-gh-token" placeholder="github_pat_..." />
+
+      <div class="grid-2" style="gap:10px;">
+        <div>
+          <label class="bold" style="font-size:11px;">GITHUB OWNER</label>
+          <input type="text" id="cfg-gh-owner" value="nothumanofearth" />
+        </div>
+        <div>
+          <label class="bold" style="font-size:11px;">PRIVATE VAULT REPO</label>
+          <input type="text" id="cfg-gh-repo" value="Mtube-Vault" />
+        </div>
+      </div>
+
+      <label class="bold" style="font-size:11px;">YOUTUBE DATA API V3 KEY</label>
+      <input type="password" id="cfg-yt-key" placeholder="AIzaSy..." />
+
+      <label class="bold" style="font-size:11px;">GEMINI API KEY (AI Studio AIza... or AQ...)</label>
+      <input type="password" id="cfg-gemini-key" placeholder="AIzaSy... or AQ..." />
+
+      <div id="cfg-status-msg" class="bold" style="font-size:12px; margin-bottom:10px;"></div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn inverse" style="flex:1;" id="btn-save-settings">Save &amp; Sync Vault</button>
+        <button type="button" class="btn" id="btn-copy-magic-link">🔗 Copy Magic Setup Link</button>
+      </div>
+      <p class="muted" style="font-size:11px; margin-top:10px; margin-bottom:0;">
+        <strong>Magic Setup Link:</strong> Open the copied link once on your iPhone, iPad, or second laptop to auto-configure that device instantly without retyping keys.
+      </p>
+    </div>
+  </div>
+
   <!-- GLOBAL CMD+K SEARCH MODAL -->
   <div class="modal-backdrop" id="cmdk-modal">
     <div class="modal-box">
@@ -856,14 +1007,85 @@
         <span class="bold" style="font-family:var(--font-mono); font-size:12px;">GLOBAL SECOND BRAIN SEARCH</span>
         <button type="button" class="btn small" id="btn-close-cmdk">ESC</button>
       </div>
-      <input type="text" id="cmdk-input" placeholder="Search videos, purposes, [[wikilinks]], or notes..." />
+      <input type="text" id="cmdk-input" placeholder="Search videos, Project Wikis, [[wikilinks]], or mentors..." />
       <div id="cmdk-results" style="max-height:320px; overflow-y:auto;"></div>
     </div>
   </div>
 
   <script>
     const App = (() => {
-      const KEYS = window.MTUBE_KEYS || {};
+      /* =====================================================================
+         1. DUAL-PERSISTENCE KEYCHAIN (LocalStorage + IndexedDB + Magic Hash)
+      ===================================================================== */
+      const creds = {
+        githubToken: "",
+        githubOwner: "nothumanofearth",
+        githubRepo: "Mtube-Vault",
+        youtubeApiKey: "",
+        geminiApiKey: ""
+      };
+
+      function openKeyDB() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open("MTubeKeychainDB", 1);
+          req.onupgradeneeded = () => req.result.createObjectStore("keys");
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function saveCredsToDevice() {
+        localStorage.setItem("mtube_v4_creds", JSON.stringify(creds));
+        try {
+          const db = await openKeyDB();
+          const tx = db.transaction("keys", "readwrite");
+          tx.objectStore("keys").put(creds, "primary");
+        } catch {}
+      }
+
+      async function loadCredsFromDevice() {
+        // 1. Check Magic Setup Hash (#setup=...) first
+        if (window.location.hash.startsWith("#setup=")) {
+          try {
+            const raw = decodeURIComponent(escape(atob(window.location.hash.slice(7))));
+            const parsed = JSON.parse(raw);
+            Object.assign(creds, parsed);
+            history.replaceState(null, "", window.location.pathname + window.location.search);
+            await saveCredsToDevice();
+            return true;
+          } catch {}
+        }
+
+        // 2. Check localStorage
+        try {
+          const local = JSON.parse(localStorage.getItem("mtube_v4_creds") || "null");
+          if (local && local.githubToken) {
+            Object.assign(creds, local);
+            return true;
+          }
+        } catch {}
+
+        // 3. Fallback to IndexedDB (survives certain cache clears)
+        try {
+          const db = await openKeyDB();
+          const stored = await new Promise(res => {
+            const r = db.transaction("keys", "readonly").objectStore("keys").get("primary");
+            r.onsuccess = () => res(r.result);
+            r.onerror = () => res(null);
+          });
+          if (stored && stored.githubToken) {
+            Object.assign(creds, stored);
+            localStorage.setItem("mtube_v4_creds", JSON.stringify(creds));
+            return true;
+          }
+        } catch {}
+
+        return false;
+      }
+
+      /* =====================================================================
+         2. STATE & SMART MERGE ENGINE (Zero Cross-Device Overwrites)
+      ===================================================================== */
       let ghSha = null;
       let syncTimer = null;
       let isSyncing = false;
@@ -875,15 +1097,73 @@
         dbView: "list",
         geminiModel: "gemini-3.5-flash-lite",
         workspaces: [
-          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPattern: "dots", coverPos: "center center" },
-          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPattern: "grid", coverPos: "center center" }
+          { id: "ws_default_1", name: "Home Server & Self-Hosting", icon: "◈", coverUrl: "", coverPattern: "dots", coverPos: "center center", updatedAt: 1 },
+          { id: "ws_default_2", name: "Podcasts & Founder Lessons", icon: "⚡", coverUrl: "", coverPattern: "grid", coverPos: "center center", updatedAt: 1 }
         ],
-        videos: [],
-        blocks: []
+        mentors: [],      // Pinned channels per workspace with mentor notes
+        videos: [],       // Curated videos & imported playlist courses
+        blocks: [],       // Both video blocks (videoId) and workspace wiki blocks (workspaceId)
+        tombstones: []    // Deleted item IDs so deleted items don't resurrect on merge
       };
 
       let ytPlayer = null;
       let ytApiReady = false;
+
+      function markDeleted(id) {
+        if (!state.tombstones.includes(id)) {
+          state.tombstones.push(id);
+          if (state.tombstones.length > 500) state.tombstones = state.tombstones.slice(-500);
+        }
+      }
+
+      function mergeArraysById(localArr, remoteArr, tombstonesSet) {
+        const map = new Map();
+        (remoteArr || []).forEach(item => {
+          if (item && item.id && !tombstonesSet.has(item.id)) map.set(item.id, item);
+        });
+        (localArr || []).forEach(item => {
+          if (!item || !item.id || tombstonesSet.has(item.id)) return;
+          const existing = map.get(item.id);
+          if (!existing || (item.updatedAt || 0) >= (existing.updatedAt || 0)) {
+            map.set(item.id, item);
+          }
+        });
+        return Array.from(map.values());
+      }
+
+      function mergeVaultPayload(remote) {
+        const tombs = new Set([...(state.tombstones || []), ...(remote.tombstones || [])]);
+        state.tombstones = Array.from(tombs).slice(-500);
+
+        if (Array.isArray(remote.workspaces) && remote.workspaces.length > 0) {
+          state.workspaces = mergeArraysById(state.workspaces, remote.workspaces, tombs);
+        }
+        state.mentors = mergeArraysById(state.mentors, remote.mentors || [], tombs);
+        state.videos = mergeArraysById(state.videos, remote.videos || [], tombs)
+          .sort((a, b) => (a.courseOrder ?? 999999) - (b.courseOrder ?? 999999) || (b.addedAt || 0) - (a.addedAt || 0));
+        state.blocks = mergeArraysById(state.blocks, remote.blocks || [], tombs)
+          .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+
+        // Hydrate YouTube & Gemini keys stored inside Private Vault if missing on this device
+        if (remote.vaultKeys) {
+          let updatedCreds = false;
+          if (!creds.youtubeApiKey && remote.vaultKeys.youtubeApiKey) {
+            creds.youtubeApiKey = remote.vaultKeys.youtubeApiKey;
+            updatedCreds = true;
+          }
+          if (!creds.geminiApiKey && remote.vaultKeys.geminiApiKey) {
+            creds.geminiApiKey = remote.vaultKeys.geminiApiKey;
+            updatedCreds = true;
+          }
+          if (updatedCreds) saveCredsToDevice();
+        }
+
+        const validModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemma-4-31b-it"];
+        if (remote.geminiModel && validModels.includes(remote.geminiModel)) {
+          state.geminiModel = remote.geminiModel;
+          document.getElementById("gemini-model-select").value = remote.geminiModel;
+        }
+      }
 
       function setSyncStatus(label, statusClass = "") {
         const pill = document.getElementById("sync-pill");
@@ -896,26 +1176,30 @@
       }
 
       /* =====================================================================
-         1. CROSS-DEVICE GITHUB VAULT SYNC (Race-Condition Safe)
+         3. REAL-TIME CACHE-BYPASSING GITHUB REPO SYNC (If-None-Match: '')
       ===================================================================== */
       async function pullVault(rerenderAfter = false) {
-        if (isSyncing || syncTimer) return;
+        if (!creds.githubToken || !creds.githubOwner || !creds.githubRepo) {
+          setSyncStatus("SETUP KEYS ⚙", "err");
+          return false;
+        }
+        if (isSyncing) return false;
         isSyncing = true;
         setSyncStatus("SYNCING...");
+
         try {
-          const url = `https://api.github.com/repos/${KEYS.githubOwner}/${KEYS.githubRepo}/contents/mtube_vault.json?t=${Date.now()}`;
+          const url = `https://api.github.com/repos/${encodeURIComponent(creds.githubOwner)}/${encodeURIComponent(creds.githubRepo)}/contents/mtube_vault.json`;
           const res = await fetch(url, {
-            cache: "no-store",
             headers: {
-              "Authorization": `Bearer ${KEYS.githubToken}`,
-              "Accept": "application/vnd.github+json"
+              "Authorization": `Bearer ${creds.githubToken}`,
+              "Accept": "application/vnd.github+json",
+              "If-None-Match": "" // Forces GitHub REST API to bypass 60s max-age cache cleanly
             }
           });
 
           if (res.status === 404) {
             isSyncing = false;
-            await pushVault(true);
-            return;
+            return await pushVault(true);
           }
           if (!res.ok) throw new Error(`GitHub HTTP ${res.status}`);
 
@@ -924,54 +1208,66 @@
           const rawJson = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
           const parsed = JSON.parse(rawJson);
 
-          if (Array.isArray(parsed.workspaces) && parsed.workspaces.length > 0) {
-            state.workspaces = parsed.workspaces;
-          }
-          state.videos = Array.isArray(parsed.videos) ? parsed.videos : [];
-          state.blocks = Array.isArray(parsed.blocks) ? parsed.blocks : [];
-
-          const validModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemma-4-31b-it"];
-          if (parsed.geminiModel && validModels.includes(parsed.geminiModel)) {
-            state.geminiModel = parsed.geminiModel;
-            document.getElementById("gemini-model-select").value = parsed.geminiModel;
-          }
-
-          localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+          mergeVaultPayload(parsed);
+          localStorage.setItem("mtube_v4_cache", JSON.stringify(state));
           setSyncStatus(`SYNCED ${nowStamp()} ✓`, "ok");
 
-          if (rerenderAfter) {
-            renderSidebar();
-            if (state.activeView === "directory") renderDirectory();
-            else if (state.activeView === "todos") renderMasterTodos();
-            else if (state.activeView === "workspace") renderWorkspace();
-            else if (state.activeView === "focus") renderBlocks();
-          }
+          if (rerenderAfter) refreshCurrentView();
+          return true;
         } catch (err) {
-          console.warn(err);
-          const cached = localStorage.getItem("mtube_v3_cache");
-          if (cached) Object.assign(state, JSON.parse(cached));
+          console.warn("Vault pull error:", err);
           setSyncStatus("SYNC ERROR", "err");
+          return false;
         } finally {
           isSyncing = false;
         }
       }
 
       async function pushVault(isInitial = false, retryCount = 0) {
-        setSyncStatus(isInitial ? "CREATING VAULT..." : "SAVING...");
+        if (!creds.githubToken || !creds.githubOwner || !creds.githubRepo) {
+          setSyncStatus("SETUP KEYS ⚙", "err");
+          return false;
+        }
+        setSyncStatus(isInitial ? "INITIALIZING..." : "SAVING...");
+
         try {
+          const url = `https://api.github.com/repos/${encodeURIComponent(creds.githubOwner)}/${encodeURIComponent(creds.githubRepo)}/contents/mtube_vault.json`;
+
+          // Pull latest remote first so multi-device edits always merge before writing
+          if (!isInitial) {
+            const latestRes = await fetch(url, {
+              headers: {
+                "Authorization": `Bearer ${creds.githubToken}`,
+                "Accept": "application/vnd.github+json",
+                "If-None-Match": ""
+              }
+            });
+            if (latestRes.ok) {
+              const latestFile = await latestRes.json();
+              ghSha = latestFile.sha;
+              const latestJson = decodeURIComponent(escape(atob(latestFile.content.replace(/\n/g, ""))));
+              mergeVaultPayload(JSON.parse(latestJson));
+            }
+          }
+
           const payload = {
-            version: 3.4,
+            version: 4.0,
             updatedAt: new Date().toISOString(),
             geminiModel: state.geminiModel,
+            vaultKeys: {
+              youtubeApiKey: creds.youtubeApiKey,
+              geminiApiKey: creds.geminiApiKey
+            },
             workspaces: state.workspaces,
+            mentors: state.mentors,
             videos: state.videos,
-            blocks: state.blocks
+            blocks: state.blocks,
+            tombstones: state.tombstones
           };
 
           const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
-          const url = `https://api.github.com/repos/${KEYS.githubOwner}/${KEYS.githubRepo}/contents/mtube_vault.json`;
           const body = {
-            message: `Sync MTube (${nowStamp()})`,
+            message: `Sync MTube 4.0 (${nowStamp()})`,
             content: encoded
           };
           if (ghSha) body.sha = ghSha;
@@ -979,7 +1275,7 @@
           const res = await fetch(url, {
             method: "PUT",
             headers: {
-              "Authorization": `Bearer ${KEYS.githubToken}`,
+              "Authorization": `Bearer ${creds.githubToken}`,
               "Accept": "application/vnd.github+json",
               "Content-Type": "application/json"
             },
@@ -987,42 +1283,42 @@
           });
 
           if (res.status === 409 && retryCount < 2) {
-            const headRes = await fetch(`${url}?t=${Date.now()}`, {
-              cache: "no-store",
-              headers: {
-                "Authorization": `Bearer ${KEYS.githubToken}`,
-                "Accept": "application/vnd.github+json"
-              }
-            });
-            if (headRes.ok) {
-              const headData = await headRes.json();
-              ghSha = headData.sha;
-              return pushVault(isInitial, retryCount + 1);
-            }
+            ghSha = null;
+            return await pushVault(isInitial, retryCount + 1);
           }
+          if (!res.ok) throw new Error(`GitHub Write HTTP ${res.status}`);
 
-          if (!res.ok) throw new Error(`GitHub Save HTTP ${res.status}`);
           const result = await res.json();
           ghSha = result.content.sha;
-          localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+          localStorage.setItem("mtube_v4_cache", JSON.stringify(state));
           setSyncStatus(`SYNCED ${nowStamp()} ✓`, "ok");
+          return true;
         } catch (err) {
-          console.warn(err);
+          console.warn("Vault push error:", err);
           setSyncStatus("SAVE FAILED", "err");
+          return false;
         }
       }
 
       function scheduleSave() {
-        localStorage.setItem("mtube_v3_cache", JSON.stringify(state));
+        localStorage.setItem("mtube_v4_cache", JSON.stringify(state));
         clearTimeout(syncTimer);
         syncTimer = setTimeout(() => {
           syncTimer = null;
           pushVault(false);
-        }, 450);
+        }, 400);
+      }
+
+      function refreshCurrentView() {
+        renderSidebar();
+        if (state.activeView === "directory") renderDirectory();
+        else if (state.activeView === "todos") renderMasterTodos();
+        else if (state.activeView === "workspace") renderWorkspace();
+        else if (state.activeView === "focus") renderFocusBlocks();
       }
 
       /* =====================================================================
-         2. NAVIGATION & SIDEBAR
+         4. NAVIGATION & SIDEBAR
       ===================================================================== */
       function navigate(viewName, param = null) {
         state.activeView = viewName;
@@ -1070,7 +1366,7 @@
       }
 
       /* =====================================================================
-         3. DIRECTORY, WIKILINKS & MASTER TO-DOS
+         5. DIRECTORY & MASTER TO-DOS
       ===================================================================== */
       function renderDirectory() {
         const list = document.getElementById("directory-ws-list");
@@ -1078,6 +1374,7 @@
 
         state.workspaces.forEach(ws => {
           const vidCount = state.videos.filter(v => v.workspaceId === ws.id).length;
+          const mentorCount = state.mentors.filter(m => m.workspaceId === ws.id).length;
           const card = document.createElement("div");
           card.className = "card";
           card.style.padding = "12px 14px";
@@ -1090,7 +1387,7 @@
           const left = document.createElement("div");
           left.style.cursor = "pointer";
           left.style.flex = "1";
-          left.innerHTML = `<div class="bold" style="font-size:15px;">${escapeHtml(ws.icon || "◈")} ${escapeHtml(ws.name)}</div><div class="muted">${vidCount} curated videos</div>`;
+          left.innerHTML = `<div class="bold" style="font-size:15px;">${escapeHtml(ws.icon || "◈")} ${escapeHtml(ws.name)}</div><div class="muted">${vidCount} videos • ${mentorCount} pinned mentors</div>`;
           left.onclick = () => navigate("workspace", ws.id);
 
           const actions = document.createElement("div");
@@ -1109,6 +1406,7 @@
           delBtn.textContent = "✕";
           delBtn.onclick = () => {
             if (confirm(`Delete workspace "${ws.name}"?`)) {
+              markDeleted(ws.id);
               state.workspaces = state.workspaces.filter(w => w.id !== ws.id);
               scheduleSave();
               renderSidebar();
@@ -1151,12 +1449,12 @@
         recent.innerHTML = "";
         const recentVids = state.videos.slice(0, 5);
         if (recentVids.length === 0) {
-          recent.innerHTML = `<span class="muted">Open a workspace to search videos or explore a YouTube channel.</span>`;
+          recent.innerHTML = `<span class="muted">Open a workspace to discover mentors, import a playlist, or search videos.</span>`;
         } else {
           recentVids.forEach(v => {
             const row = document.createElement("div");
             row.className = "list-row";
-            row.innerHTML = `<div style="min-width:0;"><div class="bold" style="font-size:14px;">${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.purpose)}</div></div>`;
+            row.innerHTML = `<div style="min-width:0;"><div class="bold" style="font-size:14px;">${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.channel)} • ${escapeHtml(v.purpose)}</div></div>`;
             const go = document.createElement("button");
             go.type = "button";
             go.className = "btn small";
@@ -1174,12 +1472,15 @@
         const todos = state.blocks.filter(b => b.type === "todo");
 
         if (todos.length === 0) {
-          container.innerHTML = `<span class="muted">No /todo blocks yet. Type <code>/todo &lt;task&gt;</code> while watching a video.</span>`;
+          container.innerHTML = `<span class="muted">No /todo blocks yet. Add <code>/todo &lt;task&gt;</code> inside any Project Wiki or Video Ledger.</span>`;
           return;
         }
 
         todos.forEach(b => {
-          const vid = state.videos.find(v => v.id === b.videoId);
+          const vid = b.videoId ? state.videos.find(v => v.id === b.videoId) : null;
+          const ws = b.workspaceId ? state.workspaces.find(w => w.id === b.workspaceId) : null;
+          const sourceLabel = vid ? `Video: ${vid.title} [${formatTime(b.timestamp)}]` : `Project Wiki: ${ws ? ws.name : "Workspace"}`;
+
           const row = document.createElement("div");
           row.className = "block-item";
 
@@ -1191,6 +1492,7 @@
           cb.style.margin = "2px 0 0";
           cb.onchange = () => {
             b.checked = cb.checked;
+            b.updatedAt = Date.now();
             scheduleSave();
             renderSidebar();
             renderMasterTodos();
@@ -1198,7 +1500,7 @@
 
           const body = document.createElement("div");
           body.className = `block-text ${b.checked ? "done" : ""}`;
-          body.innerHTML = `<div>${formatBlockHtml(b.text)}</div><div class="muted" style="font-size:11px;">From: ${escapeHtml(vid ? vid.title : "Video")} [${formatTime(b.timestamp)}]</div>`;
+          body.innerHTML = `<div>${formatBlockHtml(b.text)}</div><div class="muted" style="font-size:11px;">${escapeHtml(sourceLabel)}</div>`;
 
           row.appendChild(cb);
           row.appendChild(body);
@@ -1207,15 +1509,13 @@
       }
 
       /* =====================================================================
-         4. WORKSPACE COVER STUDIO & MULTI-VIEW DATABASE
+         6. WORKSPACE: COVER, PROJECT WIKI, PINNED MENTORS & COURSE PROGRESS
       ===================================================================== */
       function normalizeGifUrl(rawUrl) {
         const u = (rawUrl || "").trim();
         if (!u) return "";
         const gifMatch = u.match(/giphy\.com\/(?:gifs|embed)\/(?:[a-zA-Z0-9-]+-)?([a-zA-Z0-9]+)/);
-        if (gifMatch && gifMatch[1]) {
-          return `https://media.giphy.com/media/${gifMatch[1]}/giphy.gif`;
-        }
+        if (gifMatch && gifMatch[1]) return `https://media.giphy.com/media/${gifMatch[1]}/giphy.gif`;
         return u;
       }
 
@@ -1231,13 +1531,10 @@
           coverEl.style.backgroundPosition = ws.coverPos || "center center";
           return;
         }
-
         const pat = ws.coverPattern || "dots";
-        if (pat === "noir") {
-          coverEl.style.backgroundColor = "#181818";
-        } else if (pat === "hatch") {
-          coverEl.style.backgroundImage = "repeating-linear-gradient(45deg,#F2F2EE,#F2F2EE 8px,#E2E2DC 8px,#E2E2DC 16px)";
-        } else if (pat === "grid") {
+        if (pat === "noir") coverEl.style.backgroundColor = "#181818";
+        else if (pat === "hatch") coverEl.style.backgroundImage = "repeating-linear-gradient(45deg,#F2F2EE,#F2F2EE 8px,#E2E2DC 8px,#E2E2DC 16px)";
+        else if (pat === "grid") {
           coverEl.style.backgroundImage = "linear-gradient(90deg,#D5D5CE 1px,transparent 1px),linear-gradient(#D5D5CE 1px,transparent 1px)";
           coverEl.style.backgroundSize = "20px 20px";
         } else {
@@ -1254,11 +1551,102 @@
         document.getElementById("search-results-wrap").classList.add("hidden");
         document.getElementById("search-feedback").textContent = "";
 
-        const coverEl = document.getElementById("ws-cover");
-        applyCoverStyle(coverEl, ws);
+        applyCoverStyle(document.getElementById("ws-cover"), ws);
         document.getElementById("custom-cover-url").value = ws.coverUrl || "";
 
+        renderWorkspaceWiki();
+        renderPinnedMentors();
+        renderCourseProgress();
         setDbView(state.dbView);
+      }
+
+      function renderWorkspaceWiki() {
+        const container = document.getElementById("ws-wiki-blocks");
+        const wikiBlocks = state.blocks.filter(b => b.workspaceId === state.activeWorkspaceId && !b.videoId);
+        document.getElementById("ws-wiki-count").textContent = `(${wikiBlocks.length} blocks)`;
+        renderBlockListInto(container, wikiBlocks, false);
+      }
+
+      function renderPinnedMentors() {
+        const section = document.getElementById("pinned-mentors-section");
+        const list = document.getElementById("pinned-mentors-list");
+        const wsMentors = state.mentors.filter(m => m.workspaceId === state.activeWorkspaceId);
+
+        if (wsMentors.length === 0) {
+          section.classList.add("hidden");
+          return;
+        }
+        section.classList.remove("hidden");
+        list.innerHTML = "";
+
+        wsMentors.forEach(m => {
+          const card = document.createElement("div");
+          card.className = "mentor-card";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:6px;">
+              <div>
+                <div class="bold" style="font-size:14px;">${escapeHtml(m.title)}</div>
+                <div class="muted" style="font-size:11px;">${escapeHtml(m.subsLabel || "Pinned Mentor")}</div>
+              </div>
+              <button type="button" class="btn small" data-unpin="1" title="Unpin">✕</button>
+            </div>
+            <input type="text" class="mentor-note-input" placeholder="Add mentor note (e.g. 'Great beginner drills')..." value="${escapeHtml(m.note || "")}" />
+            <button type="button" class="btn small inverse full" data-browse="1">📺 Browse Latest Uploads</button>
+          `;
+
+          const noteInp = card.querySelector(".mentor-note-input");
+          noteInp.onchange = () => {
+            m.note = noteInp.value.trim();
+            m.updatedAt = Date.now();
+            scheduleSave();
+          };
+
+          card.querySelector("[data-unpin]").onclick = () => {
+            markDeleted(m.id);
+            state.mentors = state.mentors.filter(x => x.id !== m.id);
+            scheduleSave();
+            renderPinnedMentors();
+          };
+
+          card.querySelector("[data-browse]").onclick = () => {
+            jumpToChannelExplorer(m.channelId || m.title);
+          };
+
+          list.appendChild(card);
+        });
+      }
+
+      function pinMentorChannel(channelId, title, subsLabel = "", initialNote = "") {
+        if (!state.activeWorkspaceId) return;
+        const exists = state.mentors.find(m => m.workspaceId === state.activeWorkspaceId && (m.channelId === channelId || m.title === title));
+        if (exists) return;
+
+        state.mentors.push({
+          id: `mnt_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          workspaceId: state.activeWorkspaceId,
+          channelId: channelId || "",
+          title: title || "Mentor Channel",
+          subsLabel,
+          note: initialNote,
+          updatedAt: Date.now()
+        });
+        scheduleSave();
+        if (state.activeView === "workspace") renderPinnedMentors();
+      }
+
+      function renderCourseProgress() {
+        const banner = document.getElementById("course-progress-banner");
+        const wsVideos = state.videos.filter(v => v.workspaceId === state.activeWorkspaceId && v.isCourseItem);
+        if (wsVideos.length === 0) {
+          banner.classList.add("hidden");
+          return;
+        }
+        banner.classList.remove("hidden");
+        const done = wsVideos.filter(v => v.status === "synthesized").length;
+        const pct = Math.round((done / wsVideos.length) * 100);
+        document.getElementById("course-progress-label").textContent = `COURSE CURRICULUM (${done} / ${wsVideos.length} COMPLETED)`;
+        document.getElementById("course-progress-pct").textContent = `${pct}%`;
+        document.getElementById("course-progress-fill").style.width = `${pct}%`;
       }
 
       function setDbView(mode) {
@@ -1272,7 +1660,7 @@
         container.innerHTML = "";
 
         if (wsVideos.length === 0) {
-          container.innerHTML = `<div class="card muted">No curated videos in this workspace yet. Search by topic or explore any channel above.</div>`;
+          container.innerHTML = `<div class="card muted">No videos queued in this workspace yet. Use the Smart Channel Finder, Topic Search, or Course Playlist Importer above.</div>`;
           return;
         }
 
@@ -1281,12 +1669,13 @@
           card.className = "card";
           wsVideos.forEach(v => {
             const noteCount = state.blocks.filter(b => b.videoId === v.id).length;
+            const prefix = typeof v.courseOrder === "number" ? `<span class="score-tag">PART ${v.courseOrder}</span>` : "";
             const row = document.createElement("div");
             row.className = "list-row";
             row.innerHTML = `
               <div style="min-width:0; flex:1;">
-                <div class="bold" style="font-size:16px; font-family:var(--font-serif);">${escapeHtml(v.title)}</div>
-                <div class="muted"><span class="channel-link">${escapeHtml(v.channel)}</span> • [${(v.status || "backlog").toUpperCase()}] • ${noteCount} blocks</div>
+                <div class="bold" style="font-size:16px; font-family:var(--font-serif);">${prefix}${escapeHtml(v.title)}</div>
+                <div class="muted"><span class="channel-link">${escapeHtml(v.channel)}</span> • [${(v.status || "backlog").toUpperCase()}] • ${noteCount} notes</div>
                 <div style="font-size:13px; margin-top:4px;">Purpose: ${escapeHtml(v.purpose)}</div>
               </div>
               <div style="display:flex; flex-direction:column; gap:6px;">
@@ -1298,9 +1687,11 @@
             const btns = row.querySelectorAll("button");
             btns[0].onclick = () => navigate("focus", v.id);
             btns[1].onclick = () => {
+              markDeleted(v.id);
               state.videos = state.videos.filter(item => item.id !== v.id);
               scheduleSave();
               renderSidebar();
+              renderCourseProgress();
               setDbView(mode);
             };
             card.appendChild(row);
@@ -1312,7 +1703,7 @@
           const cols = [
             { key: "backlog", title: "BACKLOG" },
             { key: "watching", title: "WATCHING" },
-            { key: "synthesized", title: "SYNTHESIZED" }
+            { key: "synthesized", title: "SYNTHESIZED ✓" }
           ];
           cols.forEach(c => {
             const col = document.createElement("div");
@@ -1323,7 +1714,7 @@
               item.className = "kanban-card";
               item.innerHTML = `
                 <div class="bold" style="margin-bottom:4px;">${escapeHtml(v.title)}</div>
-                <div class="muted" style="font-size:11px; margin-bottom:8px;">${escapeHtml(v.purpose)}</div>
+                <div class="muted" style="font-size:11px; margin-bottom:8px;">${escapeHtml(v.channel)} • ${escapeHtml(v.purpose)}</div>
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                   <button type="button" class="btn small inverse">Open</button>
                   ${c.key !== "watching" ? `<button type="button" class="btn small" data-move="watching">→ Watch</button>` : ""}
@@ -1334,7 +1725,9 @@
               item.querySelectorAll("[data-move]").forEach(mv => {
                 mv.onclick = () => {
                   v.status = mv.dataset.move;
+                  v.updatedAt = Date.now();
                   scheduleSave();
+                  renderCourseProgress();
                   setDbView("board");
                 };
               });
@@ -1348,12 +1741,13 @@
           wrap.className = "card notion-table-wrap";
           const tbl = document.createElement("table");
           tbl.className = "notion-table";
-          tbl.innerHTML = `<thead><tr><th>Title</th><th>Channel</th><th>Purpose</th><th>Status</th><th>Blocks</th><th>Action</th></tr></thead><tbody></tbody>`;
+          tbl.innerHTML = `<thead><tr><th>#</th><th>Title</th><th>Channel</th><th>Purpose</th><th>Status</th><th>Notes</th><th>Action</th></tr></thead><tbody></tbody>`;
           const tbody = tbl.querySelector("tbody");
-          wsVideos.forEach(v => {
+          wsVideos.forEach((v, idx) => {
             const bCount = state.blocks.filter(b => b.videoId === v.id).length;
             const tr = document.createElement("tr");
             tr.innerHTML = `
+              <td>${v.courseOrder ?? idx + 1}</td>
               <td class="bold">${escapeHtml(v.title)}</td>
               <td>${escapeHtml(v.channel)}</td>
               <td>${escapeHtml(v.purpose)}</td>
@@ -1370,7 +1764,7 @@
       }
 
       /* =====================================================================
-         5. ACCURATE YOUTUBE SEARCH + UNRESTRICTED CHANNEL EXPLORER
+         7. SMART CHANNEL & CURRICULUM FINDER + SEARCH + PLAYLIST IMPORTER
       ===================================================================== */
       function parseISODuration(iso) {
         if (!iso || typeof iso !== "string") return 0;
@@ -1385,6 +1779,321 @@
         const m = Math.floor((s % 3600) / 60);
         const rem = s % 60;
         return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}` : `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+      }
+
+      function formatSubs(numStr) {
+        const n = Number(numStr || 0);
+        if (!n) return "";
+        if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M subs`;
+        if (n >= 1e3) return `${Math.round(n / 1e3)}K subs`;
+        return `${n} subs`;
+      }
+
+      function addVideoToWorkspace(vObj, purposeText, extra = {}) {
+        const vidKey = `${state.activeWorkspaceId}_${vObj.id}`;
+        const exists = state.videos.some(x => x.workspaceId === state.activeWorkspaceId && x.id === vObj.id);
+        if (exists) return;
+
+        state.videos.push({
+          id: vObj.id,
+          uid: vidKey,
+          workspaceId: state.activeWorkspaceId,
+          status: "backlog",
+          title: vObj.title,
+          channel: vObj.channel,
+          channelId: vObj.channelId || "",
+          description: vObj.description || "",
+          purpose: purposeText,
+          addedAt: Date.now(),
+          updatedAt: Date.now(),
+          ...extra
+        });
+      }
+
+      async function callGeminiRaw(promptText) {
+        const key = (creds.geminiApiKey || "").trim();
+        if (!key) throw new Error("Missing Gemini API key in Settings.");
+
+        const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.geminiModel)}:generateContent`;
+        const url = key.startsWith("AIza") ? `${baseUrl}?key=${encodeURIComponent(key)}` : baseUrl;
+        const headers = { "Content-Type": "application/json" };
+        if (!key.startsWith("AIza")) headers["x-goog-api-key"] = key;
+
+        const res = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: promptText }] }]
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error?.message || `Gemini HTTP ${res.status}`);
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      }
+
+      async function runSmartChannelFinder() {
+        const skill = document.getElementById("finder-skill").value.trim();
+        const level = document.getElementById("finder-level").value;
+        const goal = document.getElementById("finder-goal").value.trim();
+        const feedback = document.getElementById("search-feedback");
+        const resultsWrap = document.getElementById("search-results-wrap");
+        const resultsList = document.getElementById("search-results-list");
+
+        if (!skill || !goal) {
+          feedback.textContent = "Enter both the Skill/Topic and your Goal/Why.";
+          return;
+        }
+        if (!creds.youtubeApiKey) {
+          feedback.textContent = "Open ⚙ SETTINGS at top right to save your YouTube API key first.";
+          return;
+        }
+
+        feedback.textContent = "Step 1/2: Profiling ideal mentors & curriculum angles...";
+        resultsWrap.classList.add("hidden");
+
+        try {
+          let searchQueries = [`${skill} ${level === "Complete Beginner" ? "fundamentals beginner tutorial" : "technique guide"}`];
+          let aiMentorNotes = {};
+
+          // Ask Gemini for sharp search queries & recommended YouTube creator names if key is configured
+          if (creds.geminiApiKey) {
+            try {
+              const planPrompt = `User wants to learn: "${skill}"
+Current Level: "${level}"
+Goal / Context: "${goal}"
+
+Return ONLY valid JSON (no markdown fences) in this exact format:
+{
+  "queries": ["specific youtube search query 1", "specific youtube search query 2"],
+  "idealTraits": "1 concise sentence on what to look for at this level"
+}`;
+              const rawPlan = await callGeminiRaw(planPrompt);
+              const cleaned = rawPlan.replace(/```json|```/g, "").trim();
+              const parsedPlan = JSON.parse(cleaned);
+              if (Array.isArray(parsedPlan.queries) && parsedPlan.queries.length > 0) {
+                searchQueries = parsedPlan.queries.slice(0, 2);
+              }
+            } catch {}
+          }
+
+          feedback.textContent = "Step 2/2: Fetching top YouTube channels & starter videos (filtering Shorts)...";
+
+          // Gather candidate educational videos across search queries
+          const allVideoIds = new Set();
+          for (const q of searchQueries) {
+            const sUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=20&safeSearch=strict&key=${encodeURIComponent(creds.youtubeApiKey)}`;
+            const sRes = await fetch(sUrl);
+            const sData = await sRes.json();
+            if (!sRes.ok) throw new Error(sData.error?.message || "YouTube API error");
+            (sData.items || []).forEach(i => { if (i.id?.videoId) allVideoIds.add(i.id.videoId); });
+          }
+
+          const idBatch = Array.from(allVideoIds).slice(0, 35);
+          if (idBatch.length === 0) throw new Error("No matching videos found.");
+
+          const vRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${idBatch.join(",")}&key=${encodeURIComponent(creds.youtubeApiKey)}`);
+          const vData = await vRes.json();
+
+          // Group non-Short videos (>= 3 min) by Channel
+          const channelMap = new Map();
+          (vData.items || []).forEach(v => {
+            const dur = parseISODuration(v.contentDetails?.duration);
+            if (dur < 180) return; // Purge Shorts
+            const chId = v.snippet?.channelId;
+            if (!chId) return;
+            if (!channelMap.has(chId)) {
+              channelMap.set(chId, {
+                channelId: chId,
+                channelTitle: v.snippet?.channelTitle || "Creator",
+                subsLabel: "",
+                channelDesc: "",
+                videos: []
+              });
+            }
+            const group = channelMap.get(chId);
+            if (group.videos.length < 3) {
+              group.videos.push({
+                id: v.id,
+                title: v.snippet?.title || "Untitled",
+                channel: v.snippet?.channelTitle || "Creator",
+                channelId: chId,
+                description: v.snippet?.description || "",
+                durationSec: dur
+              });
+            }
+          });
+
+          const topChannelIds = Array.from(channelMap.keys()).slice(0, 7);
+          if (topChannelIds.length === 0) throw new Error("No long-form mentor channels matched.");
+
+          // Fetch rich Channel Metadata & Subscriber counts
+          const chRes = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${topChannelIds.join(",")}&key=${encodeURIComponent(creds.youtubeApiKey)}`);
+          const chData = await chRes.json();
+          (chData.items || []).forEach(c => {
+            const item = channelMap.get(c.id);
+            if (item) {
+              item.subsLabel = `${formatSubs(c.statistics?.subscriberCount)} • ${c.statistics?.videoCount || 0} videos`;
+              item.channelDesc = (c.snippet?.description || "").slice(0, 200);
+            }
+          });
+
+          const rankedChannels = topChannelIds.map(id => channelMap.get(id)).filter(Boolean);
+
+          // Optional Gemini synthesis: explain why each channel fits user's level & goal
+          if (creds.geminiApiKey && rankedChannels.length > 0) {
+            try {
+              const summaryList = rankedChannels.map((c, idx) => `${idx + 1}. ${c.channelTitle} (${c.subsLabel}) — Sample videos: ${c.videos.map(v => v.title).join("; ")}`).join("\n");
+              const rankPrompt = `User is a "${level}" learning "${skill}" with goal: "${goal}".
+Evaluate these YouTube channels and return ONLY valid JSON mapping channel number to a 1-sentence reason why it fits:
+{"1": "reason...", "2": "reason..."}
+
+Channels:
+${summaryList}`;
+              const rawFit = await callGeminiRaw(rankPrompt);
+              aiMentorNotes = JSON.parse(rawFit.replace(/```json|```/g, "").trim());
+            } catch {}
+          }
+
+          document.getElementById("search-results-header").textContent = `RECOMMENDED MENTOR CHANNELS & STARTER VIDEOS (${rankedChannels.length} CHANNELS)`;
+          resultsList.innerHTML = "";
+
+          rankedChannels.forEach((ch, idx) => {
+            const fitReason = aiMentorNotes[String(idx + 1)] || ch.channelDesc || `Structured long-form lessons matching ${skill} (${level}).`;
+            const box = document.createElement("div");
+            box.className = "finder-channel-card";
+
+            const vidsHtml = ch.videos.map((v, vIdx) => `
+              <div class="list-row" style="padding:8px 0;">
+                <div style="min-width:0; flex:1;">
+                  <div class="bold" style="font-size:13px;">Starter ${vIdx + 1}: ${escapeHtml(v.title)}</div>
+                  <div class="muted" style="font-size:11px;">${formatTime(v.durationSec)}</div>
+                </div>
+                <button type="button" class="btn small" data-addvid="${vIdx}">+ Queue</button>
+              </div>
+            `).join("");
+
+            box.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; margin-bottom:6px;">
+                <div>
+                  <div class="bold" style="font-size:16px; font-family:var(--font-serif);">${escapeHtml(ch.channelTitle)}</div>
+                  <div class="muted" style="font-size:12px;">${escapeHtml(ch.subsLabel)}</div>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button type="button" class="btn small inverse" data-pin="1">📌 Pin Mentor</button>
+                  <button type="button" class="btn small" data-queueall="1">+ Queue Starters</button>
+                  <button type="button" class="btn small" data-catalog="1">Full Catalog</button>
+                </div>
+              </div>
+              <div style="font-size:13px; background:var(--paper); border-left:3px solid var(--ink); padding:6px 10px; margin-bottom:8px;">
+                <strong>Why it fits:</strong> ${escapeHtml(fitReason)}
+              </div>
+              <div>${vidsHtml}</div>
+            `;
+
+            box.querySelector("[data-pin]").onclick = (e) => {
+              pinMentorChannel(ch.channelId, ch.channelTitle, ch.subsLabel, fitReason);
+              e.target.textContent = "Pinned ✓";
+              e.target.disabled = true;
+            };
+
+            box.querySelector("[data-queueall]").onclick = (e) => {
+              ch.videos.forEach(v => addVideoToWorkspace(v, `${skill} (${level}): ${goal}`));
+              scheduleSave();
+              renderSidebar();
+              setDbView(state.dbView);
+              e.target.textContent = "Queued All ✓";
+              e.target.disabled = true;
+            };
+
+            box.querySelector("[data-catalog]").onclick = () => jumpToChannelExplorer(ch.channelId);
+
+            box.querySelectorAll("[data-addvid]").forEach(btn => {
+              btn.onclick = () => {
+                const v = ch.videos[Number(btn.dataset.addvid)];
+                addVideoToWorkspace(v, `${skill} (${level}): ${goal}`);
+                scheduleSave();
+                renderSidebar();
+                setDbView(state.dbView);
+                btn.textContent = "Added ✓";
+                btn.disabled = true;
+              };
+            });
+
+            resultsList.appendChild(box);
+          });
+
+          feedback.textContent = "";
+          resultsWrap.classList.remove("hidden");
+        } catch (err) {
+          feedback.textContent = `Finder error: ${err.message}`;
+        }
+      }
+
+      async function importPlaylistCourse() {
+        const rawUrl = document.getElementById("playlist-url-input").value.trim();
+        const purpose = document.getElementById("playlist-purpose-input").value.trim() || "Structured Course Module";
+        const feedback = document.getElementById("search-feedback");
+
+        if (!rawUrl) {
+          feedback.textContent = "Paste a YouTube Playlist URL or PL... playlist ID.";
+          return;
+        }
+        if (!creds.youtubeApiKey) {
+          feedback.textContent = "Save your YouTube API key in ⚙ SETTINGS first.";
+          return;
+        }
+
+        const listMatch = rawUrl.match(/[?&]list=([a-zA-Z0-9_-]+)/) || rawUrl.match(/^([a-zA-Z0-9_-]{12,})$/);
+        if (!listMatch) {
+          feedback.textContent = "Could not find a valid playlist ID in that link.";
+          return;
+        }
+        const playlistId = listMatch[1];
+        feedback.textContent = "Importing course playlist modules...";
+
+        try {
+          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(playlistId)}&maxResults=40&key=${encodeURIComponent(creds.youtubeApiKey)}`);
+          const plData = await plRes.json();
+          if (!plRes.ok) throw new Error(plData.error?.message || "Playlist fetch failed");
+
+          const ids = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
+          if (ids.length === 0) throw new Error("Playlist is empty or private.");
+
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${encodeURIComponent(creds.youtubeApiKey)}`);
+          const dData = await dRes.json();
+          const detailMap = new Map((dData.items || []).map(v => [v.id, v]));
+
+          let orderNum = state.videos.filter(v => v.workspaceId === state.activeWorkspaceId && v.isCourseItem).length + 1;
+          let importedCount = 0;
+
+          ids.forEach(id => {
+            const v = detailMap.get(id);
+            if (!v) return;
+            const dur = parseISODuration(v.contentDetails?.duration);
+            if (dur > 0 && dur < 120) return; // Skip tiny intros/shorts
+            addVideoToWorkspace(
+              {
+                id: v.id,
+                title: v.snippet?.title || "Course Lesson",
+                channel: v.snippet?.channelTitle || "Instructor",
+                channelId: v.snippet?.channelId || "",
+                description: v.snippet?.description || ""
+              },
+              purpose,
+              { isCourseItem: true, courseOrder: orderNum++ }
+            );
+            importedCount++;
+          });
+
+          scheduleSave();
+          renderSidebar();
+          renderCourseProgress();
+          setDbView(state.dbView);
+          feedback.textContent = `✓ Imported ${importedCount} lessons into your workspace with progress tracking.`;
+          document.getElementById("playlist-url-input").value = "";
+        } catch (err) {
+          feedback.textContent = `Playlist import failed: ${err.message}`;
+        }
       }
 
       function distillTopicQuery(raw) {
@@ -1416,22 +2125,10 @@
           `;
           row.querySelector(".channel-link").onclick = () => jumpToChannelExplorer(v.channelId || v.channel);
           row.querySelector("button").onclick = () => {
-            if (!state.videos.some(existing => existing.id === v.id && existing.workspaceId === state.activeWorkspaceId)) {
-              state.videos.unshift({
-                id: v.id,
-                workspaceId: state.activeWorkspaceId,
-                status: "backlog",
-                title: v.title,
-                channel: v.channel,
-                channelId: v.channelId || "",
-                description: v.description,
-                purpose: defaultPurpose,
-                addedAt: Date.now()
-              });
-              scheduleSave();
-              renderSidebar();
-              setDbView(state.dbView);
-            }
+            addVideoToWorkspace(v, defaultPurpose);
+            scheduleSave();
+            renderSidebar();
+            setDbView(state.dbView);
             row.querySelector("button").textContent = "Added ✓";
             row.querySelector("button").disabled = true;
           };
@@ -1451,6 +2148,10 @@
           feedback.textContent = "Enter both a Core Topic and your Purpose first.";
           return;
         }
+        if (!creds.youtubeApiKey) {
+          feedback.textContent = "Save your YouTube API key in ⚙ SETTINGS first.";
+          return;
+        }
 
         feedback.textContent = "Curating accurate results...";
         resultsWrap.classList.add("hidden");
@@ -1458,7 +2159,7 @@
         try {
           const orderParam = /\b(latest|newest|recent)\b/i.test(rawQuery) ? "date" : "relevance";
           const cleanQuery = distillTopicQuery(rawQuery);
-          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${encodeURIComponent(KEYS.youtubeApiKey)}`;
+          const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(cleanQuery)}&type=video&videoEmbeddable=true&relevanceLanguage=en&maxResults=25&order=${orderParam}&safeSearch=strict&key=${encodeURIComponent(creds.youtubeApiKey)}`;
 
           const sRes = await fetch(searchUrl);
           const sData = await sRes.json();
@@ -1467,7 +2168,7 @@
           const ids = (sData.items || []).map(i => i.id?.videoId).filter(Boolean);
           if (ids.length === 0) throw new Error("No videos returned.");
 
-          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${ids.join(",")}&key=${encodeURIComponent(creds.youtubeApiKey)}`);
           const dData = await dRes.json();
 
           const stopWords = new Set(["the", "and", "for", "with", "from", "into", "about", "podcast", "video", "latest", "learn", "how"]);
@@ -1483,19 +2184,15 @@
               const desc = v.snippet?.description || "";
               const tags = (v.snippet?.tags || []).join(" ").toLowerCase();
 
-              const titleLow = title.toLowerCase();
-              const chanLow = channel.toLowerCase();
-              const descLow = desc.toLowerCase();
-
               let topicHits = 0;
               topicTokens.forEach(t => {
-                if (titleLow.includes(t) || chanLow.includes(t) || tags.includes(t)) topicHits += 1;
+                if (title.toLowerCase().includes(t) || channel.toLowerCase().includes(t) || tags.includes(t)) topicHits += 1;
               });
 
               let score = topicHits * 4;
               purposeTokens.forEach(p => {
-                if (titleLow.includes(p)) score += 2;
-                if (descLow.includes(p)) score += 1;
+                if (title.toLowerCase().includes(p)) score += 2;
+                if (desc.toLowerCase().includes(p)) score += 1;
               });
 
               return {
@@ -1513,15 +2210,12 @@
               if (v.durationSec > 0 && v.durationSec < 180) return false;
               if (topicTokens.length > 0 && v.topicHits === 0) return false;
               if (v.durationSec >= 1200) return true;
-              const tLow = v.title.toLowerCase();
-              return !titleJunk.some(j => tLow.includes(j));
+              return !titleJunk.some(j => v.title.toLowerCase().includes(j));
             })
             .sort((a, b) => (orderParam === "date" ? 0 : b.score - a.score))
             .slice(0, 10);
 
-          if (curated.length === 0) {
-            throw new Error("No high-relevance videos over 3 minutes matched. Try simpler topic keywords or Explore Channel.");
-          }
+          if (curated.length === 0) throw new Error("No high-relevance videos over 3 minutes matched.");
 
           feedback.textContent = "";
           renderCandidateList(curated, purpose, `CURATED TOPIC RESULTS (${curated.length} MATCHED)`);
@@ -1530,12 +2224,13 @@
         }
       }
 
-      function switchDiscoveryMode(mode) {
-        const isTopic = mode === "topic";
-        document.getElementById("mode-topic-btn").classList.toggle("inverse", isTopic);
-        document.getElementById("mode-channel-btn").classList.toggle("inverse", !isTopic);
-        document.getElementById("panel-topic-search").classList.toggle("hidden", !isTopic);
-        document.getElementById("panel-channel-explore").classList.toggle("hidden", isTopic);
+      function switchDiscoveryTab(tabKey) {
+        document.querySelectorAll("[data-disc]").forEach(btn => {
+          btn.classList.toggle("inverse", btn.dataset.disc === tabKey);
+        });
+        ["finder", "topic", "channel", "playlist"].forEach(k => {
+          document.getElementById(`disc-panel-${k}`).classList.toggle("hidden", k !== tabKey);
+        });
         document.getElementById("search-feedback").textContent = "";
         document.getElementById("search-results-wrap").classList.add("hidden");
       }
@@ -1545,7 +2240,7 @@
           state.activeWorkspaceId = state.workspaces[0].id;
         }
         navigate("workspace", state.activeWorkspaceId);
-        switchDiscoveryMode("channel");
+        switchDiscoveryTab("channel");
         document.getElementById("channel-query-input").value = channelIdentifier;
         exploreChannel();
       }
@@ -1560,6 +2255,10 @@
           feedback.textContent = "Enter a YouTube channel @handle, URL, or UC... ID.";
           return;
         }
+        if (!creds.youtubeApiKey) {
+          feedback.textContent = "Save your YouTube API key in ⚙ SETTINGS first.";
+          return;
+        }
 
         feedback.textContent = "Loading channel catalog (Shorts filtered out)...";
         resultsWrap.classList.add("hidden");
@@ -1567,24 +2266,18 @@
         try {
           let channelId = "";
           let handle = "";
-
           const ucMatch = rawInput.match(/(UC[a-zA-Z0-9_-]{22})/);
           const handleMatch = rawInput.match(/@([a-zA-Z0-9._-]+)/);
 
-          if (ucMatch) {
-            channelId = ucMatch[1];
-          } else if (handleMatch) {
-            handle = `@${handleMatch[1]}`;
-          } else {
-            const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
+          if (ucMatch) channelId = ucMatch[1];
+          else if (handleMatch) handle = `@${handleMatch[1]}`;
+          else {
+            const chSearch = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(rawInput)}&type=channel&maxResults=1&key=${encodeURIComponent(creds.youtubeApiKey)}`);
             const chData = await chSearch.json();
             channelId = chData.items?.[0]?.id?.channelId || "";
           }
 
-          const chanParams = new URLSearchParams({
-            part: "snippet,contentDetails",
-            key: KEYS.youtubeApiKey
-          });
+          const chanParams = new URLSearchParams({ part: "snippet,contentDetails,statistics", key: creds.youtubeApiKey });
           if (channelId) chanParams.set("id", channelId);
           else if (handle) chanParams.set("forHandle", handle);
           else throw new Error("Channel not found.");
@@ -1598,13 +2291,12 @@
           const channelTitle = channelObj.snippet?.title || rawInput;
           const resolvedChannelId = channelObj.id;
 
-          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
+          const plRes = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}&maxResults=35&key=${encodeURIComponent(creds.youtubeApiKey)}`);
           const plData = await plRes.json();
           const vidIds = (plData.items || []).map(i => i.snippet?.resourceId?.videoId).filter(Boolean);
-
           if (vidIds.length === 0) throw new Error("No public uploads found on this channel.");
 
-          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${encodeURIComponent(KEYS.youtubeApiKey)}`);
+          const dRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${vidIds.join(",")}&key=${encodeURIComponent(creds.youtubeApiKey)}`);
           const dData = await dRes.json();
 
           const regularVideos = (dData.items || [])
@@ -1616,21 +2308,19 @@
               description: v.snippet?.description || "",
               durationSec: parseISODuration(v.contentDetails?.duration)
             }))
-            .filter(v => v.durationSec > 180 && !/#shorts/i.test(v.title));
+            .filter(v => v.durationSec >= 180 && !/#shorts/i.test(v.title));
 
-          if (regularVideos.length === 0) {
-            throw new Error("Only Shorts (< 3 min) were found in this channel's recent uploads.");
-          }
+          if (regularVideos.length === 0) throw new Error("Only Shorts (< 3 min) were found in recent uploads.");
 
           feedback.textContent = "";
-          renderCandidateList(regularVideos, purpose, `${channelTitle.toUpperCase()} — FULL CATALOG (${regularVideos.length} VIDEOS, SHORTS REMOVED)`);
+          renderCandidateList(regularVideos, purpose, `${channelTitle.toUpperCase()} — ${regularVideos.length} FULL VIDEOS (SHORTS REMOVED)`);
         } catch (err) {
           feedback.textContent = `Channel error: ${err.message}`;
         }
       }
 
       /* =====================================================================
-         6. FOCUS PLAYER, INLINE CHAPTERS & NOTION BLOCK CANVAS
+         8. FOCUS MODE & SHARED NOTION BLOCK RENDERER
       ===================================================================== */
       function loadYouTubeIFrameAPI() {
         window.onYouTubeIframeAPIReady = () => { ytApiReady = true; };
@@ -1645,19 +2335,23 @@
 
         document.getElementById("focus-title").textContent = vid.title;
         document.getElementById("focus-purpose-text").textContent = vid.purpose;
-        document.getElementById("btn-focus-explore-channel").onclick = () => {
-          jumpToChannelExplorer(vid.channelId || vid.channel);
+
+        document.getElementById("btn-focus-explore-channel").onclick = () => jumpToChannelExplorer(vid.channelId || vid.channel);
+        document.getElementById("btn-focus-pin-channel").onclick = (e) => {
+          pinMentorChannel(vid.channelId, vid.channel, "", `Pinned from "${vid.title}"`);
+          e.target.textContent = "📌 Pinned ✓";
         };
 
         const statusSel = document.getElementById("focus-status-select");
         statusSel.value = vid.status || "watching";
         statusSel.onchange = () => {
           vid.status = statusSel.value;
+          vid.updatedAt = Date.now();
           scheduleSave();
         };
 
         renderInlineChapters(vid);
-        renderBlocks();
+        renderFocusBlocks();
 
         if (!ytApiReady) {
           setTimeout(renderFocusView, 400);
@@ -1674,11 +2368,8 @@
             events: {
               onStateChange: (e) => {
                 const blackout = document.getElementById("blackout-screen");
-                if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-                  blackout.classList.add("active");
-                } else {
-                  blackout.classList.remove("active");
-                }
+                if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) blackout.classList.add("active");
+                else blackout.classList.remove("active");
               }
             }
           });
@@ -1725,11 +2416,8 @@
         return safe.replace(/\[\[([^\]]+)\]\]/g, `<span class="wikilink" onclick="App.openCmdK('$1')">[[$1]]</span>`);
       }
 
-      function addBlock(rawInput, forcedType = null) {
+      function parseSlashBlock(rawInput, forcedType = null) {
         const text = (rawInput || "").trim();
-        if (!text || !state.activeVideoId) return;
-
-        const currentSec = ytPlayer && typeof ytPlayer.getCurrentTime === "function" ? ytPlayer.getCurrentTime() : 0;
         let type = forcedType || "note";
         let cleanText = text;
 
@@ -1739,39 +2427,76 @@
           else if (text.startsWith("/callout ")) { type = "callout"; cleanText = text.slice(9).trim(); }
           else if (text.startsWith("/quote ")) { type = "quote"; cleanText = text.slice(7).trim(); }
           else if (text === "/divider") { type = "divider"; cleanText = "---"; }
-          else if (text.startsWith("/ai ")) {
-            const q = text.slice(4).trim();
-            document.getElementById("gemini-dock").classList.remove("hidden");
-            askGemini(q);
-            return;
-          }
         }
+        return { type, cleanText };
+      }
+
+      function addVideoBlock(rawInput, forcedType = null) {
+        const text = (rawInput || "").trim();
+        if (!text || !state.activeVideoId) return;
+
+        if (!forcedType && text.startsWith("/ai ")) {
+          document.getElementById("gemini-dock").classList.remove("hidden");
+          askGemini(text.slice(4).trim());
+          return;
+        }
+
+        const currentSec = ytPlayer && typeof ytPlayer.getCurrentTime === "function" ? ytPlayer.getCurrentTime() : 0;
+        const { type, cleanText } = parseSlashBlock(text, forcedType);
 
         state.blocks.push({
           id: `blk_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
           videoId: state.activeVideoId,
+          workspaceId: state.activeWorkspaceId,
           type,
           timestamp: Math.floor(currentSec),
           text: cleanText,
-          checked: false
+          checked: false,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
         });
 
         scheduleSave();
         renderSidebar();
-        renderBlocks();
+        renderFocusBlocks();
       }
 
-      function renderBlocks() {
-        const container = document.getElementById("blocks-container");
-        container.innerHTML = "";
-        const vidBlocks = state.blocks.filter(b => b.videoId === state.activeVideoId);
+      function addWorkspaceWikiBlock(rawInput) {
+        const text = (rawInput || "").trim();
+        if (!text || !state.activeWorkspaceId) return;
+        const { type, cleanText } = parseSlashBlock(text);
 
-        if (vidBlocks.length === 0) {
-          container.innerHTML = `<div class="muted" style="padding:12px 0;">Empty page. Type a note or slash command above.</div>`;
+        state.blocks.push({
+          id: `wiki_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          videoId: null,
+          workspaceId: state.activeWorkspaceId,
+          type,
+          timestamp: 0,
+          text: cleanText,
+          checked: false,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        });
+
+        scheduleSave();
+        renderSidebar();
+        renderWorkspaceWiki();
+      }
+
+      function renderFocusBlocks() {
+        const container = document.getElementById("blocks-container");
+        const vidBlocks = state.blocks.filter(b => b.videoId === state.activeVideoId);
+        renderBlockListInto(container, vidBlocks, true);
+      }
+
+      function renderBlockListInto(container, blockItems, showTimestamp) {
+        container.innerHTML = "";
+        if (blockItems.length === 0) {
+          container.innerHTML = `<div class="muted" style="padding:8px 0;">No blocks yet.</div>`;
           return;
         }
 
-        vidBlocks.forEach(b => {
+        blockItems.forEach(b => {
           if (b.type === "divider") {
             const hr = document.createElement("hr");
             hr.className = "block-divider";
@@ -1791,14 +2516,15 @@
             cb.style.margin = "2px 0 0";
             cb.onchange = () => {
               b.checked = cb.checked;
+              b.updatedAt = Date.now();
               scheduleSave();
               renderSidebar();
-              renderBlocks();
+              showTimestamp ? renderFocusBlocks() : renderWorkspaceWiki();
             };
             row.appendChild(cb);
           }
 
-          if (b.type !== "h1") {
+          if (showTimestamp && b.type !== "h1") {
             const ts = document.createElement("span");
             ts.className = "block-time";
             ts.textContent = `[${formatTime(b.timestamp)}]`;
@@ -1818,8 +2544,9 @@
             const updated = prompt("Edit block text:", b.text);
             if (updated !== null && updated.trim()) {
               b.text = updated.trim();
+              b.updatedAt = Date.now();
               scheduleSave();
-              renderBlocks();
+              showTimestamp ? renderFocusBlocks() : renderWorkspaceWiki();
             }
           };
           row.appendChild(content);
@@ -1830,10 +2557,11 @@
           del.style.border = "none";
           del.textContent = "✕";
           del.onclick = () => {
+            markDeleted(b.id);
             state.blocks = state.blocks.filter(x => x.id !== b.id);
             scheduleSave();
             renderSidebar();
-            renderBlocks();
+            showTimestamp ? renderFocusBlocks() : renderWorkspaceWiki();
           };
           row.appendChild(del);
 
@@ -1842,70 +2570,8 @@
       }
 
       /* =====================================================================
-         7. COLLAPSIBLE GEMINI SIDEKICK (AIza & AQ Key Compatible)
+         9. GEMINI DOCK & GOOGLE BOOKS LOOKUP
       ===================================================================== */
-      function getValidGeminiKey() {
-        const k = (KEYS.geminiApiKey || "").trim();
-        if (!k || k === "PASTE_YOUR_WORKING_AIZA_GEMINI_KEY_HERE") return "";
-        return k;
-      }
-
-      function buildGeminiRequest(model, promptText) {
-        const key = getValidGeminiKey();
-        const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
-
-        // AIza... keys work universally via ?key= query param (exact match to iOS Shortcuts)
-        // AQ... keys require x-goog-api-key header
-        if (key.startsWith("AIza")) {
-          return {
-            url: `${baseUrl}?key=${encodeURIComponent(key)}`,
-            headers: { "Content-Type": "application/json" }
-          };
-        }
-        return {
-          url: baseUrl,
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": key
-          }
-        };
-      }
-
-      async function testGeminiKey() {
-        const feed = document.getElementById("gemini-chat-feed");
-        const bubble = document.createElement("div");
-        bubble.className = "ai-msg";
-        feed.appendChild(bubble);
-
-        const key = getValidGeminiKey();
-        if (!key) {
-          bubble.textContent = "No Gemini API key set yet. Paste your AIza... key on Line 15 of index.html.";
-          feed.scrollTop = feed.scrollHeight;
-          return;
-        }
-
-        bubble.textContent = `Testing key (${key.slice(0, 6)}...) against ${state.geminiModel}...`;
-        feed.scrollTop = feed.scrollHeight;
-
-        try {
-          const req = buildGeminiRequest(state.geminiModel, "Reply with the single word: CONNECTED");
-          const res = await fetch(req.url, {
-            method: "POST",
-            headers: req.headers,
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: "Reply with the single word: CONNECTED" }] }]
-            })
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "OK";
-          bubble.textContent = `✓ Key Verified (${state.geminiModel}): ${text.trim()}`;
-        } catch (err) {
-          bubble.textContent = `✕ Key Test Failed: ${err.message}`;
-        }
-        feed.scrollTop = feed.scrollHeight;
-      }
-
       function renderGeminiChips() {
         const box = document.getElementById("gemini-quick-chips");
         box.innerHTML = "";
@@ -1919,13 +2585,13 @@
           ];
         } else if (state.activeView === "workspace") {
           chips = [
-            { label: "Suggest Topic Keywords", prompt: "Suggest 3 clean YouTube search keywords and purposes for this workspace." },
-            { label: "Synthesize Workspace", prompt: "Synthesize the main themes across all videos and notes saved in this workspace." }
+            { label: "Build Learning Roadmap", prompt: "Create a structured step-by-step roadmap for mastering this workspace topic based on my pinned mentors and videos." },
+            { label: "Synthesize Project Wiki", prompt: "Review my Project Wiki notes and video list in this workspace and highlight key next steps." }
           ];
         } else {
           chips = [
             { label: "Prioritize Open To-Dos", prompt: "Review all my open /todo items across workspaces and recommend the top 3 to execute next." },
-            { label: "Connect My Concepts", prompt: "Identify patterns and connections across my saved videos and notes." }
+            { label: "Connect My Concepts", prompt: "Identify patterns and connections across my saved workspaces and notes." }
           ];
         }
 
@@ -1944,16 +2610,17 @@
           const vid = state.videos.find(v => v.id === state.activeVideoId);
           const notes = state.blocks.filter(b => b.videoId === state.activeVideoId)
             .map(b => `- [${formatTime(b.timestamp)}] (${b.type}) ${b.text}`).join("\n");
-          return `Active Video: "${vid?.title}" by ${vid?.channel}\nURL: https://www.youtube.com/watch?v=${vid?.id}\nStated Purpose: ${vid?.purpose}\nDescription/Chapters:\n${(vid?.description || "").slice(0, 1500)}\n\nUser's Notion Blocks:\n${notes || "None yet."}`;
+          return `Active Video: "${vid?.title}" by ${vid?.channel}\nURL: https://www.youtube.com/watch?v=${vid?.id}\nStated Purpose: ${vid?.purpose}\nDescription:\n${(vid?.description || "").slice(0, 1400)}\n\nUser Notes:\n${notes || "None yet."}`;
         }
         if (state.activeView === "workspace" && state.activeWorkspaceId) {
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
-          const vids = state.videos.filter(v => v.workspaceId === ws?.id)
-            .map(v => `- ${v.title} (Purpose: ${v.purpose})`).join("\n");
-          return `Active Workspace: ${ws?.name}\nCurated Videos:\n${vids || "None yet."}`;
+          const mentors = state.mentors.filter(m => m.workspaceId === ws?.id).map(m => `${m.title} (${m.note || ""})`).join(", ");
+          const wiki = state.blocks.filter(b => b.workspaceId === ws?.id && !b.videoId).map(b => `- ${b.text}`).join("\n");
+          const vids = state.videos.filter(v => v.workspaceId === ws?.id).map(v => `- ${v.title} (${v.status})`).join("\n");
+          return `Workspace: ${ws?.name}\nPinned Mentors: ${mentors || "None"}\nProject Wiki:\n${wiki || "Empty"}\nVideos:\n${vids || "None"}`;
         }
         const openTodos = state.blocks.filter(b => b.type === "todo" && !b.checked).map(b => `- ${b.text}`).join("\n");
-        return `Directory Overview: ${state.workspaces.length} workspaces, ${state.videos.length} videos.\nOpen To-Dos:\n${openTodos || "None."}`;
+        return `Directory: ${state.workspaces.length} workspaces, ${state.videos.length} videos.\nOpen To-Dos:\n${openTodos || "None"}`;
       }
 
       async function askGemini(userQuestion) {
@@ -1968,35 +2635,14 @@
 
         const aiBubble = document.createElement("div");
         aiBubble.className = "ai-msg";
-        feed.appendChild(aiBubble);
-
-        const key = getValidGeminiKey();
-        if (!key) {
-          aiBubble.textContent = "Gemini API key missing. Paste your working AIza... key into Line 15 (geminiApiKey) of index.html.";
-          feed.scrollTop = feed.scrollHeight;
-          return;
-        }
-
         aiBubble.textContent = `Thinking with ${state.geminiModel}...`;
+        feed.appendChild(aiBubble);
         feed.scrollTop = feed.scrollHeight;
 
-        const fullPrompt = `You are the embedded research assistant inside MTube (a Notion + YouTube learning workspace). Be concise, structured, and practical.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
-
         try {
-          const req = buildGeminiRequest(state.geminiModel, fullPrompt);
-          const res = await fetch(req.url, {
-            method: "POST",
-            headers: req.headers,
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: fullPrompt }] }]
-            })
-          });
-
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
-
-          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response text returned.";
-          aiBubble.textContent = reply;
+          const fullPrompt = `You are the embedded research assistant inside MTube 4.0 (a Notion + YouTube learning OS). Be concise, structured, and actionable.\n\nCONTEXT:\n${buildContextSummary()}\n\nUSER REQUEST:\n${q}`;
+          const reply = await callGeminiRaw(fullPrompt);
+          aiBubble.textContent = reply || "No response text returned.";
 
           if (state.activeView === "focus" && state.activeVideoId) {
             const bar = document.createElement("div");
@@ -2005,32 +2651,77 @@
             const addCallout = document.createElement("button");
             addCallout.type = "button";
             addCallout.className = "btn small inverse";
-            addCallout.textContent = "+ Callout Block";
-            addCallout.onclick = () => addBlock(reply.replace(/\n+/g, " "), "callout");
+            addCallout.textContent = "+ Video Callout";
+            addCallout.onclick = () => addVideoBlock(reply.replace(/\n+/g, " "), "callout");
 
             const addTodos = document.createElement("button");
             addTodos.type = "button";
             addTodos.className = "btn small";
-            addTodos.textContent = "+ As To-Dos";
+            addTodos.textContent = "+ Video To-Dos";
             addTodos.onclick = () => {
               reply.split("\n").map(l => l.replace(/^[-*•\d.]+\s*/, "").trim()).filter(Boolean).slice(0, 8)
-                .forEach(line => addBlock(line, "todo"));
+                .forEach(line => addVideoBlock(line, "todo"));
             };
 
             bar.appendChild(addCallout);
             bar.appendChild(addTodos);
             aiBubble.appendChild(bar);
+          } else if (state.activeView === "workspace" && state.activeWorkspaceId) {
+            const bar = document.createElement("div");
+            bar.className = "ai-insert-bar";
+            const addWiki = document.createElement("button");
+            addWiki.type = "button";
+            addWiki.className = "btn small inverse";
+            addWiki.textContent = "+ Save to Project Wiki";
+            addWiki.onclick = () => {
+              addWorkspaceWikiBlock(`/callout ${reply.replace(/\n+/g, " ")}`);
+              document.getElementById("ws-wiki-details").open = true;
+            };
+            bar.appendChild(addWiki);
+            aiBubble.appendChild(bar);
           }
         } catch (err) {
-          aiBubble.textContent = `Gemini API Error (${state.geminiModel}): ${err.message}`;
+          aiBubble.textContent = `Gemini Error: ${err.message}\n\nOpen ⚙ SETTINGS at top right to verify your Gemini API key or switch models above.`;
         }
+        feed.scrollTop = feed.scrollHeight;
+      }
 
+      async function lookupGoogleBook(bookQuery) {
+        const q = (bookQuery || "").trim();
+        if (!q) return;
+        const feed = document.getElementById("gemini-chat-feed");
+        const bubble = document.createElement("div");
+        bubble.className = "ai-msg";
+        bubble.textContent = `Searching Google Books for "${q}"...`;
+        feed.appendChild(bubble);
+
+        try {
+          const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=2`);
+          const data = await res.json();
+          const book = data.items?.[0]?.volumeInfo;
+          if (!book) throw new Error("No matching book found.");
+          const authors = (book.authors || ["Unknown"]).join(", ");
+          const summary = (book.description || "No description.").slice(0, 240);
+          bubble.textContent = `📚 ${book.title} — ${authors}\n${summary}...`;
+        } catch (err) {
+          bubble.textContent = `Book lookup error: ${err.message}`;
+        }
         feed.scrollTop = feed.scrollHeight;
       }
 
       /* =====================================================================
-         8. GLOBAL CMD+K SEARCH MODAL & UTILITIES
+         10. SETTINGS MODAL & CMD+K SEARCH
       ===================================================================== */
+      function openSettingsModal() {
+        document.getElementById("cfg-gh-token").value = creds.githubToken || "";
+        document.getElementById("cfg-gh-owner").value = creds.githubOwner || "nothumanofearth";
+        document.getElementById("cfg-gh-repo").value = creds.githubRepo || "Mtube-Vault";
+        document.getElementById("cfg-yt-key").value = creds.youtubeApiKey || "";
+        document.getElementById("cfg-gemini-key").value = creds.geminiApiKey || "";
+        document.getElementById("cfg-status-msg").textContent = "";
+        document.getElementById("settings-modal").classList.add("open");
+      }
+
       function openCmdK(initialQuery = "") {
         const modal = document.getElementById("cmdk-modal");
         const input = document.getElementById("cmdk-input");
@@ -2046,22 +2737,27 @@
         box.innerHTML = "";
 
         if (!term) {
-          box.innerHTML = `<div class="muted">Type to search across ${state.videos.length} videos and ${state.blocks.length} Notion blocks.</div>`;
+          box.innerHTML = `<div class="muted">Search across ${state.videos.length} videos, ${state.mentors.length} mentors, and ${state.blocks.length} Notion blocks.</div>`;
           return;
         }
 
-        const matchedVideos = state.videos.filter(v =>
-          v.title.toLowerCase().includes(term) || v.purpose.toLowerCase().includes(term)
-        );
-        const matchedBlocks = state.blocks.filter(b =>
-          (b.text || "").toLowerCase().includes(term)
-        );
-
-        matchedVideos.slice(0, 6).forEach(v => {
+        state.mentors.filter(m => m.title.toLowerCase().includes(term) || (m.note || "").toLowerCase().includes(term)).slice(0, 4).forEach(m => {
           const row = document.createElement("div");
           row.className = "list-row";
-          row.innerHTML = `<div><div class="bold" style="font-size:14px;">[VIDEO] ${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.purpose)}</div></div>`;
           row.style.cursor = "pointer";
+          row.innerHTML = `<div><div class="bold" style="font-size:14px;">[MENTOR] ${escapeHtml(m.title)}</div><div class="muted">${escapeHtml(m.note || "")}</div></div>`;
+          row.onclick = () => {
+            document.getElementById("cmdk-modal").classList.remove("open");
+            navigate("workspace", m.workspaceId);
+          };
+          box.appendChild(row);
+        });
+
+        state.videos.filter(v => v.title.toLowerCase().includes(term) || v.purpose.toLowerCase().includes(term)).slice(0, 6).forEach(v => {
+          const row = document.createElement("div");
+          row.className = "list-row";
+          row.style.cursor = "pointer";
+          row.innerHTML = `<div><div class="bold" style="font-size:14px;">[VIDEO] ${escapeHtml(v.title)}</div><div class="muted">${escapeHtml(v.purpose)}</div></div>`;
           row.onclick = () => {
             document.getElementById("cmdk-modal").classList.remove("open");
             navigate("focus", v.id);
@@ -2069,27 +2765,25 @@
           box.appendChild(row);
         });
 
-        matchedBlocks.slice(0, 8).forEach(b => {
-          const vid = state.videos.find(v => v.id === b.videoId);
+        state.blocks.filter(b => (b.text || "").toLowerCase().includes(term)).slice(0, 8).forEach(b => {
+          const vid = b.videoId ? state.videos.find(v => v.id === b.videoId) : null;
+          const ws = b.workspaceId ? state.workspaces.find(w => w.id === b.workspaceId) : null;
           const row = document.createElement("div");
           row.className = "list-row";
-          row.innerHTML = `<div><div style="font-size:13px;"><span class="block-time">[${formatTime(b.timestamp)}]</span> ${escapeHtml(b.text)}</div><div class="muted">In: ${escapeHtml(vid ? vid.title : "Video")}</div></div>`;
           row.style.cursor = "pointer";
+          row.innerHTML = `<div><div style="font-size:13px;">${vid ? `<span class="block-time">[${formatTime(b.timestamp)}]</span> ` : "[WIKI] "}${escapeHtml(b.text)}</div><div class="muted">${escapeHtml(vid ? vid.title : (ws ? ws.name : "Workspace"))}</div></div>`;
           row.onclick = () => {
             document.getElementById("cmdk-modal").classList.remove("open");
             if (vid) {
               navigate("focus", vid.id);
-              setTimeout(() => {
-                if (ytPlayer && typeof ytPlayer.seekTo === "function") ytPlayer.seekTo(b.timestamp, true);
-              }, 800);
+              setTimeout(() => { if (ytPlayer && typeof ytPlayer.seekTo === "function") ytPlayer.seekTo(b.timestamp, true); }, 800);
+            } else if (ws) {
+              navigate("workspace", ws.id);
+              document.getElementById("ws-wiki-details").open = true;
             }
           };
           box.appendChild(row);
         });
-
-        if (matchedVideos.length === 0 && matchedBlocks.length === 0) {
-          box.innerHTML = `<div class="muted">No matching videos or notes found.</div>`;
-        }
       }
 
       function escapeHtml(str) {
@@ -2101,23 +2795,66 @@
       }
 
       /* =====================================================================
-         9. EVENT BINDINGS & CROSS-DEVICE VISIBILITY SYNC
+         11. EVENT BINDINGS & BOOT
       ===================================================================== */
       function bindEvents() {
-        document.getElementById("btn-mobile-menu").onclick = () => {
-          document.getElementById("left-sidebar").classList.toggle("open");
-        };
-
+        document.getElementById("btn-mobile-menu").onclick = () => document.getElementById("left-sidebar").classList.toggle("open");
         document.getElementById("btn-manual-sync").onclick = () => pullVault(true);
 
+        // Instant Cross-Device Sync on Tab Focus / Unlock
         let visTimer = null;
-        document.addEventListener("visibilitychange", () => {
-          if (!document.hidden) {
+        const triggerSync = () => {
+          if (!document.hidden && creds.githubToken) {
             clearTimeout(visTimer);
-            visTimer = setTimeout(() => pullVault(true), 300);
+            visTimer = setTimeout(() => pullVault(true), 250);
           }
-        });
+        };
+        document.addEventListener("visibilitychange", triggerSync);
+        window.addEventListener("focus", triggerSync);
 
+        // Settings Modal
+        document.getElementById("btn-open-settings").onclick = () => openSettingsModal();
+        document.getElementById("btn-close-settings").onclick = () => document.getElementById("settings-modal").classList.remove("open");
+
+        document.getElementById("btn-save-settings").onclick = async () => {
+          const statusMsg = document.getElementById("cfg-status-msg");
+          creds.githubToken = document.getElementById("cfg-gh-token").value.trim();
+          creds.githubOwner = document.getElementById("cfg-gh-owner").value.trim() || "nothumanofearth";
+          creds.githubRepo = document.getElementById("cfg-gh-repo").value.trim() || "Mtube-Vault";
+          creds.youtubeApiKey = document.getElementById("cfg-yt-key").value.trim();
+          creds.geminiApiKey = document.getElementById("cfg-gemini-key").value.trim();
+
+          if (!creds.githubToken) {
+            statusMsg.textContent = "GitHub Token is required for Vault sync.";
+            return;
+          }
+
+          statusMsg.textContent = "Saving & syncing with private Mtube-Vault...";
+          await saveCredsToDevice();
+          const pulled = await pullVault(true);
+          const pushed = await pushVault(false);
+          if (pulled || pushed) {
+            statusMsg.textContent = "✓ Connected & synced across Vault!";
+            setTimeout(() => document.getElementById("settings-modal").classList.remove("open"), 700);
+          } else {
+            statusMsg.textContent = "Could not reach Mtube-Vault. Verify token has Contents Read/Write permission.";
+          }
+        };
+
+        document.getElementById("btn-copy-magic-link").onclick = () => {
+          const statusMsg = document.getElementById("cfg-status-msg");
+          if (!creds.githubToken) {
+            statusMsg.textContent = "Save your credentials first before generating a Magic Link.";
+            return;
+          }
+          const payload = btoa(unescape(encodeURIComponent(JSON.stringify(creds))));
+          const magicUrl = `${window.location.origin}${window.location.pathname}#setup=${payload}`;
+          navigator.clipboard.writeText(magicUrl).then(() => {
+            statusMsg.textContent = "✓ Magic Setup Link copied! Open it once on your other devices.";
+          });
+        };
+
+        // Create Workspace
         document.getElementById("btn-dir-create-ws").onclick = () => {
           const nameInput = document.getElementById("dir-ws-name");
           const iconInput = document.getElementById("dir-ws-icon");
@@ -2129,7 +2866,8 @@
             icon: iconInput.value.trim() || "◈",
             coverUrl: "",
             coverPattern: "dots",
-            coverPos: "center center"
+            coverPos: "center center",
+            updatedAt: Date.now()
           });
           nameInput.value = "";
           scheduleSave();
@@ -2137,18 +2875,24 @@
           renderDirectory();
         };
 
+        // Workspace Project Wiki Input
+        document.getElementById("ws-wiki-input").addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            const inp = document.getElementById("ws-wiki-input");
+            addWorkspaceWikiBlock(inp.value);
+            inp.value = "";
+          }
+        });
+
         // Cover Studio
-        document.getElementById("btn-toggle-cover-studio").onclick = () => {
-          document.getElementById("cover-studio").classList.toggle("hidden");
-        };
-        document.getElementById("btn-close-cover-studio").onclick = () => {
-          document.getElementById("cover-studio").classList.add("hidden");
-        };
+        document.getElementById("btn-toggle-cover-studio").onclick = () => document.getElementById("cover-studio").classList.toggle("hidden");
+        document.getElementById("btn-close-cover-studio").onclick = () => document.getElementById("cover-studio").classList.add("hidden");
         document.getElementById("btn-reposition-cover").onclick = () => {
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
           if (!ws) return;
           const positions = ["center center", "center top", "center bottom"];
           ws.coverPos = positions[(positions.indexOf(ws.coverPos || "center center") + 1) % positions.length];
+          ws.updatedAt = Date.now();
           scheduleSave();
           renderWorkspace();
         };
@@ -2158,6 +2902,7 @@
             if (!ws) return;
             ws.coverUrl = "";
             ws.coverPattern = btn.dataset.pattern;
+            ws.updatedAt = Date.now();
             scheduleSave();
             renderWorkspace();
             document.getElementById("cover-studio").classList.add("hidden");
@@ -2167,7 +2912,7 @@
           const ws = state.workspaces.find(w => w.id === state.activeWorkspaceId);
           if (!ws) return;
           ws.coverUrl = normalizeGifUrl(document.getElementById("custom-cover-url").value);
-          ws.coverPos = ws.coverPos || "center center";
+          ws.updatedAt = Date.now();
           scheduleSave();
           renderWorkspace();
           document.getElementById("cover-studio").classList.add("hidden");
@@ -2177,37 +2922,31 @@
           if (!ws) return;
           ws.coverUrl = "";
           ws.coverPattern = "dots";
+          ws.updatedAt = Date.now();
           scheduleSave();
           renderWorkspace();
           document.getElementById("cover-studio").classList.add("hidden");
         };
 
-        // Discovery & Search
-        document.getElementById("mode-topic-btn").onclick = () => switchDiscoveryMode("topic");
-        document.getElementById("mode-channel-btn").onclick = () => switchDiscoveryMode("channel");
+        // Discovery Tabs & Actions
+        document.querySelectorAll("[data-disc]").forEach(btn => {
+          btn.onclick = () => switchDiscoveryTab(btn.dataset.disc);
+        });
+        document.getElementById("btn-run-finder").onclick = () => runSmartChannelFinder();
+        document.getElementById("finder-goal").addEventListener("keydown", e => { if (e.key === "Enter") runSmartChannelFinder(); });
 
-        document.getElementById("search-query").addEventListener("keydown", e => {
-          if (e.key === "Enter") document.getElementById("search-purpose").focus();
-        });
-        document.getElementById("search-purpose").addEventListener("keydown", e => {
-          if (e.key === "Enter") searchYouTube();
-        });
+        document.getElementById("search-query").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("search-purpose").focus(); });
+        document.getElementById("search-purpose").addEventListener("keydown", e => { if (e.key === "Enter") searchYouTube(); });
         document.getElementById("btn-run-search").onclick = () => searchYouTube();
 
-        document.getElementById("channel-query-input").addEventListener("keydown", e => {
-          if (e.key === "Enter") document.getElementById("channel-purpose-input").focus();
-        });
-        document.getElementById("channel-purpose-input").addEventListener("keydown", e => {
-          if (e.key === "Enter") exploreChannel();
-        });
+        document.getElementById("channel-query-input").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("channel-purpose-input").focus(); });
+        document.getElementById("channel-purpose-input").addEventListener("keydown", e => { if (e.key === "Enter") exploreChannel(); });
         document.getElementById("btn-run-channel-explore").onclick = () => exploreChannel();
 
-        document.getElementById("btn-ai-suggest-queries").onclick = () => {
-          document.getElementById("gemini-dock").classList.remove("hidden");
-          askGemini("Suggest 3 clean YouTube search keywords and implementation intentions for this workspace.");
-        };
+        document.getElementById("playlist-purpose-input").addEventListener("keydown", e => { if (e.key === "Enter") importPlaylistCourse(); });
+        document.getElementById("btn-import-playlist").onclick = () => importPlaylistCourse();
 
-        // Focus Mode Controls
+        // Focus Mode
         document.getElementById("btn-back-ws").onclick = () => {
           if (ytPlayer && typeof ytPlayer.pauseVideo === "function") ytPlayer.pauseVideo();
           navigate("workspace", state.activeWorkspaceId);
@@ -2218,20 +2957,18 @@
         document.getElementById("block-input").addEventListener("keydown", e => {
           if (e.key === "Enter") {
             const inp = document.getElementById("block-input");
-            addBlock(inp.value);
+            addVideoBlock(inp.value);
             inp.value = "";
           }
         });
 
-        // Gemini Dock Controls
+        // Gemini Dock
         document.getElementById("btn-toggle-gemini").onclick = () => {
           document.getElementById("gemini-dock").classList.toggle("hidden");
           renderGeminiChips();
         };
-        document.getElementById("btn-close-gemini").onclick = () => {
-          document.getElementById("gemini-dock").classList.add("hidden");
-        };
-        document.getElementById("btn-test-gemini-key").onclick = () => testGeminiKey();
+        document.getElementById("btn-close-gemini").onclick = () => document.getElementById("gemini-dock").classList.add("hidden");
+        document.getElementById("btn-test-gemini-key").onclick = () => askGemini("Reply with: Gemini Vault Key Verified.");
         document.getElementById("gemini-model-select").onchange = e => {
           state.geminiModel = e.target.value;
           scheduleSave();
@@ -2248,12 +2985,15 @@
             inp.value = "";
           }
         });
-
-        // Global Cmd+K Search
-        document.getElementById("btn-cmd-k").onclick = () => openCmdK();
-        document.getElementById("btn-close-cmdk").onclick = () => {
-          document.getElementById("cmdk-modal").classList.remove("open");
+        document.getElementById("btn-lookup-book").onclick = () => {
+          const inp = document.getElementById("google-book-input");
+          lookupGoogleBook(inp.value);
+          inp.value = "";
         };
+
+        // Cmd+K Search
+        document.getElementById("btn-cmd-k").onclick = () => openCmdK();
+        document.getElementById("btn-close-cmdk").onclick = () => document.getElementById("cmdk-modal").classList.remove("open");
         document.getElementById("cmdk-input").addEventListener("input", e => runCmdKSearch(e.target.value));
         document.addEventListener("keydown", e => {
           if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -2261,6 +3001,7 @@
             openCmdK();
           } else if (e.key === "Escape") {
             document.getElementById("cmdk-modal").classList.remove("open");
+            document.getElementById("settings-modal").classList.remove("open");
           }
         });
       }
@@ -2268,10 +3009,23 @@
       async function boot() {
         bindEvents();
         loadYouTubeIFrameAPI();
-        await pullVault(true);
+
+        const cached = localStorage.getItem("mtube_v4_cache");
+        if (cached) {
+          try { Object.assign(state, JSON.parse(cached)); } catch {}
+        }
+
+        const hasCreds = await loadCredsFromDevice();
         renderSidebar();
         renderDirectory();
         renderGeminiChips();
+
+        if (hasCreds) {
+          await pullVault(true);
+        } else {
+          setSyncStatus("SETUP KEYS ⚙", "err");
+          openSettingsModal();
+        }
       }
 
       return { boot, navigate, setDbView, openCmdK };
